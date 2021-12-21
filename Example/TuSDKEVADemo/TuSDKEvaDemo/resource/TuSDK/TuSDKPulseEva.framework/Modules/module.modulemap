@@ -1,0 +1,6 @@
+framework module TuSDKPulseEva {
+  umbrella header "TuSDKPulseEva.h"
+
+  export *
+  module * { export * }
+}

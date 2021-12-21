@@ -1,0 +1,13 @@
+
+workspace 'TuSDKEvaDemo'
+
+target 'TuSDKEvaDemo' do
+   project 'TuSDKEvaDemo/TuSDKEvaDemo.xcodeproj'
+   workspace 'TuSDKEvaDemo'
+
+
+   use_frameworks!
+#pod 'GPUUtilization'#, :configurations => ['Debug']
+pod 'DoraemonKit/Core', '~> 3.0.4', :configurations => ['Debug']
+#   pod 'AFNetworking'
+end
