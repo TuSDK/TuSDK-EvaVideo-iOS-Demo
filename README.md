@@ -82,7 +82,7 @@
 
 ## 3.使用
 
-* [示例项目源码](https://github.com/TuSDK/TuSDK-EvaVideo-for-iOS-demo)
+* [示例项目源码](https://github.com/TuSDK/TuSDK-EvaVideo-iOS-Demo)
 
 ## 4.关注
 
