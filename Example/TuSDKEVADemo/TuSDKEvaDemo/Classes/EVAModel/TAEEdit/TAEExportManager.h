@@ -9,8 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-#import <TuSDKPulseEva/TUPEvaProducer.h>
-#import <TuSDKPulseEva/TUPEvaDirector.h>
+#import "TuSDKFramework.h"
 #import "TAEModelMediator.h"
 
 NS_ASSUME_NONNULL_BEGIN

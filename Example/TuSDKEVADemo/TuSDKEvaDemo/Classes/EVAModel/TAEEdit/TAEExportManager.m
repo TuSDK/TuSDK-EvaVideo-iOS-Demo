@@ -8,9 +8,6 @@
 
 #import "TAEExportManager.h"
 
-#import <TuSDKPulseEva/TUPEvaPlayer.h>
-#import <TuSDKPulseEva/TUPEvaModel.h>
-#import <TuSDKPulse/TUPProducer.h>
 #import "TuPopupProgress.h"
 #import "TuSDKFramework.h"
 

@@ -7,7 +7,7 @@
 //
 
 #import "TuMaskRegionView.h"
-#import <TuSDKPulseCore/TuSDKPulseCore.h>
+#import "TuSDKPulseCore.h"
 /**
  *  裁剪区域视图
  */

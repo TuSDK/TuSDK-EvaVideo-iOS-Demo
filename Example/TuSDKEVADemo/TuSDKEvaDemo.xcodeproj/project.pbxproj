@@ -3,11 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		04B44DF7265F8DB80094308C /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B44DF6265F8DB80094308C /* MediaPlayer.framework */; };
+		2A27715727B3650400A064F7 /* TuSDKPulse.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A27715627B3650400A064F7 /* TuSDKPulse.a */; };
+		2A2771BB27B3650D00A064F7 /* TuSDKPulseCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A27715927B3650D00A064F7 /* TuSDKPulseCore.a */; };
+		2A2771C427B3651200A064F7 /* TuSDKPulseEva.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A2771C327B3651200A064F7 /* TuSDKPulseEva.a */; };
 		45B606F422B733C700A9F3A6 /* TuSDKPulse.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 45B606F322B733C700A9F3A6 /* TuSDKPulse.bundle */; };
 		45F0B2AC2299FB18006D5F99 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 45F0B2AB2299FB18006D5F99 /* AppDelegate.mm */; };
 		45F0B2B22299FB18006D5F99 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45F0B2B02299FB18006D5F99 /* Main.storyboard */; };
@@ -15,12 +18,6 @@
 		45F0B2B72299FB18006D5F99 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45F0B2B52299FB18006D5F99 /* LaunchScreen.storyboard */; };
 		45F0B2BA2299FB18006D5F99 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 45F0B2B92299FB18006D5F99 /* main.m */; };
 		52D4415369A9A1384EB88409 /* Pods_TuSDKEvaDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D05AF8FB5B9041608DA425B /* Pods_TuSDKEvaDemo.framework */; };
-		A65F5C342771BB4D003BBE0A /* TuSDKPulse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A65F5C2F2771BB2C003BBE0A /* TuSDKPulse.framework */; platformFilter = ios; };
-		A65F5C352771BB4D003BBE0A /* TuSDKPulse.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A65F5C2F2771BB2C003BBE0A /* TuSDKPulse.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A65F5C362771BB4D003BBE0A /* TuSDKPulseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A65F5C302771BB2C003BBE0A /* TuSDKPulseCore.framework */; platformFilter = ios; };
-		A65F5C372771BB4D003BBE0A /* TuSDKPulseCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A65F5C302771BB2C003BBE0A /* TuSDKPulseCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A65F5C382771BB4D003BBE0A /* TuSDKPulseEva.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A65F5C2E2771BB2C003BBE0A /* TuSDKPulseEva.framework */; platformFilter = ios; };
-		A65F5C392771BB4D003BBE0A /* TuSDKPulseEva.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A65F5C2E2771BB2C003BBE0A /* TuSDKPulseEva.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A68905B826AA0B8000EC15AE /* TuTouchImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A68905B526AA0B7F00EC15AE /* TuTouchImageView.m */; };
 		A68905B926AA0B8000EC15AE /* TuMaskRegionView.m in Sources */ = {isa = PBXBuildFile; fileRef = A68905B626AA0B7F00EC15AE /* TuMaskRegionView.m */; };
 		A68905BC26AA0CF800EC15AE /* TuPopupProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = A68905BB26AA0CF700EC15AE /* TuPopupProgress.m */; };
@@ -182,9 +179,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A65F5C352771BB4D003BBE0A /* TuSDKPulse.framework in Embed Frameworks */,
-				A65F5C392771BB4D003BBE0A /* TuSDKPulseEva.framework in Embed Frameworks */,
-				A65F5C372771BB4D003BBE0A /* TuSDKPulseCore.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -195,6 +189,118 @@
 		04B44DF6265F8DB80094308C /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		04B44DF8265F8DF30094308C /* TuSDKPulseCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TuSDKPulseCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D05AF8FB5B9041608DA425B /* Pods_TuSDKEvaDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TuSDKEvaDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A27714327B3650400A064F7 /* TUPMediaInspector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPMediaInspector.h; sourceTree = "<group>"; };
+		2A27714427B3650400A064F7 /* TUPPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPPlayer.h; sourceTree = "<group>"; };
+		2A27714527B3650400A064F7 /* TUPPermission.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPPermission.h; sourceTree = "<group>"; };
+		2A27714627B3650400A064F7 /* TUPConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPConfig.h; sourceTree = "<group>"; };
+		2A27714727B3650400A064F7 /* TUPUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPUtils.h; sourceTree = "<group>"; };
+		2A27714827B3650400A064F7 /* TUPPathMarshal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPPathMarshal.h; sourceTree = "<group>"; };
+		2A27714927B3650400A064F7 /* TUPEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPEngine.h; sourceTree = "<group>"; };
+		2A27714A27B3650400A064F7 /* TUPDispatchQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPDispatchQueue.h; sourceTree = "<group>"; };
+		2A27714B27B3650400A064F7 /* TUPVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPVideoPlayer.h; sourceTree = "<group>"; };
+		2A27714C27B3650400A064F7 /* TUPProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPProperty.h; sourceTree = "<group>"; };
+		2A27714D27B3650400A064F7 /* TUPTranscoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPTranscoder.h; sourceTree = "<group>"; };
+		2A27714E27B3650400A064F7 /* TUPBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPBase.h; sourceTree = "<group>"; };
+		2A27714F27B3650400A064F7 /* TUPDisplayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPDisplayView.h; sourceTree = "<group>"; };
+		2A27715027B3650400A064F7 /* TUPVideoPreprocessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPVideoPreprocessor.h; sourceTree = "<group>"; };
+		2A27715127B3650400A064F7 /* TUPProducer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPProducer.h; sourceTree = "<group>"; };
+		2A27715227B3650400A064F7 /* TUPThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPThread.h; sourceTree = "<group>"; };
+		2A27715327B3650400A064F7 /* TuSDKPulse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuSDKPulse.h; sourceTree = "<group>"; };
+		2A27715427B3650400A064F7 /* TUPStreamInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPStreamInfo.h; sourceTree = "<group>"; };
+		2A27715527B3650400A064F7 /* TUPThumbnailMaker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPThumbnailMaker.h; sourceTree = "<group>"; };
+		2A27715627B3650400A064F7 /* TuSDKPulse.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = TuSDKPulse.a; sourceTree = "<group>"; };
+		2A27715927B3650D00A064F7 /* TuSDKPulseCore.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = TuSDKPulseCore.a; sourceTree = "<group>"; };
+		2A27715B27B3650D00A064F7 /* TuSDKPulseCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuSDKPulseCore.h; sourceTree = "<group>"; };
+		2A27715D27B3650D00A064F7 /* TuResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuResult.h; sourceTree = "<group>"; };
+		2A27715E27B3650D00A064F7 /* TuTSFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuTSFileManager.h; sourceTree = "<group>"; };
+		2A27715F27B3650D00A064F7 /* TuTSLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuTSLog.h; sourceTree = "<group>"; };
+		2A27716027B3650D00A064F7 /* TuTSBundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuTSBundle.h; sourceTree = "<group>"; };
+		2A27716127B3650D00A064F7 /* TuTSKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuTSKeychainUtils.h; sourceTree = "<group>"; };
+		2A27716227B3650D00A064F7 /* TuTSDeviceSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuTSDeviceSettings.h; sourceTree = "<group>"; };
+		2A27716327B3650D00A064F7 /* TuTSMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuTSMath.h; sourceTree = "<group>"; };
+		2A27716427B3650D00A064F7 /* TuThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuThread.h; sourceTree = "<group>"; };
+		2A27716527B3650D00A064F7 /* TuTSByte.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuTSByte.h; sourceTree = "<group>"; };
+		2A27716727B3650D00A064F7 /* TuTSImage+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSImage+Extend.h"; sourceTree = "<group>"; };
+		2A27716827B3650D00A064F7 /* TuTSScreen+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSScreen+Extend.h"; sourceTree = "<group>"; };
+		2A27716927B3650D00A064F7 /* TuICView+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuICView+Extend.h"; sourceTree = "<group>"; };
+		2A27716A27B3650D00A064F7 /* TuTSAVAudioPlayer+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSAVAudioPlayer+Extend.h"; sourceTree = "<group>"; };
+		2A27716B27B3650D00A064F7 /* TuTSCATransition+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSCATransition+Extend.h"; sourceTree = "<group>"; };
+		2A27716C27B3650D00A064F7 /* TuTSDate+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSDate+Extend.h"; sourceTree = "<group>"; };
+		2A27716D27B3650D00A064F7 /* TuTSNSDictionary+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSNSDictionary+Extend.h"; sourceTree = "<group>"; };
+		2A27716E27B3650D00A064F7 /* TuTSALAssetsGrouped+CreateTimeDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSALAssetsGrouped+CreateTimeDesc.h"; sourceTree = "<group>"; };
+		2A27716F27B3650D00A064F7 /* TuTSNSArray+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSNSArray+Extend.h"; sourceTree = "<group>"; };
+		2A27717027B3650D00A064F7 /* TuTSPHAssets+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSPHAssets+Extend.h"; sourceTree = "<group>"; };
+		2A27717127B3650D00A064F7 /* TuTSNSData+ImageExtend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSNSData+ImageExtend.h"; sourceTree = "<group>"; };
+		2A27717227B3650D00A064F7 /* TuTSNSMutableDictionary+ImageMetadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSNSMutableDictionary+ImageMetadata.h"; sourceTree = "<group>"; };
+		2A27717327B3650D00A064F7 /* TuTSAVCaptureDevice+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSAVCaptureDevice+Extend.h"; sourceTree = "<group>"; };
+		2A27717427B3650D00A064F7 /* TuTSALAssets+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSALAssets+Extend.h"; sourceTree = "<group>"; };
+		2A27717527B3650D00A064F7 /* TuTSString+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSString+Extend.h"; sourceTree = "<group>"; };
+		2A27717627B3650D00A064F7 /* TuTSNSUserDefaults+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSNSUserDefaults+Extend.h"; sourceTree = "<group>"; };
+		2A27717727B3650D00A064F7 /* TuTSNSData+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSNSData+Extend.h"; sourceTree = "<group>"; };
+		2A27717827B3650D00A064F7 /* TuTSUIColor+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSUIColor+Extend.h"; sourceTree = "<group>"; };
+		2A27717927B3650D00A064F7 /* TuTSDevice+Extend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TuTSDevice+Extend.h"; sourceTree = "<group>"; };
+		2A27717B27B3650D00A064F7 /* TuTSVolumeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuTSVolumeButton.h; sourceTree = "<group>"; };
+		2A27717C27B3650D00A064F7 /* TuTSAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuTSAnimation.h; sourceTree = "<group>"; };
+		2A27717D27B3650D00A064F7 /* TuTSMotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuTSMotion.h; sourceTree = "<group>"; };
+		2A27717E27B3650D00A064F7 /* TuRatioType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuRatioType.h; sourceTree = "<group>"; };
+		2A27717F27B3650D00A064F7 /* TuAOCellGridViewAlgorithmic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuAOCellGridViewAlgorithmic.h; sourceTree = "<group>"; };
+		2A27718027B3650D00A064F7 /* TuLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuLocation.h; sourceTree = "<group>"; };
+		2A27718127B3650D00A064F7 /* TuWaterMarkOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuWaterMarkOption.h; sourceTree = "<group>"; };
+		2A27718227B3650D00A064F7 /* TuRegionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuRegionHandler.h; sourceTree = "<group>"; };
+		2A27718327B3650D00A064F7 /* TuTSAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuTSAsset.h; sourceTree = "<group>"; };
+		2A27718527B3650D00A064F7 /* TuStatistics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuStatistics.h; sourceTree = "<group>"; };
+		2A27718627B3650D00A064F7 /* TuAOFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuAOFile.h; sourceTree = "<group>"; };
+		2A27718727B3650D00A064F7 /* TuAOValid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuAOValid.h; sourceTree = "<group>"; };
+		2A27718827B3650D00A064F7 /* TuAuth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuAuth.h; sourceTree = "<group>"; };
+		2A27718B27B3650D00A064F7 /* TuStickerCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuStickerCategory.h; sourceTree = "<group>"; };
+		2A27718C27B3650D00A064F7 /* TuStickerLocalPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuStickerLocalPackage.h; sourceTree = "<group>"; };
+		2A27718D27B3650D00A064F7 /* TuStickerAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuStickerAdapter.h; sourceTree = "<group>"; };
+		2A27718E27B3650D00A064F7 /* TuStickerGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuStickerGroup.h; sourceTree = "<group>"; };
+		2A27718F27B3650D00A064F7 /* TuSticker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuSticker.h; sourceTree = "<group>"; };
+		2A27719027B3650D00A064F7 /* TuOnlineStickerDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuOnlineStickerDownloader.h; sourceTree = "<group>"; };
+		2A27719127B3650D00A064F7 /* TuStickerText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuStickerText.h; sourceTree = "<group>"; };
+		2A27719327B3650D00A064F7 /* TuBrushGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuBrushGroup.h; sourceTree = "<group>"; };
+		2A27719427B3650D00A064F7 /* TuBrushLocalPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuBrushLocalPackage.h; sourceTree = "<group>"; };
+		2A27719527B3650D00A064F7 /* TuBrushManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuBrushManager.h; sourceTree = "<group>"; };
+		2A27719627B3650D00A064F7 /* TuBrushAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuBrushAdapter.h; sourceTree = "<group>"; };
+		2A27719727B3650D00A064F7 /* TuBrushSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuBrushSize.h; sourceTree = "<group>"; };
+		2A27719827B3650D00A064F7 /* TuBrush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuBrush.h; sourceTree = "<group>"; };
+		2A27719A27B3650D00A064F7 /* TuFilterAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuFilterAdapter.h; sourceTree = "<group>"; };
+		2A27719B27B3650D00A064F7 /* TuFilterOption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuFilterOption.h; sourceTree = "<group>"; };
+		2A27719C27B3650D00A064F7 /* TuFilterLocalPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuFilterLocalPackage.h; sourceTree = "<group>"; };
+		2A27719D27B3650D00A064F7 /* TuFilterUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuFilterUtils.h; sourceTree = "<group>"; };
+		2A27719E27B3650D00A064F7 /* TuFilterParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuFilterParameter.h; sourceTree = "<group>"; };
+		2A27719F27B3650D00A064F7 /* TuFilterGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuFilterGroup.h; sourceTree = "<group>"; };
+		2A2771A127B3650D00A064F7 /* TuNKImageColorArgument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuNKImageColorArgument.h; sourceTree = "<group>"; };
+		2A2771A227B3650D00A064F7 /* TuNKNetworkEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuNKNetworkEngine.h; sourceTree = "<group>"; };
+		2A2771A327B3650D00A064F7 /* TuNKImageAutoColorAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuNKImageAutoColorAnalysis.h; sourceTree = "<group>"; };
+		2A2771A427B3650D00A064F7 /* TuNKDownloadManger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuNKDownloadManger.h; sourceTree = "<group>"; };
+		2A2771A527B3650D00A064F7 /* TuImageViewTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuImageViewTask.h; sourceTree = "<group>"; };
+		2A2771A727B3650D00A064F7 /* UIImageView+TuNetworkAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+TuNetworkAdditions.h"; sourceTree = "<group>"; };
+		2A2771A827B3650D00A064F7 /* TuNetworkOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuNetworkOperation.h; sourceTree = "<group>"; };
+		2A2771A927B3650D00A064F7 /* TuNetworkImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuNetworkImageCache.h; sourceTree = "<group>"; };
+		2A2771AA27B3650D00A064F7 /* TuNetworkReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuNetworkReachability.h; sourceTree = "<group>"; };
+		2A2771AB27B3650D00A064F7 /* TuNKDownloadAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuNKDownloadAdapter.h; sourceTree = "<group>"; };
+		2A2771AC27B3650D00A064F7 /* TuNKNetworkArg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuNKNetworkArg.h; sourceTree = "<group>"; };
+		2A2771AD27B3650D00A064F7 /* TuNKDownloadItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuNKDownloadItem.h; sourceTree = "<group>"; };
+		2A2771AE27B3650D00A064F7 /* TuNKImageAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuNKImageAnalysis.h; sourceTree = "<group>"; };
+		2A2771AF27B3650D00A064F7 /* TuNKDownloadTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuNKDownloadTask.h; sourceTree = "<group>"; };
+		2A2771B027B3650D00A064F7 /* TuNKFaceMark.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuNKFaceMark.h; sourceTree = "<group>"; };
+		2A2771B127B3650D00A064F7 /* TUCProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUCProtocol.h; sourceTree = "<group>"; };
+		2A2771B227B3650D00A064F7 /* TuNetworkEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuNetworkEngine.h; sourceTree = "<group>"; };
+		2A2771B327B3650D00A064F7 /* TUCCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUCCore.h; sourceTree = "<group>"; };
+		2A2771B427B3650D00A064F7 /* TUCEnum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUCEnum.h; sourceTree = "<group>"; };
+		2A2771B627B3650D00A064F7 /* TMacUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMacUtils.h; sourceTree = "<group>"; };
+		2A2771B727B3650D00A064F7 /* SelesParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelesParameters.h; sourceTree = "<group>"; };
+		2A2771B827B3650D00A064F7 /* TuDefindConfigs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuDefindConfigs.h; sourceTree = "<group>"; };
+		2A2771B927B3650D00A064F7 /* SelesImageIOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelesImageIOS.h; sourceTree = "<group>"; };
+		2A2771BA27B3650D00A064F7 /* TuDataJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuDataJson.h; sourceTree = "<group>"; };
+		2A2771BE27B3651200A064F7 /* TUPEvaProducer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPEvaProducer.h; sourceTree = "<group>"; };
+		2A2771BF27B3651200A064F7 /* TuSDKPulseEva.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuSDKPulseEva.h; sourceTree = "<group>"; };
+		2A2771C027B3651200A064F7 /* TUPEvaDirector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPEvaDirector.h; sourceTree = "<group>"; };
+		2A2771C127B3651200A064F7 /* TUPEvaModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPEvaModel.h; sourceTree = "<group>"; };
+		2A2771C227B3651200A064F7 /* TUPEvaPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TUPEvaPlayer.h; sourceTree = "<group>"; };
+		2A2771C327B3651200A064F7 /* TuSDKPulseEva.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = TuSDKPulseEva.a; sourceTree = "<group>"; };
 		2AE9C5451D6D41984ADCD5A3 /* Pods-TuSDKEvaDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TuSDKEvaDemo.debug.xcconfig"; path = "Target Support Files/Pods-TuSDKEvaDemo/Pods-TuSDKEvaDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		45479E2E22ABE99C006040AB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		45B606F322B733C700A9F3A6 /* TuSDKPulse.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TuSDKPulse.bundle; sourceTree = "<group>"; };
@@ -218,9 +324,6 @@
 		45F0B2CD2299FB67006D5F99 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		45F0B2CF2299FB6D006D5F99 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		7F6BABB76364914FBC86C688 /* Pods-TuSDKEvaDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TuSDKEvaDemo.release.xcconfig"; path = "Target Support Files/Pods-TuSDKEvaDemo/Pods-TuSDKEvaDemo.release.xcconfig"; sourceTree = "<group>"; };
-		A65F5C2E2771BB2C003BBE0A /* TuSDKPulseEva.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TuSDKPulseEva.framework; sourceTree = "<group>"; };
-		A65F5C2F2771BB2C003BBE0A /* TuSDKPulse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TuSDKPulse.framework; sourceTree = "<group>"; };
-		A65F5C302771BB2C003BBE0A /* TuSDKPulseCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TuSDKPulseCore.framework; sourceTree = "<group>"; };
 		A68905B426AA0B7F00EC15AE /* TuTouchImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuTouchImageView.h; sourceTree = "<group>"; };
 		A68905B526AA0B7F00EC15AE /* TuTouchImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TuTouchImageView.m; sourceTree = "<group>"; };
 		A68905B626AA0B7F00EC15AE /* TuMaskRegionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TuMaskRegionView.m; sourceTree = "<group>"; };
@@ -491,14 +594,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A65F5C342771BB4D003BBE0A /* TuSDKPulse.framework in Frameworks */,
-				A65F5C362771BB4D003BBE0A /* TuSDKPulseCore.framework in Frameworks */,
 				04B44DF7265F8DB80094308C /* MediaPlayer.framework in Frameworks */,
 				B86D1B3224E284BA00BA6A13 /* libc++.tbd in Frameworks */,
+				2A27715727B3650400A064F7 /* TuSDKPulse.a in Frameworks */,
 				B86D1B3124E284AF00BA6A13 /* libz.tbd in Frameworks */,
+				2A2771BB27B3650D00A064F7 /* TuSDKPulseCore.a in Frameworks */,
 				D711E9DE22FC1EC200545604 /* libresolv.tbd in Frameworks */,
+				2A2771C427B3651200A064F7 /* TuSDKPulseEva.a in Frameworks */,
 				D72A774122F4040E006DB467 /* libiconv.tbd in Frameworks */,
-				A65F5C382771BB4D003BBE0A /* TuSDKPulseEva.framework in Frameworks */,
 				52D4415369A9A1384EB88409 /* Pods_TuSDKEvaDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -506,6 +609,251 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2A27714127B3650400A064F7 /* TuSDKPulse */ = {
+			isa = PBXGroup;
+			children = (
+				2A27714227B3650400A064F7 /* include */,
+				2A27715627B3650400A064F7 /* TuSDKPulse.a */,
+			);
+			path = TuSDKPulse;
+			sourceTree = "<group>";
+		};
+		2A27714227B3650400A064F7 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				2A27714327B3650400A064F7 /* TUPMediaInspector.h */,
+				2A27714427B3650400A064F7 /* TUPPlayer.h */,
+				2A27714527B3650400A064F7 /* TUPPermission.h */,
+				2A27714627B3650400A064F7 /* TUPConfig.h */,
+				2A27714727B3650400A064F7 /* TUPUtils.h */,
+				2A27714827B3650400A064F7 /* TUPPathMarshal.h */,
+				2A27714927B3650400A064F7 /* TUPEngine.h */,
+				2A27714A27B3650400A064F7 /* TUPDispatchQueue.h */,
+				2A27714B27B3650400A064F7 /* TUPVideoPlayer.h */,
+				2A27714C27B3650400A064F7 /* TUPProperty.h */,
+				2A27714D27B3650400A064F7 /* TUPTranscoder.h */,
+				2A27714E27B3650400A064F7 /* TUPBase.h */,
+				2A27714F27B3650400A064F7 /* TUPDisplayView.h */,
+				2A27715027B3650400A064F7 /* TUPVideoPreprocessor.h */,
+				2A27715127B3650400A064F7 /* TUPProducer.h */,
+				2A27715227B3650400A064F7 /* TUPThread.h */,
+				2A27715327B3650400A064F7 /* TuSDKPulse.h */,
+				2A27715427B3650400A064F7 /* TUPStreamInfo.h */,
+				2A27715527B3650400A064F7 /* TUPThumbnailMaker.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		2A27715827B3650D00A064F7 /* TuSDKPulseCore */ = {
+			isa = PBXGroup;
+			children = (
+				2A27715927B3650D00A064F7 /* TuSDKPulseCore.a */,
+				2A27715A27B3650D00A064F7 /* include */,
+			);
+			path = TuSDKPulseCore;
+			sourceTree = "<group>";
+		};
+		2A27715A27B3650D00A064F7 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				2A27715B27B3650D00A064F7 /* TuSDKPulseCore.h */,
+				2A27715C27B3650D00A064F7 /* tools */,
+				2A27716627B3650D00A064F7 /* category */,
+				2A27717A27B3650D00A064F7 /* UIKit */,
+				2A27718427B3650D00A064F7 /* secrets */,
+				2A27718927B3650D00A064F7 /* source */,
+				2A2771A027B3650D00A064F7 /* network */,
+				2A2771B127B3650D00A064F7 /* TUCProtocol.h */,
+				2A2771B227B3650D00A064F7 /* TuNetworkEngine.h */,
+				2A2771B327B3650D00A064F7 /* TUCCore.h */,
+				2A2771B427B3650D00A064F7 /* TUCEnum.h */,
+				2A2771B527B3650D00A064F7 /* cx */,
+				2A2771BA27B3650D00A064F7 /* TuDataJson.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		2A27715C27B3650D00A064F7 /* tools */ = {
+			isa = PBXGroup;
+			children = (
+				2A27715D27B3650D00A064F7 /* TuResult.h */,
+				2A27715E27B3650D00A064F7 /* TuTSFileManager.h */,
+				2A27715F27B3650D00A064F7 /* TuTSLog.h */,
+				2A27716027B3650D00A064F7 /* TuTSBundle.h */,
+				2A27716127B3650D00A064F7 /* TuTSKeychainUtils.h */,
+				2A27716227B3650D00A064F7 /* TuTSDeviceSettings.h */,
+				2A27716327B3650D00A064F7 /* TuTSMath.h */,
+				2A27716427B3650D00A064F7 /* TuThread.h */,
+				2A27716527B3650D00A064F7 /* TuTSByte.h */,
+			);
+			path = tools;
+			sourceTree = "<group>";
+		};
+		2A27716627B3650D00A064F7 /* category */ = {
+			isa = PBXGroup;
+			children = (
+				2A27716727B3650D00A064F7 /* TuTSImage+Extend.h */,
+				2A27716827B3650D00A064F7 /* TuTSScreen+Extend.h */,
+				2A27716927B3650D00A064F7 /* TuICView+Extend.h */,
+				2A27716A27B3650D00A064F7 /* TuTSAVAudioPlayer+Extend.h */,
+				2A27716B27B3650D00A064F7 /* TuTSCATransition+Extend.h */,
+				2A27716C27B3650D00A064F7 /* TuTSDate+Extend.h */,
+				2A27716D27B3650D00A064F7 /* TuTSNSDictionary+Extend.h */,
+				2A27716E27B3650D00A064F7 /* TuTSALAssetsGrouped+CreateTimeDesc.h */,
+				2A27716F27B3650D00A064F7 /* TuTSNSArray+Extend.h */,
+				2A27717027B3650D00A064F7 /* TuTSPHAssets+Extend.h */,
+				2A27717127B3650D00A064F7 /* TuTSNSData+ImageExtend.h */,
+				2A27717227B3650D00A064F7 /* TuTSNSMutableDictionary+ImageMetadata.h */,
+				2A27717327B3650D00A064F7 /* TuTSAVCaptureDevice+Extend.h */,
+				2A27717427B3650D00A064F7 /* TuTSALAssets+Extend.h */,
+				2A27717527B3650D00A064F7 /* TuTSString+Extend.h */,
+				2A27717627B3650D00A064F7 /* TuTSNSUserDefaults+Extend.h */,
+				2A27717727B3650D00A064F7 /* TuTSNSData+Extend.h */,
+				2A27717827B3650D00A064F7 /* TuTSUIColor+Extend.h */,
+				2A27717927B3650D00A064F7 /* TuTSDevice+Extend.h */,
+			);
+			path = category;
+			sourceTree = "<group>";
+		};
+		2A27717A27B3650D00A064F7 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				2A27717B27B3650D00A064F7 /* TuTSVolumeButton.h */,
+				2A27717C27B3650D00A064F7 /* TuTSAnimation.h */,
+				2A27717D27B3650D00A064F7 /* TuTSMotion.h */,
+				2A27717E27B3650D00A064F7 /* TuRatioType.h */,
+				2A27717F27B3650D00A064F7 /* TuAOCellGridViewAlgorithmic.h */,
+				2A27718027B3650D00A064F7 /* TuLocation.h */,
+				2A27718127B3650D00A064F7 /* TuWaterMarkOption.h */,
+				2A27718227B3650D00A064F7 /* TuRegionHandler.h */,
+				2A27718327B3650D00A064F7 /* TuTSAsset.h */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		2A27718427B3650D00A064F7 /* secrets */ = {
+			isa = PBXGroup;
+			children = (
+				2A27718527B3650D00A064F7 /* TuStatistics.h */,
+				2A27718627B3650D00A064F7 /* TuAOFile.h */,
+				2A27718727B3650D00A064F7 /* TuAOValid.h */,
+				2A27718827B3650D00A064F7 /* TuAuth.h */,
+			);
+			path = secrets;
+			sourceTree = "<group>";
+		};
+		2A27718927B3650D00A064F7 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				2A27718A27B3650D00A064F7 /* sticker */,
+				2A27719227B3650D00A064F7 /* brush */,
+				2A27719927B3650D00A064F7 /* filter */,
+			);
+			path = source;
+			sourceTree = "<group>";
+		};
+		2A27718A27B3650D00A064F7 /* sticker */ = {
+			isa = PBXGroup;
+			children = (
+				2A27718B27B3650D00A064F7 /* TuStickerCategory.h */,
+				2A27718C27B3650D00A064F7 /* TuStickerLocalPackage.h */,
+				2A27718D27B3650D00A064F7 /* TuStickerAdapter.h */,
+				2A27718E27B3650D00A064F7 /* TuStickerGroup.h */,
+				2A27718F27B3650D00A064F7 /* TuSticker.h */,
+				2A27719027B3650D00A064F7 /* TuOnlineStickerDownloader.h */,
+				2A27719127B3650D00A064F7 /* TuStickerText.h */,
+			);
+			path = sticker;
+			sourceTree = "<group>";
+		};
+		2A27719227B3650D00A064F7 /* brush */ = {
+			isa = PBXGroup;
+			children = (
+				2A27719327B3650D00A064F7 /* TuBrushGroup.h */,
+				2A27719427B3650D00A064F7 /* TuBrushLocalPackage.h */,
+				2A27719527B3650D00A064F7 /* TuBrushManager.h */,
+				2A27719627B3650D00A064F7 /* TuBrushAdapter.h */,
+				2A27719727B3650D00A064F7 /* TuBrushSize.h */,
+				2A27719827B3650D00A064F7 /* TuBrush.h */,
+			);
+			path = brush;
+			sourceTree = "<group>";
+		};
+		2A27719927B3650D00A064F7 /* filter */ = {
+			isa = PBXGroup;
+			children = (
+				2A27719A27B3650D00A064F7 /* TuFilterAdapter.h */,
+				2A27719B27B3650D00A064F7 /* TuFilterOption.h */,
+				2A27719C27B3650D00A064F7 /* TuFilterLocalPackage.h */,
+				2A27719D27B3650D00A064F7 /* TuFilterUtils.h */,
+				2A27719E27B3650D00A064F7 /* TuFilterParameter.h */,
+				2A27719F27B3650D00A064F7 /* TuFilterGroup.h */,
+			);
+			path = filter;
+			sourceTree = "<group>";
+		};
+		2A2771A027B3650D00A064F7 /* network */ = {
+			isa = PBXGroup;
+			children = (
+				2A2771A127B3650D00A064F7 /* TuNKImageColorArgument.h */,
+				2A2771A227B3650D00A064F7 /* TuNKNetworkEngine.h */,
+				2A2771A327B3650D00A064F7 /* TuNKImageAutoColorAnalysis.h */,
+				2A2771A427B3650D00A064F7 /* TuNKDownloadManger.h */,
+				2A2771A527B3650D00A064F7 /* TuImageViewTask.h */,
+				2A2771A627B3650D00A064F7 /* core */,
+				2A2771AB27B3650D00A064F7 /* TuNKDownloadAdapter.h */,
+				2A2771AC27B3650D00A064F7 /* TuNKNetworkArg.h */,
+				2A2771AD27B3650D00A064F7 /* TuNKDownloadItem.h */,
+				2A2771AE27B3650D00A064F7 /* TuNKImageAnalysis.h */,
+				2A2771AF27B3650D00A064F7 /* TuNKDownloadTask.h */,
+				2A2771B027B3650D00A064F7 /* TuNKFaceMark.h */,
+			);
+			path = network;
+			sourceTree = "<group>";
+		};
+		2A2771A627B3650D00A064F7 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				2A2771A727B3650D00A064F7 /* UIImageView+TuNetworkAdditions.h */,
+				2A2771A827B3650D00A064F7 /* TuNetworkOperation.h */,
+				2A2771A927B3650D00A064F7 /* TuNetworkImageCache.h */,
+				2A2771AA27B3650D00A064F7 /* TuNetworkReachability.h */,
+			);
+			path = core;
+			sourceTree = "<group>";
+		};
+		2A2771B527B3650D00A064F7 /* cx */ = {
+			isa = PBXGroup;
+			children = (
+				2A2771B627B3650D00A064F7 /* TMacUtils.h */,
+				2A2771B727B3650D00A064F7 /* SelesParameters.h */,
+				2A2771B827B3650D00A064F7 /* TuDefindConfigs.h */,
+				2A2771B927B3650D00A064F7 /* SelesImageIOS.h */,
+			);
+			path = cx;
+			sourceTree = "<group>";
+		};
+		2A2771BC27B3651200A064F7 /* TuSDKPulseEva */ = {
+			isa = PBXGroup;
+			children = (
+				2A2771BD27B3651200A064F7 /* include */,
+				2A2771C327B3651200A064F7 /* TuSDKPulseEva.a */,
+			);
+			path = TuSDKPulseEva;
+			sourceTree = "<group>";
+		};
+		2A2771BD27B3651200A064F7 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				2A2771BE27B3651200A064F7 /* TUPEvaProducer.h */,
+				2A2771BF27B3651200A064F7 /* TuSDKPulseEva.h */,
+				2A2771C027B3651200A064F7 /* TUPEvaDirector.h */,
+				2A2771C127B3651200A064F7 /* TUPEvaModel.h */,
+				2A2771C227B3651200A064F7 /* TUPEvaPlayer.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
 		45F0B29E2299FB18006D5F99 = {
 			isa = PBXGroup;
 			children = (
@@ -573,9 +921,9 @@
 		A65F5C2D2771BB2C003BBE0A /* TuSDK */ = {
 			isa = PBXGroup;
 			children = (
-				A65F5C2E2771BB2C003BBE0A /* TuSDKPulseEva.framework */,
-				A65F5C2F2771BB2C003BBE0A /* TuSDKPulse.framework */,
-				A65F5C302771BB2C003BBE0A /* TuSDKPulseCore.framework */,
+				2A2771BC27B3651200A064F7 /* TuSDKPulseEva */,
+				2A27715827B3650D00A064F7 /* TuSDKPulseCore */,
+				2A27714127B3650400A064F7 /* TuSDKPulse */,
 			);
 			name = TuSDK;
 			path = ../../../TuSDKEVADemo/TuSDKEvaDemo/resource/TuSDK;

@@ -7,7 +7,6 @@
 //
 
 #import "TAEModelMediator.h"
-#import <TuSDKPulseEva/TUPEvaModel.h>
 #import "TuSDKFramework.h"
 
 @implementation TAEModelTextItem

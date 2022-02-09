@@ -11,7 +11,7 @@
 //#import "TuSDKPulseCore/tools/TuTSScreen+Extend.h"
 //#import "TuSDKPulseCore/secrets/TuStatistics.h"
 //#import "TuSDKPulseCore/tools/TuTSLog.h"
-#import <TuSDKPulseCore/TuSDKPulseCore.h>
+#import "TuSDKPulseCore.h"
 /**
  *  图片编辑视图 (旋转，缩放)
  */

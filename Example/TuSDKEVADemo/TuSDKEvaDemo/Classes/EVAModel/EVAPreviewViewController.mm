@@ -11,10 +11,6 @@
 #import "EditViewController.h"
 #import "EvaProgressSlider.h"
 
-#import <TuSDKPulseEva/TUPEvaPlayer.h>
-#import <TuSDKPulse/TUPDisplayView.h>
-
-#import <TuSDKPulseEva/TUPEvaDirector.h>
 
 
 

@@ -1,6 +1,0 @@
-framework module TuSDKPulse {
-  umbrella header "TuSDKPulse.h"
-
-  export *
-  module * { export * }
-}

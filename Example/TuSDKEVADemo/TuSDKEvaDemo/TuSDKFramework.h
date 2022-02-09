@@ -8,6 +8,7 @@
 
 //#import "TuSDK/TuSDK.h"
 
-#import <TuSDKPulseCore/TuSDKPulseCore.h>
+#import "TuSDKPulseCore.h"
 //#import <TuViews/TuViews.h>
-#import <TuSDKPulseEva/TUPEvaModel.h>
+#import "TuSDKPulseEva.h"
+#import "TuSDKPulse.h"

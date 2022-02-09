@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "TuSDKFramework.h"
-#import <TuSDKPulse/TUPDisplayView.h>
 NS_ASSUME_NONNULL_BEGIN
 
 

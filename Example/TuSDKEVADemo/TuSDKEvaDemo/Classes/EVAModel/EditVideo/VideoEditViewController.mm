@@ -13,9 +13,6 @@
 #import "TrimmerMaskView.h"
 #import "VideoCuteView.h"
 #import <AVFoundation/AVFoundation.h>
-#import <TuSDKPulse/TUPVideoPlayer.h>
-#import <TuSDKPulse/TUPDisplayView.h>
-#import <TuSDKPulse/TUPTranscoder.h>
 #import "TuSDKVideoImageExtractor.h"
 #import "TuPopupProgress.h"
 //#import "TuSDKMediaAsset.h"

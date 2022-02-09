@@ -17,7 +17,7 @@
 #import "TuPopupProgress.h"
 #import <QuartzCore/QuartzCore.h>
 //#import "TuSDKPulseCore/tools/TuTSBundle.h"
-#import <TuSDKPulseCore/TuSDKPulseCore.h>
+#import "TuSDKPulseCore.h"
 #pragma mark LSQIndefiniteAnimatedView
 @interface LSQIndefiniteAnimatedView : UIView
 

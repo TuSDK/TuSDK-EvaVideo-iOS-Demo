@@ -14,7 +14,6 @@
 #import "DownLoadFileModel.h"
 #import "TuSDKFramework.h"
 #import "DownLoadListManager.h"
-#import "TuSDKPulse/TUPEngine.h"
 
 #define kColumMargin 12.0
 #define kRowMargin   12.0

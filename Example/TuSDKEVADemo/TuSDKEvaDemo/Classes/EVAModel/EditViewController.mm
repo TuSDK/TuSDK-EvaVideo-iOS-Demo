@@ -13,15 +13,10 @@
 #import "ImageEditViewController.h"
 #import "MultiAssetPicker.h"
 
-#import <TuSDKPulseEva/TUPEvaPlayer.h>
-#import <TuSDKPulseEva/TUPEvaModel.h>
-#import <TuSDKPulseEva/TUPEvaProducer.h>
-#import <TuSDKPulse/TUPProducer.h>
+#import "TuSDKFramework.h"
 #import "TuEvaAsset.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import <MediaPlayer/MPVolumeView.h>
-#import <TuSDKPulseEva/TUPEvaDirector.h>
-#import <TuSDKPulseEva/TUPEvaProducer.h>
 #import "TuPopupProgress.h"
 
 #import "TAEExportManager.h"
