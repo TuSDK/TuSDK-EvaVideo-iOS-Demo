@@ -12,7 +12,7 @@
 //#import <Bugly/Bugly.h>
 #import "TAEExportManager.h"
 #ifdef DEBUG
-#import <DoraemonKit/DoraemonManager.h>
+//#import <DoraemonKit/DoraemonManager.h>
 #endif
 @interface AppDelegate ()
 
@@ -31,9 +31,19 @@
     [TuPopupProgress setDefaultMaskType:TuSDKProgressHUDMaskTypeClear];
     
 #ifdef DEBUG
-    [[DoraemonManager shareInstance] install];
+//    [[DoraemonManager shareInstance] install];
 #endif
     
+//    BuglyConfig *config = [[BuglyConfig alloc] init];
+//    config.reportLogLevel = BuglyLogLevelWarn;
+   // [Bugly startWithAppId:@"33b8065dbd" config:config];
+    
+    // 添加文件引入
+    //#import <TuSDK/TuSDK.h>
+    // 版本号输出
+    //NSLog(@"TuSDK.framework 的版本号 : %@",lsqSDKVersion);
+    //NSLog(@"TuSDKVideo.framework 的版本号 : %@",lsqVideoVersion);
+    //NSLog(@"TuSDKEva.framework 的版本号 : %@",lsqEvaVersion);
     return YES;
 }
 
@@ -70,6 +80,39 @@
     NSLog(@"=========================================");
     NSLog(@"++++++++++++++内存警告+++++++++++++++++++++");
     NSLog(@"=========================================");
+}
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    
+
+    if (url) {
+        NSString *fileName = url.lastPathComponent; // 从路径中获得完整的文件名（带后缀）
+        // path 类似这种格式：file:///private/var/mobile/Containers/Data/Application/83643509-E90E-40A6-92EA-47A44B40CBBF/Documents/Inbox/jfkdfj123a.pdf
+        NSString *path = url.absoluteString; // 完整的url字符串
+        path = [self URLDecodedString:path]; // 解决url编码问题
+        
+        NSMutableString *string = [[NSMutableString alloc] initWithString:path];
+
+        if ([path hasPrefix:@"file://"]) { // 通过前缀来判断是文件
+            // 去除前缀：/private/var/mobile/Containers/Data/Application/83643509-E90E-40A6-92EA-47A44B40CBBF/Documents/Inbox/jfkdfj123a.pdf
+            [string replaceOccurrencesOfString:@"file://" withString:@"" options:NSCaseInsensitiveSearch range:NSMakeRange(0, path.length)];
+
+            // 此时获取到文件存储在本地的路径，就可以在自己需要使用的页面使用了
+            NSDictionary *dict = @{@"fileName":fileName,
+                                   @"filePath":string};
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"FileNotification" object:nil userInfo:dict];
+
+            return YES;
+        }
+    }
+    
+    return YES;
+}
+
+// 当文件名为中文时，解决url编码问题
+- (NSString *)URLDecodedString:(NSString *)str {
+    NSString *decodedString=(__bridge_transfer NSString *)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL, (__bridge CFStringRef)str, CFSTR(""), CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding));
+    NSLog(@"decodedString = %@",decodedString);
+    return decodedString;
 }
 
 

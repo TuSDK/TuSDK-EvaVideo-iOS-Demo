@@ -56,5 +56,22 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+    <key>CFBundleDocumentTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleTypeName</key>
+        <string>Binary</string>
+        <key>LSHandlerRank</key>
+        <string>Alternate</string>
+        <key>LSItemContentTypes</key>
+        <array>
+          <string>public.data</string>
+          <string>public.item</string>
+          <string>public.executable</string>
+          <string>com.apple.mach-o-binary</string>
+          <string>com.apple.pef-binary</string>
+        </array>
+      </dict>
+    </array>
 </dict>
 </plist>

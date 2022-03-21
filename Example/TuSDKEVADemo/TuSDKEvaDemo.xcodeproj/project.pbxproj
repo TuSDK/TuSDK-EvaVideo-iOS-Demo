@@ -3,11 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		04B44DF7265F8DB80094308C /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B44DF6265F8DB80094308C /* MediaPlayer.framework */; };
+		2A7A4D3627DEF067007DBCC5 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A7A4D3527DEF067007DBCC5 /* CloudKit.framework */; };
+		2ACAFE8327DF20B500482F9D /* TTDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ACAFE8227DF20B500482F9D /* TTDocument.m */; };
+		2ACAFE8727DF215200482F9D /* iCloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ACAFE8627DF215200482F9D /* iCloudManager.m */; };
 		45B606F422B733C700A9F3A6 /* TuSDKPulse.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 45B606F322B733C700A9F3A6 /* TuSDKPulse.bundle */; };
 		45F0B2AC2299FB18006D5F99 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 45F0B2AB2299FB18006D5F99 /* AppDelegate.mm */; };
 		45F0B2B22299FB18006D5F99 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45F0B2B02299FB18006D5F99 /* Main.storyboard */; };
@@ -15,12 +18,6 @@
 		45F0B2B72299FB18006D5F99 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45F0B2B52299FB18006D5F99 /* LaunchScreen.storyboard */; };
 		45F0B2BA2299FB18006D5F99 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 45F0B2B92299FB18006D5F99 /* main.m */; };
 		52D4415369A9A1384EB88409 /* Pods_TuSDKEvaDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D05AF8FB5B9041608DA425B /* Pods_TuSDKEvaDemo.framework */; };
-		A65F5C342771BB4D003BBE0A /* TuSDKPulse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A65F5C2F2771BB2C003BBE0A /* TuSDKPulse.framework */; platformFilter = ios; };
-		A65F5C352771BB4D003BBE0A /* TuSDKPulse.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A65F5C2F2771BB2C003BBE0A /* TuSDKPulse.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A65F5C362771BB4D003BBE0A /* TuSDKPulseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A65F5C302771BB2C003BBE0A /* TuSDKPulseCore.framework */; platformFilter = ios; };
-		A65F5C372771BB4D003BBE0A /* TuSDKPulseCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A65F5C302771BB2C003BBE0A /* TuSDKPulseCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A65F5C382771BB4D003BBE0A /* TuSDKPulseEva.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A65F5C2E2771BB2C003BBE0A /* TuSDKPulseEva.framework */; platformFilter = ios; };
-		A65F5C392771BB4D003BBE0A /* TuSDKPulseEva.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A65F5C2E2771BB2C003BBE0A /* TuSDKPulseEva.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A68905B826AA0B8000EC15AE /* TuTouchImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A68905B526AA0B7F00EC15AE /* TuTouchImageView.m */; };
 		A68905B926AA0B8000EC15AE /* TuMaskRegionView.m in Sources */ = {isa = PBXBuildFile; fileRef = A68905B626AA0B7F00EC15AE /* TuMaskRegionView.m */; };
 		A68905BC26AA0CF800EC15AE /* TuPopupProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = A68905BB26AA0CF700EC15AE /* TuPopupProgress.m */; };
@@ -28,6 +25,12 @@
 		A691C77527675508005BC230 /* TAEModelMediator.m in Sources */ = {isa = PBXBuildFile; fileRef = A691C77427675508005BC230 /* TAEModelMediator.m */; };
 		A691C77927684D1A005BC230 /* TAEWave.m in Sources */ = {isa = PBXBuildFile; fileRef = A691C77827684D1A005BC230 /* TAEWave.m */; };
 		A691C77C27686D47005BC230 /* TAEWaveProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = A691C77B27686D47005BC230 /* TAEWaveProgress.m */; };
+		A6DFAFD027E8591700A80F10 /* TuSDKPulse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6DFAFCB27E8513B00A80F10 /* TuSDKPulse.framework */; };
+		A6DFAFD127E8591700A80F10 /* TuSDKPulse.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A6DFAFCB27E8513B00A80F10 /* TuSDKPulse.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A6DFAFD227E8591700A80F10 /* TuSDKPulseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6DFAFCC27E8513B00A80F10 /* TuSDKPulseCore.framework */; };
+		A6DFAFD327E8591700A80F10 /* TuSDKPulseCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A6DFAFCC27E8513B00A80F10 /* TuSDKPulseCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A6DFAFD427E8591700A80F10 /* TuSDKPulseEva.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6DFAFCA27E8513B00A80F10 /* TuSDKPulseEva.framework */; };
+		A6DFAFD527E8591700A80F10 /* TuSDKPulseEva.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A6DFAFCA27E8513B00A80F10 /* TuSDKPulseEva.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B8446DD523B8764400E60E41 /* DownLoadListManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B8446DD423B8764400E60E41 /* DownLoadListManager.m */; };
 		B8446E6623B8792600E60E41 /* SDImageHEICCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = B8446DD923B8792500E60E41 /* SDImageHEICCoder.m */; };
 		B8446E6723B8792600E60E41 /* NSImage+Compatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = B8446DDB23B8792500E60E41 /* NSImage+Compatibility.m */; };
@@ -176,15 +179,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		A65F5C3A2771BB4D003BBE0A /* Embed Frameworks */ = {
+		A6DFAFD627E8591700A80F10 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A65F5C352771BB4D003BBE0A /* TuSDKPulse.framework in Embed Frameworks */,
-				A65F5C392771BB4D003BBE0A /* TuSDKPulseEva.framework in Embed Frameworks */,
-				A65F5C372771BB4D003BBE0A /* TuSDKPulseCore.framework in Embed Frameworks */,
+				A6DFAFD127E8591700A80F10 /* TuSDKPulse.framework in Embed Frameworks */,
+				A6DFAFD527E8591700A80F10 /* TuSDKPulseEva.framework in Embed Frameworks */,
+				A6DFAFD327E8591700A80F10 /* TuSDKPulseCore.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -195,6 +198,12 @@
 		04B44DF6265F8DB80094308C /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		04B44DF8265F8DF30094308C /* TuSDKPulseCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TuSDKPulseCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D05AF8FB5B9041608DA425B /* Pods_TuSDKEvaDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TuSDKEvaDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A7A4D3527DEF067007DBCC5 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		2ACAFE8127DF20B500482F9D /* TTDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTDocument.h; sourceTree = "<group>"; };
+		2ACAFE8227DF20B500482F9D /* TTDocument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTDocument.m; sourceTree = "<group>"; };
+		2ACAFE8527DF215200482F9D /* iCloudManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iCloudManager.h; sourceTree = "<group>"; };
+		2ACAFE8627DF215200482F9D /* iCloudManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iCloudManager.m; sourceTree = "<group>"; };
+		2ACAFE8827DF238500482F9D /* TuSDKEvaDemo.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = TuSDKEvaDemo.entitlements; sourceTree = "<group>"; };
 		2AE9C5451D6D41984ADCD5A3 /* Pods-TuSDKEvaDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TuSDKEvaDemo.debug.xcconfig"; path = "Target Support Files/Pods-TuSDKEvaDemo/Pods-TuSDKEvaDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		45479E2E22ABE99C006040AB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		45B606F322B733C700A9F3A6 /* TuSDKPulse.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TuSDKPulse.bundle; sourceTree = "<group>"; };
@@ -218,9 +227,6 @@
 		45F0B2CD2299FB67006D5F99 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		45F0B2CF2299FB6D006D5F99 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		7F6BABB76364914FBC86C688 /* Pods-TuSDKEvaDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TuSDKEvaDemo.release.xcconfig"; path = "Target Support Files/Pods-TuSDKEvaDemo/Pods-TuSDKEvaDemo.release.xcconfig"; sourceTree = "<group>"; };
-		A65F5C2E2771BB2C003BBE0A /* TuSDKPulseEva.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TuSDKPulseEva.framework; sourceTree = "<group>"; };
-		A65F5C2F2771BB2C003BBE0A /* TuSDKPulse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TuSDKPulse.framework; sourceTree = "<group>"; };
-		A65F5C302771BB2C003BBE0A /* TuSDKPulseCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TuSDKPulseCore.framework; sourceTree = "<group>"; };
 		A68905B426AA0B7F00EC15AE /* TuTouchImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuTouchImageView.h; sourceTree = "<group>"; };
 		A68905B526AA0B7F00EC15AE /* TuTouchImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TuTouchImageView.m; sourceTree = "<group>"; };
 		A68905B626AA0B7F00EC15AE /* TuMaskRegionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TuMaskRegionView.m; sourceTree = "<group>"; };
@@ -235,6 +241,9 @@
 		A691C77827684D1A005BC230 /* TAEWave.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TAEWave.m; sourceTree = "<group>"; };
 		A691C77A27686D47005BC230 /* TAEWaveProgress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TAEWaveProgress.h; sourceTree = "<group>"; };
 		A691C77B27686D47005BC230 /* TAEWaveProgress.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TAEWaveProgress.m; sourceTree = "<group>"; };
+		A6DFAFCA27E8513B00A80F10 /* TuSDKPulseEva.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TuSDKPulseEva.framework; sourceTree = "<group>"; };
+		A6DFAFCB27E8513B00A80F10 /* TuSDKPulse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TuSDKPulse.framework; sourceTree = "<group>"; };
+		A6DFAFCC27E8513B00A80F10 /* TuSDKPulseCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TuSDKPulseCore.framework; sourceTree = "<group>"; };
 		B8446DD323B8764300E60E41 /* DownLoadListManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownLoadListManager.h; sourceTree = "<group>"; };
 		B8446DD423B8764400E60E41 /* DownLoadListManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownLoadListManager.m; sourceTree = "<group>"; };
 		B8446DD823B8792500E60E41 /* UIImage+ExtendedCacheData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ExtendedCacheData.h"; sourceTree = "<group>"; };
@@ -392,7 +401,6 @@
 		D71E5AAA233B6867009D2FDC /* DownLoadManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownLoadManager.m; sourceTree = "<group>"; };
 		D71E5AAC233B6A03009D2FDC /* DownLoadFileModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownLoadFileModel.h; sourceTree = "<group>"; };
 		D71E5AAD233B6A03009D2FDC /* DownLoadFileModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownLoadFileModel.m; sourceTree = "<group>"; };
-		D71EB158235732EB004B0BA8 /* TuSDKEvaDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TuSDKEvaDemo.entitlements; sourceTree = "<group>"; };
 		D72A775B22F7BF69006DB467 /* 08-cover.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "08-cover.jpg"; sourceTree = "<group>"; };
 		D77418C122CA338D0025625C /* City Sunshine.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "City Sunshine.mp3"; sourceTree = "<group>"; };
 		D77418C222CA338D0025625C /* Rush.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Rush.mp3; sourceTree = "<group>"; };
@@ -491,14 +499,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A65F5C342771BB4D003BBE0A /* TuSDKPulse.framework in Frameworks */,
-				A65F5C362771BB4D003BBE0A /* TuSDKPulseCore.framework in Frameworks */,
 				04B44DF7265F8DB80094308C /* MediaPlayer.framework in Frameworks */,
+				A6DFAFD427E8591700A80F10 /* TuSDKPulseEva.framework in Frameworks */,
 				B86D1B3224E284BA00BA6A13 /* libc++.tbd in Frameworks */,
 				B86D1B3124E284AF00BA6A13 /* libz.tbd in Frameworks */,
+				2A7A4D3627DEF067007DBCC5 /* CloudKit.framework in Frameworks */,
+				A6DFAFD027E8591700A80F10 /* TuSDKPulse.framework in Frameworks */,
+				A6DFAFD227E8591700A80F10 /* TuSDKPulseCore.framework in Frameworks */,
 				D711E9DE22FC1EC200545604 /* libresolv.tbd in Frameworks */,
 				D72A774122F4040E006DB467 /* libiconv.tbd in Frameworks */,
-				A65F5C382771BB4D003BBE0A /* TuSDKPulseEva.framework in Frameworks */,
 				52D4415369A9A1384EB88409 /* Pods_TuSDKEvaDemo.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -506,6 +515,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2ACAFE8427DF213400482F9D /* iCloud */ = {
+			isa = PBXGroup;
+			children = (
+				2ACAFE8527DF215200482F9D /* iCloudManager.h */,
+				2ACAFE8627DF215200482F9D /* iCloudManager.m */,
+				2ACAFE8127DF20B500482F9D /* TTDocument.h */,
+				2ACAFE8227DF20B500482F9D /* TTDocument.m */,
+			);
+			path = iCloud;
+			sourceTree = "<group>";
+		};
 		45F0B29E2299FB18006D5F99 = {
 			isa = PBXGroup;
 			children = (
@@ -527,7 +547,7 @@
 		45F0B2A92299FB18006D5F99 /* TuSDKEvaDemo */ = {
 			isa = PBXGroup;
 			children = (
-				D71EB158235732EB004B0BA8 /* TuSDKEvaDemo.entitlements */,
+				2ACAFE8827DF238500482F9D /* TuSDKEvaDemo.entitlements */,
 				D774191622CC8F210025625C /* 视频融合文档-iOS.md */,
 				D7911078236AD94800DE0293 /* lsq_eva_001.mp4 */,
 				D77418BF22CA338D0025625C /* resource */,
@@ -548,6 +568,7 @@
 		45F0B2C02299FB23006D5F99 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2A7A4D3527DEF067007DBCC5 /* CloudKit.framework */,
 				B8ADB6B926A9EC7100A36075 /* TuViews.framework */,
 				04B44DF8265F8DF30094308C /* TuSDKPulseCore.framework */,
 				04B44DF6265F8DB80094308C /* MediaPlayer.framework */,
@@ -568,17 +589,6 @@
 				1D05AF8FB5B9041608DA425B /* Pods_TuSDKEvaDemo.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		A65F5C2D2771BB2C003BBE0A /* TuSDK */ = {
-			isa = PBXGroup;
-			children = (
-				A65F5C2E2771BB2C003BBE0A /* TuSDKPulseEva.framework */,
-				A65F5C2F2771BB2C003BBE0A /* TuSDKPulse.framework */,
-				A65F5C302771BB2C003BBE0A /* TuSDKPulseCore.framework */,
-			);
-			name = TuSDK;
-			path = ../../../TuSDKEVADemo/TuSDKEvaDemo/resource/TuSDK;
 			sourceTree = "<group>";
 		};
 		A691C77027675285005BC230 /* TAEEdit */ = {
@@ -602,6 +612,16 @@
 				A691C77B27686D47005BC230 /* TAEWaveProgress.m */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		A6DFAFC927E8513B00A80F10 /* TuSDK */ = {
+			isa = PBXGroup;
+			children = (
+				A6DFAFCA27E8513B00A80F10 /* TuSDKPulseEva.framework */,
+				A6DFAFCB27E8513B00A80F10 /* TuSDKPulse.framework */,
+				A6DFAFCC27E8513B00A80F10 /* TuSDKPulseCore.framework */,
+			);
+			path = TuSDK;
 			sourceTree = "<group>";
 		};
 		B8446DD623B8792500E60E41 /* SDWebImage */ = {
@@ -801,7 +821,7 @@
 		D77418BF22CA338D0025625C /* resource */ = {
 			isa = PBXGroup;
 			children = (
-				A65F5C2D2771BB2C003BBE0A /* TuSDK */,
+				A6DFAFC927E8513B00A80F10 /* TuSDK */,
 				D774190722CB68D20025625C /* sample_watermark.png */,
 				D77418C022CA338D0025625C /* music */,
 				D77418C722CA338D0025625C /* images */,
@@ -871,6 +891,7 @@
 		D789D62622C31D9E008D8F18 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				2ACAFE8427DF213400482F9D /* iCloud */,
 				D789D61822C30B11008D8F18 /* HomeViewController.h */,
 				D789D61922C30B11008D8F18 /* HomeViewController.mm */,
 				D789D61D22C31163008D8F18 /* CollectionViewLayout.h */,
@@ -995,8 +1016,7 @@
 				45F0B2A42299FB18006D5F99 /* Frameworks */,
 				45F0B2A52299FB18006D5F99 /* Resources */,
 				B86D1B3624E2863000BA6A13 /* ShellScript */,
-				B6F8E35DF8ADD91CB168C707 /* [CP] Embed Pods Frameworks */,
-				A65F5C3A2771BB4D003BBE0A /* Embed Frameworks */,
+				A6DFAFD627E8591700A80F10 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1119,23 +1139,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B6F8E35DF8ADD91CB168C707 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TuSDKEvaDemo/Pods-TuSDKEvaDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TuSDKEvaDemo/Pods-TuSDKEvaDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TuSDKEvaDemo/Pods-TuSDKEvaDemo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		B86D1B3624E2863000BA6A13 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1191,6 +1194,7 @@
 				D789D62722C3215C008D8F18 /* HomeViewController.mm in Sources */,
 				B86D1B3024E1BFDE00BA6A13 /* TuSDKVideoImageExtractor.m in Sources */,
 				B8446E8F23B8792600E60E41 /* SDImageTransformer.m in Sources */,
+				2ACAFE8727DF215200482F9D /* iCloudManager.m in Sources */,
 				D789D62822C3215C008D8F18 /* HomeCollectionViewCell.mm in Sources */,
 				B8446DD523B8764400E60E41 /* DownLoadListManager.m in Sources */,
 				B8446E9B23B8792600E60E41 /* UIImage+Metadata.m in Sources */,
@@ -1250,6 +1254,7 @@
 				B8446E7723B8792600E60E41 /* SDGraphicsImageRenderer.m in Sources */,
 				B8446E7323B8792600E60E41 /* SDWebImageDownloader.m in Sources */,
 				B8446EA623B8792600E60E41 /* SDAsyncBlockOperation.m in Sources */,
+				2ACAFE8327DF20B500482F9D /* TTDocument.m in Sources */,
 				B8446E8723B8792600E60E41 /* SDWebImageDownloaderConfig.m in Sources */,
 				45F0B2AC2299FB18006D5F99 /* AppDelegate.mm in Sources */,
 				B8446E6A23B8792600E60E41 /* SDWebImageDownloaderDecryptor.m in Sources */,
@@ -1412,9 +1417,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TuSDKEvaDemo/TuSDKEvaDemo.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20211221;
+				CURRENT_PROJECT_VERSION = 20211101;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 9U2KRZU6GT;
 				ENABLE_BITCODE = NO;
@@ -1437,7 +1442,7 @@
 					"\"$(SRCROOT)/../../iOS-eva-dev/ios/TuSDK/framework/TuSDK\"/**",
 					"\"$(SRCROOT)/../libTuSDKCore\"",
 				);
-				MARKETING_VERSION = 3.0.4;
+				MARKETING_VERSION = 3.0.3;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"$(inherited)",
@@ -1457,9 +1462,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = TuSDKEvaDemo/TuSDKEvaDemo.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20211221;
+				CURRENT_PROJECT_VERSION = 20211101;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 9U2KRZU6GT;
 				ENABLE_BITCODE = NO;
@@ -1482,7 +1487,7 @@
 					"\"$(SRCROOT)/../../iOS-eva-dev/ios/TuSDK/framework/TuSDK\"/**",
 					"\"$(SRCROOT)/../libTuSDKCore\"",
 				);
-				MARKETING_VERSION = 3.0.4;
+				MARKETING_VERSION = 3.0.3;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"$(inherited)",

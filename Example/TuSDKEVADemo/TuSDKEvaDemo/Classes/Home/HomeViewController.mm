@@ -15,13 +15,13 @@
 #import "TuSDKFramework.h"
 #import "DownLoadListManager.h"
 #import "TuSDKPulse/TUPEngine.h"
-
+#import "iCloudManager.h"
 #define kColumMargin 12.0
 #define kRowMargin   12.0
 #define kItemWidth   (([UIScreen mainScreen].bounds.size.width - kColumMargin*3) * 0.5)
 
 
-@interface HomeViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, CollectionViewLayoutDelegate>
+@interface HomeViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, CollectionViewLayoutDelegate, UIDocumentPickerDelegate>
 
 @property (weak, nonatomic) IBOutlet CollectionViewLayout *collectionViewLayout;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -30,7 +30,7 @@
  models
  */
 @property (nonatomic, strong) NSMutableArray *models;
-
+@property(nonatomic, strong) UIActivityIndicatorView *indicatorView;
 @end
 
 @implementation HomeViewController
@@ -52,6 +52,7 @@
     
     self.view.backgroundColor = [UIColor colorWithRed:19.0/255.0 green:19.0/255.0 blue:19.0/255.0 alpha:1.0];
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"edit_ic_add"] style:UIBarButtonItemStylePlain target:self action:@selector(addCustomAction)];
     [self.collectionView registerNib:[UINib nibWithNibName:@"HomeCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"HomeCollectionViewCell"];
     self.collectionViewLayout.delegate = self;
     self.collectionView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
@@ -69,9 +70,82 @@
     
     //初始化
     [TUPEngine Init:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(urlCustomAction:) name:@"FileNotification" object:nil];
+    
 }
 
+- (void)urlCustomAction:(NSNotification *)notification {
+    NSDictionary *dict = notification.userInfo;
+    NSString *fileName = dict[@"fileName"];
+    NSString *filePath = dict[@"filePath"];
+    if (![fileName containsString:@"eva"]) {
+        return;
+    }
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:[EVAPreviewViewController classForCoder]]) {
+            [self.navigationController popViewControllerAnimated:NO];
+            break;
+        }
+    }
+    [self pushDetail:filePath fileName:fileName];
+}
 
+- (void)addCustomAction {
+    if (![iCloudManager iCloudEnable]) {
+        return;
+    }
+    if (!_indicatorView) {
+        _indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        _indicatorView.frame = CGRectMake(0, 0, 75, 75);
+        _indicatorView.backgroundColor = UIColor.blackColor;
+        _indicatorView.layer.cornerRadius = 6;
+        _indicatorView.clipsToBounds = YES;
+        _indicatorView.center = self.collectionView.center;
+        [self.view addSubview:_indicatorView];
+        
+    }
+    [self.indicatorView startAnimating];
+    NSArray *documentTypes = @[@"public.content", @"public.text", @"public.data", @"public.executable",@"public.item"];
+    UIDocumentPickerViewController *documentPickerViewController = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:documentTypes inMode:UIDocumentPickerModeOpen];
+    documentPickerViewController.delegate = self;
+    [self presentViewController:documentPickerViewController animated:YES completion:nil];
+}
+
+- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentAtURL:(NSURL *)url {
+    NSArray *array = [[url absoluteString] componentsSeparatedByString:@"/"];
+    NSString *fileName = [array lastObject];
+    fileName = [fileName stringByRemovingPercentEncoding];
+    if (![fileName containsString:@"eva"]) {
+        [self dismissIndicator];
+        return;
+    }
+    
+    [iCloudManager downloadWithDocumentURL:url callBack:^(id obj) {
+        NSData *data = obj;
+        //写入沙盒Documents
+        NSString *path = [NSHomeDirectory() stringByAppendingString:[NSString stringWithFormat:@"/Documents/%@",fileName]];
+        BOOL ret = [data writeToFile:path atomically:YES];
+        [self dismissIndicator];
+        if (ret) {
+            [self pushDetail:path fileName:fileName];
+        }
+    }];
+}
+
+- (void)dismissIndicator {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.indicatorView stopAnimating];
+    });
+}
+
+- (void)pushDetail:(NSString *)path fileName:(NSString *)fileName {
+    // 已经下载的
+    EVAPreviewViewController *vc = [[EVAPreviewViewController alloc] initWithNibName:nil bundle:nil];
+    vc.evaPath = path;
+    vc.modelTitle = fileName;
+    vc.fileName = fileName;
+    [self showViewController:vc sender:nil];
+}
 
 #pragma mark - UICollectionViewDataSource, UICollectionViewDelegate
 

@@ -8,6 +8,6 @@ target 'TuSDKEvaDemo' do
 
    use_frameworks!
 #pod 'GPUUtilization'#, :configurations => ['Debug']
-pod 'DoraemonKit/Core', '~> 3.0.4', :configurations => ['Debug']
+#pod 'DoraemonKit/Core', '~> 3.0.4', :configurations => ['Debug']
 #   pod 'AFNetworking'
 end
