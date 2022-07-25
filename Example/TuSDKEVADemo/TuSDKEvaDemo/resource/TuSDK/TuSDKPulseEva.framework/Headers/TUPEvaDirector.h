@@ -38,6 +38,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL) openModel:(TUPEvaModel*)model;
 
+- (BOOL)openModel:(TUPEvaModel *)model fontPath:(NSString *)fontPath;
+
 - (void) close;
 
 

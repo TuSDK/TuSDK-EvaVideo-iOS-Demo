@@ -13,19 +13,14 @@
 #import "ImageEditViewController.h"
 #import "MultiAssetPicker.h"
 
-#import <TuSDKPulseEva/TUPEvaPlayer.h>
-#import <TuSDKPulseEva/TUPEvaModel.h>
-#import <TuSDKPulseEva/TUPEvaProducer.h>
-#import <TuSDKPulse/TUPProducer.h>
 #import "TuEvaAsset.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import <MediaPlayer/MPVolumeView.h>
-#import <TuSDKPulseEva/TUPEvaDirector.h>
-#import <TuSDKPulseEva/TUPEvaProducer.h>
-#import "TuPopupProgress.h"
 
+#import "TuPopupProgress.h"
+#import "TTItemReplaceView.h"
 #import "TAEExportManager.h"
-#import "TAEModelMediator.h"
+#import "TTDirectorMediator.h"
 
 //#import <GPUUtilization/GPUUtilization.h>
 
@@ -38,11 +33,12 @@ typedef NS_ENUM(NSUInteger, TuSelectFilePathState) {
 /** 视频支持的最大边界 */
 static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 
-@interface EditViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, MultiPickerDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, TUPPlayerDelegate, TUPProducerDelegate>
+@interface EditViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, MultiPickerDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate , TTItemReplaceViewDelegate, TTDirectorMediatorDelegate>
 
 {
-    NSInteger _index;
     BOOL _producerCancel;
+    //是否允许select标记
+    BOOL _canSelect;
 }
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *previewSuperHeight;
 @property (weak, nonatomic) IBOutlet UIView *previewSuperView;
@@ -60,6 +56,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textFiledBottom;
 @property (weak, nonatomic) IBOutlet UIView *volumView;
+
 
 ///**总时长*/
 //@property (nonatomic, strong) UILabel *totalTimelabel;
@@ -79,22 +76,6 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
  */
 @property (nonatomic, assign) TuSelectFilePathState selectPathState;
 
-/**
- orgResources
- */
-@property (nonatomic, strong) NSMutableArray *orgResources;
-/**
- changeState
- */
-@property (nonatomic, strong) NSMutableArray *statusResources;
-
-/**
- eva 播放器
- */
-@property (nonatomic, strong) TUPEvaDirectorPlayer *evaPlayer;
-@property (nonatomic, strong) TUPEvaDirector *evaDirector;
-
-@property (nonatomic, strong) NSMutableArray *imageResources;
 /**
  slider Befor
  */
@@ -120,18 +101,6 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 /**暂停时间*/
 @property (nonatomic, assign) NSInteger pauseTime;
 
-@property (nonatomic, strong) TUPEvaReplaceConfig_ImageOrVideo *evaConfig;
-/**
- 视频config
- */
-@property (nonatomic, strong) TUPEvaReplaceConfig_ImageOrVideo *videoConfig;
-
-/**存储器*/
-//@property (nonatomic, strong) TUPEvaProducer *producer;
-@property (nonatomic, strong) TUPEvaDirectorProducer *producer;
-/**是否重置*/
-@property (nonatomic, assign) BOOL isReset;
-
 /**音量视图*/
 @property (nonatomic, strong) MPVolumeView *volumeView;
 @property (nonatomic, strong) UISlider *volumeViewSlider;
@@ -140,8 +109,18 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 @property (nonatomic, assign) NSInteger totalTime;
 
 @property (nonatomic, assign) BOOL isStart;
-
-@property (nonatomic, strong) TAEModelMediator *mediator;
+/// 选中的文字模块
+@property (nonatomic, strong) TAEModelTextItem *selectTextItem;
+/// 选中的视频图片模块
+@property (nonatomic, strong) TAEModelVideoItem *selectVideoItem;
+/// 选中的index
+@property (nonatomic, assign) NSInteger selectIndex;
+/// 操作视图
+@property (nonatomic, strong) TTItemReplaceView *itemReplaceView;
+/// eva模型中间件
+@property (nonatomic, strong) TTDirectorMediator *directorMediator;
+/// displayViewRect
+@property (nonatomic, assign) CGRect displayRect;
 
 @end
 
@@ -150,43 +129,18 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.selectIndex = -1;
+    
     [self commonInit];
     
     self.isStart = YES;
-    _index = 999;
+
     // 添加后台、前台切换的通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterBackFromFront) name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterFrontFromBack) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     self.producerSate = kDO_START;
-    
-//    {
-//
-//
-//        //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            UILabel * gpuLabel = [[UILabel alloc] init];
-//            gpuLabel.backgroundColor = [UIColor whiteColor];
-//            gpuLabel.font = [UIFont fontWithName:@"Courier" size:14];
-//            gpuLabel.text = @"GPU:  0%";
-//            gpuLabel.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
-//            [gpuLabel sizeToFit];
-//
-//            CGRect rect = gpuLabel.frame;
-//            rect.origin.x = 10.f;
-//            rect.origin.y = 200;//application.statusBarFrame.size.height;
-//            gpuLabel.frame = rect;
-//            [self.view addSubview:gpuLabel];
-//
-//            NSTimer *timer = [NSTimer timerWithTimeInterval:0.5
-//                                                    repeats:YES
-//                                                      block:^(NSTimer * timer) {
-//                                                          [GPUUtilization fetchCurrentUtilization:^(GPUUtilization *current) {
-//                                                              gpuLabel.text = [NSString stringWithFormat:@"GPU: %2zd%%", current.deviceUtilization];
-//                                                          }];
-//                                                      }];
-//            [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
-//        //});
-//    }
+
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -218,8 +172,6 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     }
 }
 
-
-
 /**
  对象消耗回调
  */
@@ -230,20 +182,17 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
         _musiView = nil;
     }
     
-    if (_evaDirector) {
-        [_evaPlayer close];
-        [_displayView teardown];
-        [_evaDirector close];
+    if (self.directorMediator) {
+        [self.directorMediator destory];
     }
 
     //清除临时图片、视频文件
     if (self.mediator && !self.mediator.isSilenceExport) {
-        [self.mediator removeTempFilePath];
         self.mediator = nil;
     }
     
     // 希望可以及时回收FBO
-    NSLog(@"EditViewController ------ dealloc");
+    NSLog(@"TUEVA:EditViewController ------ dealloc");
     
     //注销系统音量监听
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"AVSystemController_SystemVolumeDidChangeNotification" object:nil];
@@ -268,9 +217,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     saveBtn.titleLabel.font = [UIFont systemFontOfSize:18 weight:UIFontWeightMedium];
     [saveBtn addTarget:self action:@selector(saveAction) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:saveBtn];
-    
-    [self resetOrgResoures];
-    
+        
     [self.evaSlider setThumbImage:[UIImage imageNamed:@"circle_s_ic"] forState:UIControlStateNormal];
     self.evaSlider.value = 0.0;
     
@@ -288,92 +235,96 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     
-    // evaplayer加载
-    if (_evaPlayer == nil) {
+    self.directorMediator = [[TTDirectorMediator alloc] init];
+    self.directorMediator.delegate = self;
+    [self.directorMediator setup:self.mediator.filePath];
+    
 
-        
-        TUPEvaModel *model = [[TUPEvaModel alloc] init:self.evaPath];
-
-        [self.volumeView setVolumeThumbImage:[UIImage imageNamed:@"circle_b_ic"] forState:UIControlStateNormal];
-        
-        self.volmSlider.hidden = YES;
-        [self.volumView addSubview:self.volumeView];
-        
-        self.volumeView.frame = CGRectMake(CGRectGetMinX(self.volmSlider.frame), 7, CGRectGetWidth(self.volmSlider.frame), CGRectGetHeight(self.volmSlider.frame));
-        self.volumeViewSlider.frame = self.volumeView.bounds;
-        [self.volumeViewSlider addTarget:self action:@selector(volumeValueChange:) forControlEvents:UIControlEventValueChanged];
-        
-        // 页面布局
-        // 视频预览视图宽高，两边留边12pt
-        CGFloat sWidth  = [UIScreen mainScreen].bounds.size.width;
-        
-        CGFloat tnHeight = [UIDevice lsqIsDeviceiPhoneX] ? (88 + 34) : 64;
-        CGFloat sHeight = [UIScreen mainScreen].bounds.size.height - tnHeight - 270;
-        CGSize videoSize = [model getSize];
-        CGFloat vWidth  = videoSize.width;
-        CGFloat vHeight = videoSize.height;
-
-        CGFloat sliderWidth = sWidth;
-        if (sWidth/sHeight > vWidth/vHeight) {
-            // 视频偏宽
-            if (sWidth * (vHeight/vWidth) > sHeight) {
-                self.previewHeight.constant = sHeight;
-                
-                sliderWidth= sHeight * (vWidth/vHeight);
-
-            } else {
-                self.previewHeight.constant = sWidth * (vHeight/vWidth);
-            }
+    [self.volumeView setVolumeThumbImage:[UIImage imageNamed:@"circle_b_ic"] forState:UIControlStateNormal];
+    
+    self.volmSlider.hidden = YES;
+    [self.volumView addSubview:self.volumeView];
+    
+    self.volumeView.frame = CGRectMake(CGRectGetMinX(self.volmSlider.frame), 7, CGRectGetWidth(self.volmSlider.frame), CGRectGetHeight(self.volmSlider.frame));
+    self.volumeViewSlider.frame = self.volumeView.bounds;
+    [self.volumeViewSlider addTarget:self action:@selector(volumeValueChange:) forControlEvents:UIControlEventValueChanged];
+    // 页面布局
+    // 视频预览视图宽高，两边留边12pt
+    CGFloat sWidth  = [UIScreen mainScreen].bounds.size.width;
+    
+    CGFloat tnHeight = [UIDevice lsqIsDeviceiPhoneX] ? (88 + 34) : 64;
+    CGFloat sHeight = [UIScreen mainScreen].bounds.size.height - tnHeight - 270;
+    CGSize videoSize = [self.directorMediator modelSize];
+    CGFloat vWidth  = videoSize.width;
+    CGFloat vHeight = videoSize.height;
+    
+    self.displayRect = CGRectZero;
+    
+    CGFloat sliderWidth = sWidth;
+    if (sWidth/sHeight > vWidth/vHeight) {
+        // 视频偏宽
+        if (sWidth * (vHeight/vWidth) > sHeight) {
+            self.previewHeight.constant = sHeight;
+            
+            sliderWidth = sHeight * (vWidth/vHeight);
+            
         } else {
-            if (sHeight * (vWidth/vHeight) > sWidth) {
-                self.previewHeight.constant = sWidth * (vHeight/vWidth);
-            } else {
-                self.previewHeight.constant = sHeight;
-                sliderWidth= sHeight * (vWidth/vHeight);
-            }
+            self.previewHeight.constant = sWidth * (vHeight/vWidth);
         }
-            self.previewSuperHeight.constant = self.previewHeight.constant + 10;
-            
-           
-            [self setupPlayer];
-            
+//        self.previewSuperView.frame = CGRectMake(0, 0, CGRectGetWidth(self.preview.frame), self.previewHeight.constant);
+//        self.displayRect = CGRectMake(0, 0, CGRectGetWidth(self.preview.frame), self.previewHeight.constant);
+        self.previewSuperHeight.constant = self.previewHeight.constant + 10;
         
-        
-        [self.view layoutIfNeeded];
-                
-        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        self.volmSlider.value = audioSession.outputVolume;
-        NSLog(@"系统媒体音量 === %.2f", audioSession.outputVolume);
-        
-        //系统音量监听
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(volumeClicked:) name:@"AVSystemController_SystemVolumeDidChangeNotification" object:nil];
-        [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-        
-//        //创建时长视图
-//        [self creatShowTimeView];
+    } else {
+        if (sHeight * (vWidth/vHeight) > sWidth) {
+            self.previewHeight.constant = sWidth * (vHeight/vWidth);
+        } else {
+            self.previewHeight.constant = sHeight;
+            sliderWidth= sHeight * (vWidth/vHeight);
+        }
+//        self.previewSuperView.frame = CGRectMake(0, (sHeight - self.previewHeight.constant) / 2, CGRectGetWidth(self.preview.frame), self.previewHeight.constant);
+//        self.displayRect = CGRectMake(0, (sHeight - self.previewHeight.constant) / 2, CGRectGetWidth(self.preview.frame), self.previewHeight.constant);
     }
+    self.displayRect = CGRectMake(0, 0, CGRectGetWidth(self.preview.frame), self.previewHeight.constant);
+    
+    
+    
+    [self setupPlayer];
+
+    [self.view layoutIfNeeded];
+    
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    self.volmSlider.value = audioSession.outputVolume;
+    NSLog(@"系统媒体音量 === %.2f", audioSession.outputVolume);
+    
+    //系统音量监听
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(volumeClicked:) name:@"AVSystemController_SystemVolumeDidChangeNotification" object:nil];
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    
+    //        //创建时长视图
+    //        [self creatShowTimeView];
 }
+
   
 - (void)setupPlayer
 {
-    TUPEvaModel *model = [[TUPEvaModel alloc] init:self.evaPath];
-    self.displayView = [[TUPDisplayView alloc] init];
-    [self.preview addSubview:self.displayView];
-    [self.displayView setup:nil];
+    [self.directorMediator setupView:self.preview rect:self.displayRect];
+    self.totalTime = [self.directorMediator getDuration];
     
-    self.displayView.frame = CGRectMake(0, 0, lsqScreenWidth, self.previewHeight.constant);
     
-    self.evaDirector = [[TUPEvaDirector alloc] init];
-    [self.evaDirector openModel:model];
-    
-    self.evaPlayer = (TUPEvaDirectorPlayer *)[self.evaDirector newPlayer];
-    [self.evaPlayer open];
-    self.evaPlayer.delegate = self;
-    
-    self.totalTime = [self.evaPlayer getDuration];
-    
-    [self.displayView attachPlayer:self.evaPlayer];
-    [self.evaPlayer play];
+    //如果素材选择页面存在替换，则需要替换
+    for (id item in self.mediator.resource) {
+        if ([item isKindOfClass:[TAEModelVideoItem class]]) {
+            TAEModelVideoItem *videoItem = (TAEModelVideoItem *)item;
+            if (videoItem.isReplace) {
+                
+                videoItem.audioMixWeight = self.volmSlider.value;
+                [self.directorMediator updateVideoOrImage:videoItem];
+            }
+        }
+        TAEModelItem *modelItem = (TAEModelItem *)item;
+        modelItem.isSelected = NO;
+    }
 }
     
 
@@ -384,19 +335,25 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     self.volmSlider.value = volume;
 }
 
+#pragma mark - setter getter
+- (void)setMediator:(TAEModelMediator *)mediator
+{
+    _mediator = mediator;
+}
+
 #pragma mark - back & front
 - (void)enterBackFromFront {
     
-    if (self.evaPlayer && self.playerState == kPLAYING) {
-        
-        [self.evaPlayer pause];
+    if (self.playerState == kPLAYING) {
+        [self.directorMediator pause];
     }
-    if (self.producer && self.producerSate == kWRITING) {
+    if (self.producerSate == kWRITING) {
         
         self.producerSate = kDO_CANCEL;
-        [self.producer cancel];
-        [self.producer close];
-        [self.evaDirector resetProducer];
+        //取消 - 关闭 - 重置
+        [self.directorMediator cancelProducer];
+        [self.directorMediator closeProducer];
+        [self.directorMediator resetProducer];
         [TuPopupProgress dismiss];
         _producerCancel = YES;
     }    
@@ -406,11 +363,8 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 - (void)enterFrontFromBack {
     
     //重新创建
-    if (self.evaPlayer)
-    {
-        [self.evaPlayer previewFrame:self.pauseTime];
-        [self.evaPlayer seekTo:self.pauseTime];
-    }
+    [self.directorMediator previewFrame:self.pauseTime];
+    [self.directorMediator seekTo:self.pauseTime];
 }
 
 - (void)volumeValueChange:(UISlider *)sender
@@ -425,209 +379,180 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return _orgResources.count;
+    return self.mediator.resource.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     EditCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"EditCollectionViewCell" forIndexPath:indexPath];
-    id model = _orgResources[indexPath.row];
-    id item = self.mediator.resource[indexPath.row];
-    if ([item isKindOfClass:[TAEModelTextItem class]])
-    {
-        //文本
-        cell.backgroundImage.hidden = YES;
-        cell.typeText.hidden = YES;
-        cell.text.hidden = NO;
-        TAEModelTextItem *textItem = (TAEModelTextItem *)item;
-        if (textItem.isReplace) {
-            // 替换的
-            cell.text.textColor = [UIColor whiteColor];
-        } else {
-            // 没有替换的
-            cell.text.textColor = [UIColor colorWithRed:102.0/255.0 green:102.0/255.0 blue:102.0/255.0 alpha:1];
-        }
-        cell.text.text = textItem.text;
-    }
-    if ([model isKindOfClass:[TextReplaceItem class]]) {
-        
-    } else {
-        // 图片，视频
-        cell.backgroundImage.hidden = NO;
-        cell.typeText.hidden = NO;
-        cell.text.hidden = YES;
-        VideoReplaceItem *origin = model;
-        if (origin.type == kIMAGE_VIDEO) {
-            cell.typeText.text = @"图片/视频 ";
-        } else if (origin.type == kIMAGE_ONLY) {
-            cell.typeText.text = @" 图片 ";
-        } else if (origin.type == kVIDEO_ONLY) {
-            cell.typeText.text = @" 视频 ";
-        } else if (origin.type == kAUDIO) {
-            cell.typeText.text = @" 音频 ";
-        } else if (origin.type == kMASK) {
-            cell.typeText.text = @"蒙版视频 ";
-        } else {
-
-        }
-        // 解决加载大图卡顿的问题
-        cell.tag = indexPath.row;
-        CGRect imageBounds = cell.backgroundImage.bounds;
-        NSString *itemStatus = self.statusResources[indexPath.row];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-            
-            TuEvaAsset *asset = [[TuEvaAsset alloc] initWithAssetPath:origin.resPath];
-            if (itemStatus.integerValue == 1) {
-                
-                // video
-                UIImage *image = [self getVideoPreViewImage:[NSURL URLWithString:origin.resPath] itemFlag:indexPath.row isFirst:NO];
-                if (self->_index == 999) {
-                    [self.imageResources replaceObjectAtIndex:indexPath.item withObject:image];
-                }
-                
-                [self setImage:image forCell:cell inBounds:imageBounds atIndex:indexPath.row];
-                
-            } else {
-                [asset requestImageWithResultHandler:^(UIImage * _Nullable result) {
-                    if (result != nil)
-                    {
-                        UIImage *image = result;
-                        if (self->_index == 999) {
-                            [self.imageResources replaceObjectAtIndex:indexPath.item withObject:image];
-                        }
-                        [self setImage:image forCell:cell inBounds:imageBounds atIndex:indexPath.row];
-                    }
-                    else
-                    {
-                        NSString *filePath = [@"file://" stringByAppendingString:origin.resPath];
-                        UIImage *image = [self getVideoPreViewImage:[NSURL URLWithString:filePath] itemFlag:indexPath.row isFirst:YES];
-                        [self setImage:image forCell:cell inBounds:imageBounds atIndex:indexPath.row];
-                    }
-                }];
-            }
-        });
-    }
+    id item = self.mediator.resource[indexPath.item];
+    cell.item = item;
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    _index = indexPath.row;
     
-    [self stopEvaPlayer];
-    id model = _orgResources[indexPath.row];
-    
-    if ([model isKindOfClass:[TextReplaceItem class]]) {
-        // 去编辑文本
-        TextReplaceItem *textAsset = (TextReplaceItem *)model;
-        _textField.text = textAsset.text;
-        [_textField becomeFirstResponder];
-        
-        
-    } else {
-        // 去编辑图片、视频
-        MultiAssetPicker *picker = [MultiAssetPicker picker];
-        picker.disableMultipleSelection = YES;
-        VideoReplaceItem *origin = (VideoReplaceItem*)model;
-        if (origin.type == kIMAGE_VIDEO) {
-            picker.fetchMediaTypes = @[@(PHAssetMediaTypeImage),@(PHAssetMediaTypeVideo)];
-        } else if (origin.type == kVIDEO_ONLY) {
-            picker.fetchMediaTypes = @[@(PHAssetMediaTypeVideo)];
-        } else if (origin.type == kIMAGE_ONLY) {
-            picker.fetchMediaTypes = @[@(PHAssetMediaTypeImage)];
+    //额外添加的间隔时间
+    NSInteger extraDuration = 300;
+    if (self.playerState == kPLAYING) {
+        [self.directorMediator pause];
+    }
+    //判断当前item与点选是否一致
+    if (_selectIndex != indexPath.item) {
+        [self.itemReplaceView removeFromSuperview];
+        self.itemReplaceView = nil;
+        for (TAEModelItem *item in self.mediator.resource) {
+            item.isSelected = NO;
         }
-        picker.navigationItem.title = @"素材选择";
-        picker.delegate = self;
-        picker.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
-        [self showViewController:picker sender:nil];
-    }
-}
-
-- (void)setImage:(UIImage *)image forCell:(EditCollectionViewCell *)cell inBounds:(CGRect)imageBounds atIndex:(NSInteger)index {
-    
-    //redraw image using device context
-    CGSize size = image.size;
-    if (image.size.width > image.size.height) {
-        // 宽图片
-        size = CGSizeMake(imageBounds.size.width, imageBounds.size.width * (image.size.height/image.size.width));
-    } else {
-        // 高图片
-        size = CGSizeMake(imageBounds.size.height * (image.size.width/image.size.height), imageBounds.size.height);
-    }
-    UIGraphicsBeginImageContextWithOptions(size, NO, 0);
-    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
-    image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    //set image on main thread, but only if index still matches up
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (index == cell.tag) {
-            cell.backgroundImage.image = image;
-            if (self->_index != 999 && self.imageResources.count == self.orgResources.count) {
-                [self.imageResources replaceObjectAtIndex:self->_index withObject:image];
-            }
-        }
-    });
-}
-
-// 获取视频第一帧
-- (UIImage*)getVideoPreViewImage:(NSURL *)path itemFlag:(NSInteger)itemFlag isFirst:(BOOL)isFirst
-{
-    if (!isFirst)
-    {
-        if (itemFlag != _index && self.imageResources.count == self.orgResources.count) {
-            return self.imageResources[itemFlag];
-        }
-    }
         
-    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:path options:nil];
-    AVAssetImageGenerator *assetGen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-    
-    assetGen.appliesPreferredTrackTransform = YES;
-    CMTime time = CMTimeMakeWithSeconds(0, 600);
-    NSError *error = nil;
-    CMTime actualTime;
-    CGImageRef image = [assetGen copyCGImageAtTime:time actualTime:&actualTime error:&error];
-    UIImage *videoImage = [[UIImage alloc] initWithCGImage:image];
-    CGImageRelease(image);
-    
-    CGSize outPutSize = CGSizeMake(720, 1280);
-    
-    if (self.videoConfig == nil)
-    {
-        videoImage = [videoImage lsqImageCorpWithPrecentRect:CGRectMake(0, 0, 1, 1) outputSize:outPutSize];
-    }
-    else
-    {
-        videoImage = [videoImage lsqImageCorpWithPrecentRect:self.videoConfig.crop outputSize:outPutSize];
-    }
-    
-    if (videoImage != nil)
-    {
-        if (self.imageResources.count != 0 && self.imageResources.count == self.orgResources.count) {
+        id item = self.mediator.resource[indexPath.item];
+        if ([item isKindOfClass:[TAEModelTextItem class]]) {
+            TAEModelTextItem *textItem = (TAEModelTextItem *)item;
+            _selectTextItem = textItem;
+            _selectVideoItem = nil;
+            textItem.isSelected = YES;
+            [self.directorMediator seekTo:textItem.startTime + extraDuration];
+            [self.directorMediator previewFrame:textItem.startTime + extraDuration];
+        }
+        if ([item isKindOfClass:[TAEModelVideoItem class]]) {
+            TAEModelVideoItem *videoItem = (TAEModelVideoItem *)item;
+            _selectTextItem = nil;
+            _selectVideoItem = videoItem;
+            videoItem.isSelected = YES;
+//            [self.directorMediator seekTo:videoItem.startTime + videoItem.duration / 2];
+//            [self.directorMediator previewFrame:videoItem.startTime + videoItem.duration / 2];
             
-            if (isFirst)
-            {
-                [self.imageResources replaceObjectAtIndex:itemFlag withObject:videoImage];
+            [self.directorMediator seekTo:videoItem.startTime + extraDuration];
+            [self.directorMediator previewFrame:videoItem.startTime + extraDuration];
+        }
+        _selectIndex = indexPath.item;
+        [collectionView reloadData];
 
+    } else {
+        //点选一致的情况下，如果是视频图片item则弹出替换选择页面
+        if (_selectVideoItem && !_selectTextItem) {
+            //获取当前cell在屏幕中的位置
+            if (!_itemReplaceView) {
+                CGRect cellRect = [self getSelectCellRectAtSuperView];
+                [self creatItemEditViewWithRect:cellRect];
+            } else {
+                [self.itemReplaceView removeFromSuperview];
+                self.itemReplaceView = nil;
             }
-            else
-            {
-                [self.imageResources replaceObjectAtIndex:_index withObject:videoImage];
-
-            }
+            
+        }
+        if (!_selectVideoItem && _selectTextItem) {
+            _textField.text = _selectTextItem.text;
+            [_textField becomeFirstResponder];
         }
     }
-    
-    return videoImage;
+}
+
+//获取当前cell在屏幕中的位置
+- (CGRect)getSelectCellRectAtSuperView;
+{
+    if (_selectVideoItem) {
+        
+        //获取当前选中item的位置
+        NSInteger selectIndex = [self.mediator.resource indexOfObject:_selectVideoItem];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:selectIndex inSection:0];
+        
+        UICollectionViewCell *cell = [self collectionView:self.collectionView cellForItemAtIndexPath:indexPath];
+        
+        CGRect cellRect = [_collectionView convertRect:cell.frame toView:self.view];
+        NSLog(@"TUEVA::Cell在屏幕中的位置==%@", NSStringFromCGRect(cellRect));
+        return cellRect;
+    }
+    return CGRectZero;
+}
+
+- (void)creatItemEditViewWithRect:(CGRect)rect
+{
+    CGFloat width = 120;
+    CGFloat height = 60;
+    CGFloat minY = rect.origin.y - height - 10;
+    CGFloat minX = rect.origin.x;
+    if (_selectVideoItem.itemIndex == self.mediator.resource.count - 1) {
+        minX = rect.origin.x + rect.size.width - width - 10;
+    }
+    self.itemReplaceView = [[TTItemReplaceView alloc] initWithFrame:CGRectMake(minX, minY, width, height)];
+    self.itemReplaceView.delegate = self;
+    [self.view addSubview:self.itemReplaceView];
+}
+
+/// 替换素材
+- (void)replaceResource
+{
+    [self.itemReplaceView removeFromSuperview];
+    // 去编辑图片、视频
+    MultiAssetPicker *picker = [MultiAssetPicker picker];
+    picker.disableMultipleSelection = YES;
+    if (_selectVideoItem.type == TAEModelAssetType_ImageOrVideo) {
+        picker.fetchMediaTypes = @[@(PHAssetMediaTypeImage),@(PHAssetMediaTypeVideo)];
+    } else if (_selectVideoItem.type == TAEModelAssetType_Image) {
+        picker.fetchMediaTypes = @[@(PHAssetMediaTypeImage)];
+    } else if (_selectVideoItem.type == TAEModelAssetType_Video) {
+        picker.fetchMediaTypes = @[@(PHAssetMediaTypeVideo)];
+    }
+    picker.navigationItem.title = @"素材选择";
+    picker.delegate = self;
+    picker.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
+    [self showViewController:picker sender:nil];
+}
+
+//编辑素材
+- (void)editResource
+{
+    [self.itemReplaceView removeFromSuperview];
+    //Demo里为无素材坑位模板，只有替换了素材后才能对素材进行编辑操作
+    if (_selectVideoItem.isReplace && _selectVideoItem) {
+        if (_selectVideoItem.isSelectVideo) {
+            //视频素材
+            VideoEditViewController *edit = [[VideoEditViewController alloc] initWithNibName:nil bundle:nil];
+
+            edit.filePath = _selectVideoItem.replaceResPath;
+
+            edit.durationTime = _selectVideoItem.endTime - _selectVideoItem.startTime;
+            edit.cutSize = _selectVideoItem.size;
+
+            [edit setEditCompleted:^(TUPEvaReplaceConfig_ImageOrVideo * _Nonnull config, NSString *savePath) {
+
+                [self.navigationController popToViewController:self animated:YES];
+                self.selectVideoItem.isEdit = YES;
+                [self updateVideoResource:config path:savePath videoPath:self.selectVideoItem.replaceResPath];
+                self.selectPathState = TuSelectFilePathVideoState;
+                [self replaceEvaTemplate];
+
+            }];
+            [self showViewController:edit sender:nil];
+            
+        } else {
+            //图片素材
+            ImageEditViewController *edit = [[ImageEditViewController alloc] initWithNibName:nil bundle:nil];
+            edit.inputImage = self.selectVideoItem.thumbnail;
+            edit.index = self.selectVideoItem.itemIndex;
+            edit.cutSize = self.selectVideoItem.size;
+            [edit setEditCompleted:^(NSURL * _Nonnull outputUrl) {
+                [self.navigationController popToViewController:self animated:YES];
+                self.selectVideoItem.isEdit = YES;
+                [self updateImageResource:outputUrl];
+                self.selectPathState = TuSelectFilePathImageState;
+                [self replaceEvaTemplate];
+            }];
+            [self showViewController:edit sender:nil];
+        }
+    }
 }
 
 #pragma mark - MultiPickerDelegate
 - (void)picker:(MultiAssetPicker *)picker didTapItemWithIndexPath:(NSIndexPath *)indexPath phAsset:(PHAsset *)phAsset {
-    
-    VideoReplaceItem *asset = _orgResources[_index];
-    __weak typeof(asset)weakAsset = asset;
+
+    [self.navigationController popToViewController:self animated:YES];
     __weak typeof(self)weakSelf = self;
     
-    if (asset.isVideo)
+    __weak typeof(self.selectVideoItem)weakAsset = self.selectVideoItem;
+    
+    if (self.selectVideoItem.isVideo)
     {
         self.selectPathState = TuSelectFilePathVideoState;
     }
@@ -639,90 +564,182 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     [self requestAVAsset:phAsset completion:^(PHAsset *inputPhAsset, NSObject *returnValue) {
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            weakSelf.isReset = YES;
             if (inputPhAsset.mediaType == PHAssetMediaTypeVideo) {
-
+                
                 // 去进行视频编辑
-                
-                VideoEditViewController *edit = [[VideoEditViewController alloc] initWithNibName:nil bundle:nil];
-                AVURLAsset *assets = (AVURLAsset *)returnValue;
-                NSLog(@"视频输出路径 === %@", assets.URL);
-                
-                edit.filePath = [assets.URL.absoluteString componentsSeparatedByString:@"file://"].lastObject;
-                
-                edit.inputAssets = @[(AVAsset *)returnValue];
-                edit.durationTime = weakAsset.endTime - weakAsset.startTime;
-                edit.cutSize = weakAsset.size;
-
-                [edit setEditCompleted:^(TUPEvaReplaceConfig_ImageOrVideo * _Nonnull config, NSString *savePath) {
-                    weakSelf.videoConfig = config;
-                    weakSelf.selectedPath = [savePath componentsSeparatedByString:@"file://"].lastObject;
-                    [self.mediator addTempFilePath:weakSelf.selectedPath];
-                    [weakSelf.navigationController popToViewController:weakSelf animated:YES];
-                    [weakSelf.statusResources replaceObjectAtIndex:self->_index withObject:@"1"];
-                    weakAsset.resPath = assets.URL.absoluteString;
-                    [weakSelf.collectionView reloadData];
+                AVURLAsset *asset = (AVURLAsset *)returnValue;
+                NSString *videoPath = asset.URL.absoluteString;
+                [TAEModelMediator requestVideoPathWith:asset videoIndex:weakAsset.itemIndex resultHandle:^(NSString * _Nonnull filePath, UIImage * _Nonnull fileImage) {
+                    [weakSelf updateVideoResource:nil path:filePath videoPath:videoPath image:fileImage];
                     [weakSelf replaceEvaTemplate];
                 }];
-                [picker showViewController:edit sender:nil];
             }
             if (inputPhAsset.mediaType == PHAssetMediaTypeImage) {
-                // 去图片编辑
-                ImageEditViewController *edit = [[ImageEditViewController alloc] initWithNibName:nil bundle:nil];
-                edit.inputImage = (UIImage *)returnValue;
-                edit.index = self->_index;
-                edit.cutSize = weakAsset.size;
-                [edit setEditCompleted:^(NSURL * _Nonnull outputUrl) {
-                    [weakSelf.navigationController popToViewController:weakSelf animated:YES];
-                    [self.mediator addTempFilePath:outputUrl.path];
-                    [weakSelf.statusResources replaceObjectAtIndex:self->_index withObject:@"0"];
-                    weakSelf.selectedPath = [outputUrl.absoluteString componentsSeparatedByString:@"file://"].lastObject;
-                    weakAsset.resPath = weakSelf.selectedPath;
-                    [weakSelf.collectionView reloadData];
+
+                UIImage *image = (UIImage *)returnValue;
+                [TAEModelMediator requestImagePathWith:image imageIndex:weakAsset.itemIndex resultHandle:^(NSString * _Nonnull filePath) {
+                    if (!filePath) return;
+                    [weakSelf updateImageResource:[NSURL fileURLWithPath:filePath]];
                     [weakSelf replaceEvaTemplate];
                 }];
-                [picker showViewController:edit sender:nil];
             }
         });
     }];
+}
+
+/**
+ * 更新图片资源
+ * @param fileUrl 图片路径
+ */
+- (void)updateImageResource:(NSURL *)fileUrl
+{
+    self.selectedPath = [fileUrl.absoluteString componentsSeparatedByString:@"file://"].lastObject;
+
+    __weak typeof(self)weakSelf = self;
+    
+    [TAEModelMediator requestImageWith:self.selectedPath resultHandle:^(UIImage * _Nonnull reslut) {
+        
+        [weakSelf.mediator addTempFilePath:fileUrl.path];
+
+        weakSelf.selectVideoItem.resPath = self.selectedPath;
+        weakSelf.selectVideoItem.replaceResPath = self.selectedPath;
+        weakSelf.selectVideoItem.isReplace = YES;
+        weakSelf.selectVideoItem.isSelectVideo = NO;
+        weakSelf.selectVideoItem.thumbnail = reslut;
+
+        [weakSelf.mediator replaceVideoItem:self.selectVideoItem];
+        [weakSelf.collectionView reloadData];
+        
+        if (weakSelf.editCompleted) {
+            weakSelf.editCompleted(weakSelf.mediator);
+        }
+    }];
+}
+
+/**
+ * 更新视频图片资源
+ * @param config 视频裁剪配置
+ * @param path 视频裁剪后路径
+ * @param videoPath 源视频路径
+ */
+- (void)updateVideoResource:(TUPEvaReplaceConfig_ImageOrVideo *)config path:(NSString *)path videoPath:(NSString *)videoPath
+{
+    self.selectedPath = [path componentsSeparatedByString:@"file://"].lastObject;
+    __weak typeof(self)weakSelf = self;
+    
+    [TAEModelMediator requestVideoImageWith:self.selectedPath cropRect:config.crop resultHandle:^(UIImage * _Nonnull reslut) {
+        
+        [weakSelf.mediator addTempFilePath:self.selectedPath];
+        
+        weakSelf.selectVideoItem.isReplace = YES;
+        weakSelf.selectVideoItem.isSelectVideo = YES;
+        weakSelf.selectVideoItem.replaceResPath = videoPath;
+        weakSelf.selectVideoItem.resPath = videoPath;
+        weakSelf.selectVideoItem.thumbnail = reslut;
+        
+        if (config) {
+            weakSelf.selectVideoItem.crop = config.crop;
+            weakSelf.selectVideoItem.start = config.start;
+            weakSelf.selectVideoItem.duration = config.duration;
+            weakSelf.selectVideoItem.maxSide = config.maxSide;
+        }
+    
+        [weakSelf.mediator replaceVideoItem:self.selectVideoItem];
+        [weakSelf.collectionView reloadData];
+        
+        if (weakSelf.editCompleted) {
+            weakSelf.editCompleted(weakSelf.mediator);
+        }
+    }];
+}
+
+/**
+ * 更新视频图片资源
+ * @param config 视频裁剪配置
+ * @param path 视频裁剪后路径
+ * @param videoPath 源视频路径
+ * @param image 封面图
+ */
+- (void)updateVideoResource:(TUPEvaReplaceConfig_ImageOrVideo *)config path:(NSString *)path videoPath:(NSString *)videoPath image:(UIImage *)image
+{
+    self.selectedPath = videoPath;
+//    NSString *selectedPath = [path componentsSeparatedByString:@"file://"].lastObject;
+    [self.mediator addTempFilePath:self.selectedPath];
+    self.selectVideoItem.isReplace = YES;
+    self.selectVideoItem.isSelectVideo = YES;
+    self.selectVideoItem.replaceResPath = self.selectedPath;
+    self.selectVideoItem.thumbnail = image;
+    if (config) {
+        self.selectVideoItem.crop = config.crop;
+        self.selectVideoItem.start = config.start;
+        self.selectVideoItem.duration = config.duration;
+        self.selectVideoItem.maxSide = config.maxSide;
+    }
+    
+    [self.mediator replaceVideoItem:self.selectVideoItem];
+    [self.collectionView reloadData];
+    
+    if (self.editCompleted) {
+        self.editCompleted(self.mediator);
+    }
 }
 
 #pragma mark - actions
 
 // 音量改变
 - (IBAction)volmValueChanged:(UISlider *)sender {
-    self.evaConfig.audioMixWeight = sender.value;
-    
     self.volumeViewSlider.value = sender.value;
 }
 
 // 进度条值改变
 - (IBAction)evaPregressValueChanged:(UISlider *)sender {
-    if (self.evaPlayer == nil ) return;
     
     if (!_isSeek) {
         _isSeek = YES;
         _sliderBefore = self.playerState != kPLAYING;
     }
-    [self.evaPlayer pause];
+    [self.directorMediator pause];
     
     // 将拖拽阈值放大
     if (abs(sender.value - _lastProgress) < 0.01) {
         return;
     }
     //拖动时间
-    NSInteger seekTime = sender.value * [self.evaPlayer getDuration];
+    NSInteger seekTime = sender.value * self.totalTime;
     _lastProgress = sender.value;
-    [self.evaPlayer seekTo:seekTime];
+    [self.directorMediator seekTo:seekTime];
 }
 
 
 // 进度条滑动完成
 - (IBAction)evaSliderCompeleted:(UISlider *)sender {
-    if (self.evaPlayer == nil ) return;
 
-    [self.evaPlayer previewFrame:_lastProgress * [self.evaPlayer getDuration]];
+    NSInteger seekTime = _lastProgress * self.totalTime;
+    [self.directorMediator previewFrame:seekTime];
     _isSeek = NO;
+    NSLog(@"TUEVA:进度条滑动完成");
+    
+    for (int index = 0; index < self.mediator.resource.count; index++) {
+        TAEModelItem *item = self.mediator.resource[index];
+        NSArray<TAEItemTime *> *times = item.io_times;
+        for (TAEItemTime *time in times) {
+            if (seekTime >= time.in_time && seekTime <= time.out_time) {
+                
+                if (!item.isSelected) {
+                    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
+                    item.isSelected = YES;
+                    self->_selectIndex = index;
+                }
+                
+            } else {
+                if (item.isSelected) {
+                    item.isSelected = NO;
+                }
+            }
+        }
+        
+    }
+    [self.collectionView reloadData];
 }
 
 
@@ -731,8 +748,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
  */
 - (IBAction)changeMusic:(UIButton *)sender {
     
-    TUPEvaModel *model = [[TUPEvaModel alloc] init:_evaPath];
-    if (_displayView == nil || model == nil || self.mediator.audioItem == nil) {
+    if (![self.mediator existAudio]) {
         //[[TuSDK shared].messageHub showToast:@"此资源不支持替换背景音乐"];
         return;
     }
@@ -752,7 +768,6 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
         if ([musicPath isEqualToString:weakSelf.selectedPath]) return;
         weakSelf.selectedPath = musicPath;
         [weakSelf replaceEvaTemplate];
-        self->_isReset = YES;
     }];
 }
 
@@ -762,111 +777,70 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
  */
 - (IBAction)reset:(UIButton *)sender {
 
-    if (!self.isReset) return;
+    if (![self.mediator canReset]) return;
     
     [self stopEvaPlayer];
-    _index = 999;
 
-    [self.evaPlayer close];
-    [self.displayView teardown];
-    [self.evaDirector close];
-    
-    [self.imageResources removeAllObjects];
-    [_orgResources removeAllObjects];
-    [self.statusResources removeAllObjects];
-        
-    if (self.mediator) {
-        self.mediator = nil;
-    }
-    
-    [self resetOrgResoures];
-    
+    [self.directorMediator reset];
+
+    //资源重置
+    BOOL success = [self.mediator reset];
+    _selectIndex = -1;
     _selectedPath = nil;
     [self.collectionView reloadData];
     
+    //编辑数据回调
+    if (self.editCompleted) {
+        self.editCompleted(self.mediator);
+    }
+
     //重载播放器
     [self setupPlayer];
 
-    self.isReset = NO;
-    
-    [self.evaPlayer seekTo:0];
-    [self.evaPlayer previewFrame:0];
+    [self.directorMediator seekTo:0];
+    [self.directorMediator previewFrame:0];
 }
 
 
 // 替换资源后，播放器重载资源
 - (void)replaceEvaTemplate {
-
-//    [self stopEvaPlayer];
     
-    if (self.evaPlayer) {
-        [self.evaPlayer pause];
-    }
+    [self.directorMediator pause];
     
     //替换音乐
     if (self.selectedPath && self.selectPathState  == TuSelectFilePathMusicState) {
-        TUPEvaReplaceConfig_Audio *audioConfig = [[TUPEvaReplaceConfig_Audio alloc] init];
-        audioConfig.start = 0;
-        audioConfig.duration = [self.evaPlayer getDuration];
-        audioConfig.audioMixWeight = self.volmSlider.value;
-        
+
         //资源替换
         self.mediator.audioItem.isReplace = YES;
         self.mediator.audioItem.audioMixWeight = self.volmSlider.value;
         self.mediator.audioItem.resPath = self.selectedPath;
-        [self.evaDirector updateAudio:self.mediator.audioItem.Id withPath:self.mediator.audioItem.resPath andConfig:audioConfig];
+        [self.directorMediator updateAudio:self.mediator.audioItem];
     }
     //替换图片
     if (self.selectedPath && self.selectPathState == TuSelectFilePathImageState) {
-        //选中的图片资源
-        VideoReplaceItem *asset = _orgResources[_index];
-        TUPEvaReplaceConfig_ImageOrVideo *imageConfig = [[TUPEvaReplaceConfig_ImageOrVideo alloc] init];
-        imageConfig.start = self.videoConfig.start;
-        imageConfig.duration = self.videoConfig.duration;
-        imageConfig.audioMixWeight = self.volmSlider.value;
+        // 如果选择的不为视频图片图层则不替换
+
+        if (!_selectVideoItem) return;
+
+        _selectVideoItem.audioMixWeight = self.volmSlider.value;
+//        _selectVideoItem.replaceResPath = self.selectedPath;
         
-        [self.evaDirector updateImage:asset.Id withPath:self.selectedPath andConfig:imageConfig];
-        
-        TAEModelVideoItem *item = self.mediator.resource[_index];
-        item.Id = item.Id;
-        item.type = TAEModelAssetType_Image;
-        item.isReplace = YES;
-        item.resPath = self.selectedPath;
-        item.isVideo = NO;
-        item.audioMixWeight = self.volmSlider.value;
-        [self.mediator replaceVideoItem:item withIndex:_index];
-        
+        [self.mediator replaceVideoItem:_selectVideoItem];
+        [self.directorMediator updateVideoOrImage:_selectVideoItem];
+
     }
     //替换视频
     if (self.selectedPath && self.selectPathState == TuSelectFilePathVideoState) {
         //选中的视频资源,根据isVideo字段判断相对应涂层
-        VideoReplaceItem *asset = _orgResources[_index];
 
-        TAEModelVideoItem *item = self.mediator.resource[_index];
-        item.Id = item.Id;
-        item.isReplace = YES;
-        item.resPath = self.selectedPath;
-        item.isVideo = asset.isVideo;
-        item.type = TAEModelAssetType_Video;
-        item.crop = self.videoConfig.crop;
-        item.start = self.videoConfig.start;
-        item.duration = self.videoConfig.duration;
-        item.maxSide = self.videoConfig.maxSide;
-        
-        if (asset.isVideo) {
-        
-            [self.evaDirector updateVideo:asset.Id withPath:self.selectedPath andConfig:self.videoConfig];
-        } else {
+        _selectVideoItem.audioMixWeight = self.volmSlider.value;
+        _selectVideoItem.replaceResPath = self.selectedPath;
+        [self.mediator replaceVideoItem:_selectVideoItem];
 
-            [self.evaDirector updateImage:asset.Id withPath:self.selectedPath andConfig:self.videoConfig];
-            
-        }
-        [self.mediator replaceVideoItem:item withIndex:_index];
-
+        [self.directorMediator updateVideoOrImage:_selectVideoItem];
     }
-    
-    [self.evaPlayer previewFrame:self.pauseTime];
-    self.evaSlider.value = self.pauseTime / [self.evaPlayer getDuration];
+    [self.directorMediator previewFrame:self.pauseTime];
+    self.evaSlider.value = self.pauseTime / self.totalTime;
     
     //选择素材后不需要跳到起始帧
 //    dispatch_async(dispatch_get_global_queue(DISPATCH_TARGET_QUEUE_DEFAULT, 0), ^{
@@ -881,51 +855,6 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 }
 
 
-// 重置源资源
-- (void)resetOrgResoures {
-    // 资源排序
-    TUPEvaModel *model = [[TUPEvaModel alloc] init:_evaPath];
-    
-    [self.orgResources addObjectsFromArray:[model listReplaceableImageAssets]];
-    [self.orgResources addObjectsFromArray:[model listReplaceableVideoAssets]];
-    [self.orgResources addObjectsFromArray:[model listReplaceableTextAssets]];
-    [self.imageResources addObjectsFromArray:self.orgResources];
-
-
-    // 用资源显示的开始帧进行排序
-    [self.orgResources sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        NSInteger start1 = 0.0, start2 = 0.0;
-        if ([obj1 isKindOfClass:[VideoReplaceItem class]]) {
-            VideoReplaceItem *imageItem = (VideoReplaceItem *)obj1;
-            start1 = imageItem.startTime;
-        } else if ([obj1 isKindOfClass:[TextReplaceItem class]]) {
-            TextReplaceItem *textItem = (TextReplaceItem *)obj1;
-            start1 = textItem.startTime;
-        }
-        if ([obj2 isKindOfClass:[VideoReplaceItem class]]) {
-            VideoReplaceItem *imageItem = (VideoReplaceItem *)obj2;
-            start2 = imageItem.startTime;
-        } else if ([obj2 isKindOfClass:[TextReplaceItem class]]) {
-            TextReplaceItem *textItem = (TextReplaceItem *)obj2;
-            start2 = textItem.startTime;
-        }
-        return [[NSNumber numberWithInteger:start1] compare:[NSNumber numberWithInteger:start2]];
-    }];
-    
-    for (NSInteger itemTag = 0; itemTag < self.orgResources.count; itemTag++) {
-        [self.statusResources addObject:@"0"];
-    }
-    
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        self.mediator = [[TAEModelMediator alloc] initWithEvaPath:self.evaPath];
-//        [self.mediator loadResource];
-//    });
-    
-    self.mediator = [[TAEModelMediator alloc] initWithEvaPath:self.evaPath];
-    [self.mediator loadResource];
-}
-
-
 // 点击视频视图
 - (IBAction)tapPreview:(UITapGestureRecognizer *)sender {
     // 先处理键盘
@@ -935,13 +864,13 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     }
     
     if (self.playerState == kPLAYING) {
-        [self.evaPlayer pause];
+        [self.directorMediator pause];
 
     } else {
         if (self.evaSlider.value >= 0.99) {
-            [self.evaPlayer seekTo:0];
+            [self.directorMediator seekTo:0];
         }
-        [self.evaPlayer play];
+        [self.directorMediator play];
     }
 }
 
@@ -978,41 +907,9 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
  */
 - (void)receptionSaveAction
 {
-    self.totalTime = [self.evaPlayer getDuration];
-    
-    // 必须停止/暂停播放器
-    [self.evaPlayer pause];
-        
-    NSString *savePath = [self generateTempFile];
-//    NSLog(@"本地存储地址 == %@", savePath);
-
     _producerCancel = NO;
     
-    /**
-     导出配置，默认全部导出
-     如果导出部分视频则需要配置 rangeStart 和 rangeDuration
-     rangeStart ：导出起始时间
-     rangeDuration ：导出视频长度
-     */
-    
-    // 6S以下540P, 7P及以下的机型保持最高分辨率是中等，即720p，其它的保证原分辨率
-    
-    CGFloat scale = [UIDevice lsqDevicePlatform] <= TuDevicePlatform_iPhone7p ? ([UIDevice lsqDevicePlatform] < TuDevicePlatform_iPhone6s ? 0.5 : 0.67) : 1;
-    
-    TUPProducer_OutputConfig *config = [[TUPProducer_OutputConfig alloc] init];
-    config.rangeStart = 0;
-    config.rangeDuration = self.totalTime;
-    config.watermark = [UIImage imageNamed:@"sample_watermark"];
-    config.watermarkPosition = -1;
-    config.scale = scale;
-
-    self.producer = (TUPEvaDirectorProducer *)[self.evaDirector newProducer];
-    self.producer.delegate = self;
-    self.producer.savePath = [@"file://" stringByAppendingString:savePath];
-
-    [self.producer setOutputConfig:config];
-    [self.producer open];
-    [self.producer start];
+    [self.directorMediator startProducer];
 }
 /**
  * 静默导出
@@ -1040,7 +937,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
         option.watermarkPosition = -1;
         option.scale = scale;
         option.savePath = [self generateTempFile];
-        option.evaPath = self.evaPath;
+        option.evaPath = self.mediator.filePath;
         
         [TAEExportManager shareManager].mediator = self.mediator;
         [TAEExportManager shareManager].option = option;
@@ -1065,14 +962,13 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 
 // 暂停导出
 - (void)stopEvaPlayer {
-    if (_evaPlayer) {
-        if (self.playerState == kPLAYING) {
-            [_evaPlayer pause];
-        }
-        _evaSlider.value = 0.0;
-        [_evaPlayer seekTo:0];
-        [_evaPlayer previewFrame:0];
+
+    if (self.playerState == kPLAYING) {
+        [self.directorMediator pause];
     }
+    _evaSlider.value = 0.0;
+    [self.directorMediator seekTo:0];
+    [self.directorMediator previewFrame:0];
 }
 
 
@@ -1099,21 +995,15 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
         //[[TuSDK shared].messageHub showToast:@"输入的内容不能为空"];
         return NO;
     }
-    
-    self.isReset = YES;
-    
-    self.selectPathState = TuSelectFilePathMusicState;
-
-    TextReplaceItem *textAsset = _orgResources[_index];
-    [self.evaDirector updateText:textAsset.Id withText:textField.text];
+        
+    if (!_selectTextItem) return NO;
     
     //替换文字资源
-    TAEModelTextItem *textItem = self.mediator.resource[_index];
-    textItem.isReplace = YES;
-    textItem.text = textField.text;
-    [self.mediator replaceTextItem:textItem withIndex:_index];
+    _selectTextItem.isReplace = YES;
+    _selectTextItem.text = textField.text;
+    [self.mediator replaceTextItem:_selectTextItem];
+    [self.directorMediator updateText:_selectTextItem];
 
-    textAsset.text = textField.text;
     [self.collectionView reloadData];
     
     [self replaceEvaTemplate];
@@ -1208,30 +1098,6 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     return _volumeView;
 }
 
-- (NSMutableArray *)statusResources
-{
-    if (!_statusResources) {
-        _statusResources = [NSMutableArray array];
-    }
-    return _statusResources;
-}
-
-- (NSMutableArray *)orgResources
-{
-    if (!_orgResources) {
-        _orgResources = [NSMutableArray array];
-    }
-    return _orgResources;;
-}
-
-- (NSMutableArray *)imageResources
-{
-    if (!_imageResources) {
-        _imageResources = [NSMutableArray array];
-    }
-    return _imageResources;
-}
-
 /**
  根据 videoSize 获取安全的size
  
@@ -1253,32 +1119,125 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     return videoSize;
 }
 
-#pragma mark - TUPPlayerDelegate
-- (void)onPlayerEvent:(TUPPlayerState)state withTimestamp:(NSInteger)ts
+#pragma mark - TTItemReplaceViewDelegate
+- (void)itemReplaceView:(TTItemReplaceView *)view editType:(TTItemEditType)editType
+{
+    _selectVideoItem.isSelected = YES;
+
+    switch (editType) {
+        case TTItemEditTypeReplace:
+            [self replaceResource];
+            break;
+        case TTItemEditTypeCrop:
+            [self editResource];
+            break;
+        default:
+            break;
+    }
+}
+
+#pragma mark - TUPPlayerDelegate、TTDirectorMediatorDelegate
+//- (void)onPlayerEvent:(TUPPlayerState)state withTimestamp:(NSInteger)ts
+/**
+ * eva播放器回调
+ * @param state 播放器状态
+ * @param ts 时间
+ */
+- (void)directorMediatorPlayerEvent:(TUPPlayerState)state withTimestamp:(NSInteger)ts;
 {
     self.playerState = state;
-    //NSLog(@"当前时间 ===%ld", (long)ts);
-    
-//    if (state == kAUDIO_EOS)
-//    {
-//        [self.evaPlayer pause];
-//        self.isStart = NO;
-//    }
-    
+    NSLog(@"TUEVA:播放状态 ===%ld", (long)state);
+    NSLog(@"TUEVA:播放时间 ===%ld", (long)ts);
+
     if (self.isStart && ts != 0) {
-        [self.evaPlayer pause];
+        [self.directorMediator pause];
         self.isStart = NO;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
         self.playBtn.hidden = self.playerState == kPLAYING;
+        if(self.playerState == kPLAYING && self.itemReplaceView) {
+            [self.itemReplaceView removeFromSuperview];
+        }
 
-        NSInteger totalTime = [self.evaPlayer getDuration];
+        NSInteger totalTime = [self.directorMediator getDuration];
         self.lastProgress = [[NSString stringWithFormat:@"%.5f", ts * 1000.f / totalTime / 1000] floatValue];
-        //NSLog(@"进度条 === %.5f", self.lastProgress);
+        //NSLog(@"TUEVA:进度条 === %.5f", self.lastProgress);
         if (self.lastProgress != 0) {
             self.evaSlider.value = self.lastProgress;
             self.pauseTime = ts;
+        }
+        //在播放过程中切换选中状态
+        if (state == kPLAYING) {
+            if (!self->_canSelect) return;
+#if 0
+            //两种动画方式 1、符合时间的所有坑位均选中高亮
+            for (int index = 0; index < self.mediator.resource.count; index++) {
+                TAEModelItem *item = self.mediator.resource[index];
+                if (self.pauseTime >= item.startTime && self.pauseTime <= item.endTime) {
+
+                    if (!item.isSelected) {
+                        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
+                        item.isSelected = YES;
+                        self->_selectIndex = index;
+                    }
+
+                } else {
+                    if (item.isSelected) {
+                        item.isSelected = NO;
+                    }
+                }
+            }
+#endif
             
+#if 1
+            //2、顺序选中高亮
+            for (int index = 0; index < self.mediator.resource.count; index++) {
+                TAEModelItem *item = self.mediator.resource[index];
+                if (self.pauseTime >= item.startTime && self.pauseTime <= item.endTime) {
+
+                    if (!item.isSelected) {
+                        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
+                        item.isSelected = YES;
+                        self->_selectIndex = index;
+                    }
+                    if (index != 0) {
+                        TAEModelItem *lastItem = self.mediator.resource[index - 1];
+                        if (lastItem.isSelected) {
+                            lastItem.isSelected = NO;
+                        }
+                    }
+//                } else {
+//                    if (item.isSelected) {
+//                        item.isSelected = NO;
+//                    }
+                }
+            }
+#endif
+            [self.collectionView reloadData];
+        }
+        
+        //播放完成则置为0
+        if (state == kEOS)
+        {
+            //播放完成后全部重置为未选中状态
+            for (int index = 0; index < self.mediator.resource.count; index++) {
+                TAEModelItem *item = self.mediator.resource[index];
+                item.isSelected = NO;
+            }
+            
+            self.evaSlider.value = 0;
+            [self.directorMediator seekTo:0];
+            [self.directorMediator previewFrame:0];
+            
+            [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
+            [self.collectionView reloadData];
+        }
+        
+        //避免第一次play的时候的时候添加选中标记导致第一个坑位为文字时点击无法正常修改
+        if (self.playerState == kDO_PAUSE) {
+            if (!self->_canSelect) {
+                self->_canSelect = YES;
+            }
         }
         
 //        self.totalTimelabel.text = [NSString stringWithFormat:@"总时长(TS) : %ld", totalTime];
@@ -1289,9 +1248,14 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     });
 }
 
-#pragma mark - TUPProducerDelegate
-
-- (void)onProducerEvent:(TUPProducerState)state withTimestamp:(NSInteger)ts
+#pragma mark - TUPProducerDelegate、TTDirectorMediatorDelegate
+/**
+ * eva导出器回调
+ * @param state 播放器状态
+ * @param ts 时间
+ */
+//- (void)onProducerEvent:(TUPProducerState)state withTimestamp:(NSInteger)ts
+- (void)directorMediatorProducerEvent:(TUPProducerState)state withTimestamp:(NSInteger)ts;
 {
     if (_producerCancel || state == kDO_CANCEL) {
 
@@ -1307,7 +1271,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
         
         //NSLog(@"导出进度 ==== %.2f", percent);
         if (self.producerSate == kEND) {
-            NSString *videoPath = [self.producer.savePath componentsSeparatedByString:@"file://"].lastObject;
+            NSString *videoPath = [[self.directorMediator producerPath] componentsSeparatedByString:@"file://"].lastObject;
             UISaveVideoAtPathToSavedPhotosAlbum(videoPath, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
         }
     });
@@ -1329,10 +1293,10 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     } else {
         [TuPopupProgress showErrorWithStatus:@"导出失败"];
     }
-    [self.evaPlayer seekTo:self.pauseTime];
-    [self.evaPlayer previewFrame:self.pauseTime];
-    [self.producer close];
-    [self.evaDirector resetProducer];
+    [self.directorMediator seekTo:self.pauseTime];
+    [self.directorMediator previewFrame:self.pauseTime];
+    [self.directorMediator closeProducer];
+    [self.directorMediator resetProducer];
 
 }
 
@@ -1360,3 +1324,4 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 //}
 
 @end
+

@@ -45,7 +45,8 @@ typedef NS_ENUM(NSInteger, DownloadState) {
 
 /** 模版是否更新*/
 @property (nonatomic, assign, readonly) BOOL isChange;
-
+/** 模板ID */
+@property (nonatomic, strong, readonly) NSString *ID;
 /** 图片地址 */
 @property (nonatomic, strong, readonly) NSString *image;
 

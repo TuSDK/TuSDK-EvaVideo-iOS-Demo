@@ -16,8 +16,10 @@ static const CGFloat kTimeLabelHeight = 16;
 @property (nonatomic, strong) UIImageView *imageView;
 
 @property (nonatomic, strong) CustomTouchBoundsButton *selectButton;
-
+/// 时间label
 @property (nonatomic, strong) UILabel *timeLabel;
+/// 已选择标签
+@property (nonatomic, strong) UILabel *tagLabel;
 
 /**
  底部背景视图
@@ -47,33 +49,50 @@ static const CGFloat kTimeLabelHeight = 16;
     _imageView.contentMode = UIViewContentModeScaleAspectFill;
     _imageView.clipsToBounds = YES;
     
-//    _selectButton = [CustomTouchBoundsButton buttonWithType:UIButtonTypeCustom];
-//    [self.contentView addSubview:_selectButton];
-//    [_selectButton setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
+    _selectButton = [CustomTouchBoundsButton buttonWithType:UIButtonTypeCustom];
+    [self.contentView addSubview:_selectButton];
+    [_selectButton setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
 //    [_selectButton setBackgroundImage:[UIImage imageNamed:@"edit_checkbox_sel"] forState:UIControlStateSelected];
 //    [_selectButton setBackgroundImage:[UIImage imageNamed:@"edit_checkbox_unsel"] forState:UIControlStateNormal];
-//    _selectButton.titleLabel.font = [UIFont systemFontOfSize:11];
-//    [_selectButton addTarget:self action:@selector(selectButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [_selectButton setBackgroundImage:[UIImage imageNamed:@"style_add"] forState:UIControlStateNormal];
+    _selectButton.backgroundColor = [UIColor colorWithRed:213.f / 255 green:213.f / 255 blue:213.f / 255 alpha:1];
+    _selectButton.layer.cornerRadius = 10;
+    _selectButton.titleLabel.font = [UIFont systemFontOfSize:11];
+    [_selectButton addTarget:self action:@selector(selectButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
     _bottomMaskView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.contentView addSubview:_bottomMaskView];
-    _bottomMaskView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.4];
+//    _bottomMaskView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.4];
     
     _timeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [self.contentView addSubview:_timeLabel];
     _timeLabel.textColor = [UIColor whiteColor];
     _timeLabel.font = [UIFont systemFontOfSize:11];
     _timeLabel.textAlignment = NSTextAlignmentRight;
+    
+    _tagLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    [self.contentView addSubview:_tagLabel];
+    _tagLabel.backgroundColor = [UIColor colorWithWhite:1 alpha:0.7];
+    _tagLabel.text = @"已选择";
+    _tagLabel.layer.cornerRadius = 3;
+    _tagLabel.layer.masksToBounds = YES;
+    _tagLabel.textColor = [UIColor blackColor];
+    _tagLabel.font = [UIFont systemFontOfSize:10];
+    _tagLabel.textAlignment = NSTextAlignmentCenter;
+    _tagLabel.hidden = YES;
 }
 
 - (void)layoutSubviews {
-    _imageView.frame = self.contentView.frame;
-    _selectButton.frame = CGRectMake(6, 6, 20, 20);
     
     CGFloat width = CGRectGetWidth(self.contentView.bounds);
     CGFloat height = CGRectGetHeight(self.contentView.bounds);
+    
+    _imageView.frame = self.contentView.frame;
+    _selectButton.frame = CGRectMake(width - 26, 6, 20, 20);
+    
     _bottomMaskView.frame = CGRectMake(0, height - kTimeLabelHeight, width, kTimeLabelHeight);
     _timeLabel.frame = CGRectMake(kTimeLabelHeight / 2, height - kTimeLabelHeight, width - kTimeLabelHeight, kTimeLabelHeight);
+    _tagLabel.frame = CGRectMake(4, 6, 40, 20);
 }
 
 - (void)prepareForReuse {

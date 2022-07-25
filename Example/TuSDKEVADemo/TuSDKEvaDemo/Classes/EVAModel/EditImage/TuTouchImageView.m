@@ -292,16 +292,16 @@
     NSInteger actType = 0;
     switch (changed) {
         case lsqImageChangeTurnLeft:
-            actType = tkc_editCuter_action_trun_left;
+            actType = tu_editCuter_action_trun_left;
             break;
         case lsqImageChangeTurnRight:
-            actType = tkc_editCuter_action_trun_right;
+            actType = tu_editCuter_action_trun_right;
             break;
         case lsqImageChangeMirrorHorizontal:
-            actType = tkc_editCuter_action_mirror_horizontal;
+            actType = tu_editCuter_action_mirror_horizontal;
             break;
         case lsqImageChangeMirrorVertical:
-            actType = tkc_editCuter_action_mirror_vertical;
+            actType = tu_editCuter_action_mirror_vertical;
             break;
         default:
             break;

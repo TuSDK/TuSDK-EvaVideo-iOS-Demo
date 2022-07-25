@@ -7,18 +7,17 @@
 //
 
 #import "EVAPreviewViewController.h"
+#import "EVAMutiAssetPickerController.h"
+
 #import "TuSDKFramework.h"
 #import "EditViewController.h"
 #import "EvaProgressSlider.h"
+#import "TAEModelMediator.h"
 
-#import <TuSDKPulseEva/TUPEvaPlayer.h>
-#import <TuSDKPulse/TUPDisplayView.h>
+#define videoPathHost @"https://files.tusdk.com/miniprogram/eva/"
+#define timeScale 20
 
-#import <TuSDKPulseEva/TUPEvaDirector.h>
-
-
-
-@interface EVAPreviewViewController ()<UIGestureRecognizerDelegate, TUPPlayerDelegate>
+@interface EVAPreviewViewController ()<UIGestureRecognizerDelegate>
 {
     BOOL _editStatus;
 }
@@ -39,39 +38,6 @@
 @property (weak, nonatomic) IBOutlet UIView *durationView;
 
 @property (weak, nonatomic) IBOutlet UIButton *playBtn;
-//播放状态
-@property (nonatomic, assign) TUPPlayerState playerState;
-
-/**
- eva 资源加载器
- */
-@property (nonatomic, strong) TUPDisplayView *displayView;
-
-/**
- eva 播放器
- */
-
-@property (nonatomic, strong) TUPEvaDirectorPlayer *evaPlayer;
-
-/**
- eva 播放器
- */
-@property (nonatomic, strong) TUPEvaDirector *evaDirector;
-
-/**
- 文字资源
- */
-@property (nonatomic, strong) NSMutableArray *texts;
-
-/**
- 图片资源
- */
-@property (nonatomic, strong) NSMutableArray *medias;
-
-/**
- 音频
- */
-@property (nonatomic, strong) NSMutableArray *audios;
 
 /**
  slider Befor
@@ -87,8 +53,17 @@
 /**eva总时长*/
 @property (nonatomic, assign) NSInteger totalTime;
 
-/**暂停时间*/
-@property (nonatomic, assign) NSInteger pauseTime;
+/**eva模型*/
+@property (nonatomic, strong) TAEModelMediator *evaMediator;
+/**播放器*/
+@property (nonatomic, strong) AVPlayer *player;
+@property (nonatomic, strong) AVPlayerLayer *playerLayer;
+
+/**播放时长观察者*/
+@property (nonatomic) id timeObserve;
+/**是否正在播放*/
+@property (nonatomic, assign) BOOL isPlaying;
+
 
 @end
 
@@ -114,15 +89,22 @@
 - (void)dealloc {
     NSLog(@"EVAPreviewViewController------dealloc");
     
-    if (!_editStatus) {
-        if (_evaDirector) {
-            [_evaPlayer close];
-            [_displayView teardown];
-            [_evaDirector close];
-        }
+    if (self.playerLayer) {
+        [self.playerLayer removeFromSuperlayer];
+        self.playerLayer = nil;
+    }
+    
+    if (self.timeObserve) {
+        [self.player pause];
+        [self.player removeTimeObserver:self.timeObserve];
+        self.timeObserve = nil;
+        [self.player.currentItem cancelPendingSeeks];
+        [self.player.currentItem.asset cancelLoading];
+        self.player = nil;
     }
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -153,9 +135,6 @@
     self.makeBtn.layer.masksToBounds = YES;
     self.makeBtn.backgroundColor = [UIColor colorWithRed:0 green:122.0/255.0 blue:1.0 alpha:1.0];
     
-    _texts = [NSMutableArray array];
-    _medias = [NSMutableArray array];
-    _audios = [NSMutableArray array];
     [self refreshUI];
     self.previewSuperView.hidden = YES;
     self.slider.hidden = YES;
@@ -164,21 +143,67 @@
     self.makeBtn.hidden = YES;
     self.durationView.hidden = YES;
     self.playBtn.hidden = YES;
+    self.isPlaying = YES;
     
+    //创建播放器
+    NSString *videoPath = [videoPathHost stringByAppendingString:[NSString stringWithFormat:@"%@.mp4", _ID]];
+    NSLog(@"TUEVA::视频路径===%@", videoPath);
+    AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithURL:[NSURL URLWithString:videoPath]];
+    self.totalTime = CMTimeGetSeconds(playerItem.asset.duration) * 1000;
     
-    self.displayView = [[TUPDisplayView alloc] init];
-    [self.preview addSubview:self.displayView];
+    self.player = [[AVPlayer alloc] initWithPlayerItem:playerItem];
+
+    self.playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.player];
+    self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
+    self.playerLayer.backgroundColor = [UIColor blackColor].CGColor;
+    self.playerLayer.frame = self.preview.bounds;
+    [self.preview.layer addSublayer:self.playerLayer];
+
+    [self.player play];
+    self.isPlaying = YES;
+
+    __weak typeof(self)weakSelf = self;
+    self.timeObserve = [self.player addPeriodicTimeObserverForInterval:CMTimeMake(1, timeScale) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
+        
+        if (!weakSelf.isPlaying) return;
+
+        NSInteger currentTime = CMTimeGetSeconds(time) * 1000;
+        NSLog(@"TUEVA:播放时长===%ld", (long)currentTime);
+        weakSelf.duration.text = [NSString stringWithFormat:@"%@/%@", [weakSelf evaFileTotalTime:currentTime], [weakSelf evaFileTotalTime:weakSelf.totalTime]];
+        weakSelf.lastProgress = [[NSString stringWithFormat:@"%.5f", currentTime * 1000.f / weakSelf.totalTime / 1000] floatValue];
+        NSLog(@"TUEVA:播放进度===%.5f", weakSelf.lastProgress);
+        weakSelf.slider.value = weakSelf.lastProgress;
+    }];
     
-    [self.displayView setup:nil];
+    //播放器监听
+    //[playerItem addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playFinish:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(interruption:) name:AVAudioSessionInterruptionNotification object:nil];
     
-    self.displayView.frame = self.preview.bounds;
+}
+
+
+
+- (void)playFinish:(NSNotification *)noti
+{
+    self.isPlaying = NO;
+    self.playBtn.hidden = NO;
+    NSLog(@"TUEVA:播放完成");
+}
+
+- (void)interruption:(NSNotification *)noti
+{
+    [self.player pause];
+    self.isPlaying = NO;
+    self.playBtn.hidden = NO;
+    NSLog(@"TUEVA:声音被打断（来电话了）");
 }
 
 
 - (void)refreshUI {
-    self.text.text = [NSString stringWithFormat:@"文字 %ld段", self.texts.count];
-    self.media.text = [NSString stringWithFormat:@"图片/视频 %ld个", self.medias.count];
-    self.music.text = [NSString stringWithFormat:@"音乐 %ld段", self.audios.count];
+    self.text.text = [NSString stringWithFormat:@"文字 %ld段", [self.evaMediator textCount]];
+    self.media.text = [NSString stringWithFormat:@"图片/视频 %ld个", [self.evaMediator imageVideoCount]];
+    self.music.text = [NSString stringWithFormat:@"音乐 %ld段", [self.evaMediator audioCount]];
     
     [self.view layoutIfNeeded];
 
@@ -192,7 +217,6 @@
         self.evaTitle.hidden = NO;
         self.makeBtn.hidden = NO;
         self.durationView.hidden = NO;
-        self.displayView.hidden = NO;
     }];
 }
 
@@ -200,94 +224,61 @@
 // 加载模板
 - (void)loadTemplate {
     
-    TUPEvaModel *model = [[TUPEvaModel alloc] init:_evaPath];
-    if (model == nil) {
+    self.evaMediator = [[TAEModelMediator alloc] initWithEvaPath:self.evaPath];
+    BOOL state = [self.evaMediator loadResource];
+    if (!state) {
         //[[TuSDK shared].messageHub showError:@"  模板有误   "];
         if (self.loadTempleError) {
             self.loadTempleError();
         }
         return;
     }
-    
-    _texts = [NSMutableArray arrayWithArray:[model listReplaceableTextAssets]];
-    _medias = [NSMutableArray arrayWithArray:[model listReplaceableVideoAssets]];
-    [_medias addObjectsFromArray:[model listReplaceableImageAssets]];
-    _audios = [NSMutableArray arrayWithArray:[model listReplaceableAudioAssets]];
-
 
     dispatch_async(dispatch_get_main_queue(), ^{
         [self refreshUI];
-        
-        TUPEvaModel *model = [[TUPEvaModel alloc]init:self.evaPath];
-        self.evaDirector = [[TUPEvaDirector alloc] init];
-        [self.evaDirector openModel:model];
-        
-        self.evaPlayer = (TUPEvaDirectorPlayer *)[self.evaDirector newPlayer];
-        [self.evaPlayer open];
-        self.evaPlayer.delegate = self;
-        
-        self.totalTime = [self.evaPlayer getDuration];
-
-        __weak typeof(self) weakSelf = self;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_TARGET_QUEUE_DEFAULT, 0), ^{
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf.displayView attachPlayer:weakSelf.evaPlayer];
-                [weakSelf.evaPlayer play];
-            });
-        });
     });
 }
 
 #pragma mark - back & front
 - (void)enterBackFromFront
 {
-    if (self.evaPlayer && self.playerState == kPLAYING) {
-        [self.evaPlayer pause];
+    if (self.player && self.isPlaying) {
+        [self.player pause];
+        self.isPlaying = self.playBtn.hidden = NO;
     }
 }
 
 - (void)enterFrontFromBack
 {
-    if (self.evaPlayer) {
-        [self.evaPlayer play];
-    }
+//    NSLog(@"回到前台");
 }
 
 
 #pragma mark - actions
 // 去制作
 - (IBAction)clickMake:(UIButton *)sender {
-    if (self.displayView == nil) return;
-    [self.evaPlayer pause];
-    _editStatus = YES;
-    //eva播放器关闭
-    if (_evaDirector) {
-        [_evaPlayer close];
-        [_displayView teardown];
-        [_evaDirector close];
-    }
     
-    EditViewController *edit = [[EditViewController alloc] initWithNibName:nil bundle:nil];
-    edit.evaPath = self.evaPath;
-//    edit.displayView = self.displayView;
-    [self showViewController:edit sender:nil];
+    EVAMutiAssetPickerController *controller = [[EVAMutiAssetPickerController alloc] init];
+    controller.evaMediator = self.evaMediator;
+    [self showViewController:controller sender:nil];
 }
 
 
 // 播放进度拖拽
 - (IBAction)sliderValueChanged:(UISlider *)sender {
-    if (self.evaPlayer == nil ) return;
+    
+    
+    if (!self.player) return;
     if (!_isSeek) {
         _isSeek = YES;
-        _sliderBefore = self.playerState != kPLAYING;
         _lastProgress = 0;
     }
-    [_evaPlayer pause];
+    self.isPlaying = self.playBtn.hidden = NO;
+    [self.player pause];
     
-    NSInteger seekTime = sender.value * self.totalTime;
-    
-    [self.evaPlayer seekTo:seekTime];
+    NSInteger seekTime = sender.value * self.totalTime / 1000;
+    NSLog(@"TUEVA::拖拽时间===%ld", (long)seekTime);
+    [self.player seekToTime:CMTimeMakeWithSeconds(seekTime, timeScale)];
     _lastProgress = sender.value;
     NSInteger sliderTime = self.totalTime * _lastProgress;
     self.duration.text = [NSString stringWithFormat:@"%@/%@", [self evaFileTotalTime:sliderTime], [self evaFileTotalTime:self.totalTime]];
@@ -295,117 +286,94 @@
 
 // 进度拖拽完成
 - (IBAction)sliderCompleted:(UISlider *)sender {
-    if (self.evaPlayer == nil ) return;
+    
+    
+    if (!self.player) return;
     if (_sliderBefore) {
-        [self.evaPlayer previewFrame:self.totalTime * _lastProgress];
+        NSInteger seekTime = self.totalTime * _lastProgress / 1000;
+        [self.player seekToTime:CMTimeMakeWithSeconds(seekTime, timeScale)];
     }
     _isSeek = NO;
 }
 
 - (IBAction)lastFrame:(UIButton *)sender {
-    if (self.evaPlayer == nil ) return;
-    [self.evaPlayer pause];
-    [self.evaPlayer seekTo:self.totalTime];
+    if (!self.player) return;
+    [self.player pause];
+    self.isPlaying = self.playBtn.hidden = NO;
+    NSLog(@"TUEVA::结束时间===%ld", self.totalTime / 1000);
+    [self.player seekToTime:CMTimeMakeWithSeconds(self.totalTime / 1000, timeScale)];
+    self.duration.text = [NSString stringWithFormat:@"%@/%@", [self evaFileTotalTime:self.totalTime], [self evaFileTotalTime:self.totalTime]];
     self.slider.value = 1.0;
-    [self.evaPlayer previewFrame:self.totalTime];
 }
 
 - (IBAction)firstFrame:(UIButton *)sender {
-    if (self.evaPlayer == nil ) return;
-    [self.evaPlayer pause];
-    [self.evaPlayer seekTo:0];
-    self.slider.value = self.lastProgress = 0.0;
-    [self.evaPlayer previewFrame:0];
+    if (!self.player) return;
     
+    [self.player pause];
+    [self.player seekToTime:kCMTimeZero];
+    self.isPlaying = self.playBtn.hidden = YES;
+    self.slider.value = self.lastProgress = 0.0;
+    [self.player play];
 }
 
 
 // 预览播放点击
 - (IBAction)tapPreView: (UITapGestureRecognizer *)tap {
     
-    if (self.evaPlayer == nil) return;
+    if (!self.player) return;
     
-    if (self.playerState == kPLAYING) {
-        [self.evaPlayer pause];
-
+    if (self.isPlaying) {
+        self.isPlaying = NO;
+        [self.player pause];
+        NSLog(@"TUEVA::暂停播放");
     } else {
-        if (self.slider.value >= 0.99) {
-            [self.evaPlayer seekTo:0];
+        if (self.slider.value == 1.0) {
             self.duration.text = [NSString stringWithFormat:@"00:00/%@", [self evaFileTotalTime:self.totalTime]];
+            [self.player seekToTime:kCMTimeZero];
         }
-        [self.evaPlayer play];
+        self.isPlaying = YES;
+        [self.player play];
+        NSLog(@"TUEVA::开始播放");
     }
+    self.playBtn.hidden = self.isPlaying;
 }
 
-#pragma mark - TUPPlayerDelegate
-- (void)onPlayerEvent:(TUPPlayerState)state withTimestamp:(NSInteger)ts
-{
-    self.playerState = state;
-    //NSLog(@"当前时间 ===%ld", (long)ts);
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (state == kDO_PAUSE || state == kEOS) {
-            self.playBtn.hidden = NO;
-        } else {
-            self.playBtn.hidden = YES;
-        }
-        if (ts != 0) {
-            self.lastProgress = [[NSString stringWithFormat:@"%.5f", ts * 1000.f / self.totalTime / 1000] floatValue];
-        }
-        
-        //NSLog(@"进度条君要挺住 === %.5f", self.lastProgress);
-        
-        self.duration.text = [NSString stringWithFormat:@"%@/%@", [self evaFileTotalTime:self.pauseTime], [self evaFileTotalTime:self.totalTime]];
-        
-        if (self.lastProgress != 0) {
-            self.slider.value = self.lastProgress;
-            self.pauseTime = self.lastProgress * self.totalTime;
-            
-            //最后一秒不置为0
-            if (self.lastProgress >= 0.99) {
-                self.duration.text = [NSString stringWithFormat:@"%@/%@", [self evaFileTotalTime:self.totalTime], [self evaFileTotalTime:self.totalTime]];
-            }
-        }
-        
-        if (self.slider.value == 0 && self.lastProgress == 0) {
-            self.duration.text = [NSString stringWithFormat:@"00:00/%@", [self evaFileTotalTime:self.totalTime]];
-        }
-        
-    });
-}
+//- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
+//{
+//    if ([keyPath isEqualToString:@"status"]) {
+//        switch (self.player.status) {
+//            case AVPlayerStatusUnknown:
+//                NSLog(@"TUEVA::播放器状态未知");
+//                break;
+//            case AVPlayerStatusReadyToPlay:
+//                NSLog(@"TUEVA::准备完毕，可以播放");
+//                break;
+//            case AVPlayerStatusFailed:
+//                NSLog(@"TUEVA::加载失败，请检查网络");
+//                break;
+//            default:
+//                break;
+//        }
+//    }
+//}
 
 //时间转换
 - (NSString *)evaFileTotalTime:(NSInteger)currentTime
 {
-    //NSLog(@"视频时间长度 == %ld", (long)self.totalTime);
+    NSInteger seconds = currentTime / 1000;
     
-    NSString *time = @"00:00";
-    NSInteger duration = currentTime / 1000;
-    if (duration <= 0) {
-        return @"00:00";
-    } else if (duration > 0 && duration < 10) {
-        return [NSString stringWithFormat:@"00:0%ld", (long)duration];
-    } else if (duration >= 10 && duration < 60) {
-        return [NSString stringWithFormat:@"00:%ld", (long)duration];
-    } else {
-        NSInteger seconds = duration / (1000 * 60);
-        NSString *secondStr;
-        if (seconds > 0 && seconds < 10) {
-            secondStr = [NSString stringWithFormat:@"0%ld", (long)seconds];
-        } else {
-            secondStr = [NSString stringWithFormat:@"%ld", (long)seconds];
-        }
-        NSInteger mSeconds = duration % (1000 * 60);
-        NSString *mSecondStr;
-        if (mSeconds > 0 && mSeconds < 10) {
-            mSecondStr = [NSString stringWithFormat:@"0%ld", (long)mSeconds];
-        } else {
-            mSecondStr = [NSString stringWithFormat:@"%ld", (long)mSeconds];
-        }
-        time = [NSString stringWithFormat:@"%@:%@", secondStr, mSecondStr];
+    NSInteger hour = seconds / 3600;
+    //format of hour
+    NSString *str_hour = [NSString stringWithFormat:@"%02ld",hour];
+    //format of minute
+    NSString *str_minute = [NSString stringWithFormat:@"%02ld",(seconds%3600)/60];
+    //format of second
+    NSString *str_second = [NSString stringWithFormat:@"%02ld",seconds%60];
+    
+    if (hour > 0) {
+        return [NSString stringWithFormat:@"%@:%@:%@",str_hour,str_minute,str_second];
     }
-    
-    return time;
+    return [NSString stringWithFormat:@"%@:%@",str_minute,str_second];
 }
 
 @end

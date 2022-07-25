@@ -11,3 +11,4 @@
 #import <TuSDKPulseCore/TuSDKPulseCore.h>
 //#import <TuViews/TuViews.h>
 #import <TuSDKPulseEva/TUPEvaModel.h>
+#import <Masonry/Masonry.h>

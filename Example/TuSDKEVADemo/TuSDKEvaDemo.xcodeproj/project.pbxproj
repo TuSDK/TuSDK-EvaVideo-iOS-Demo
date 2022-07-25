@@ -3,14 +3,17 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		04B44DF7265F8DB80094308C /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04B44DF6265F8DB80094308C /* MediaPlayer.framework */; };
+		2A78BE442805202F002BE7F2 /* EditDynamicViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2A78BE412805202F002BE7F2 /* EditDynamicViewController.mm */; };
+		2A78BE452805202F002BE7F2 /* EditDynamicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A78BE432805202F002BE7F2 /* EditDynamicViewController.xib */; };
 		2A7A4D3627DEF067007DBCC5 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A7A4D3527DEF067007DBCC5 /* CloudKit.framework */; };
 		2ACAFE8327DF20B500482F9D /* TTDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ACAFE8227DF20B500482F9D /* TTDocument.m */; };
 		2ACAFE8727DF215200482F9D /* iCloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ACAFE8627DF215200482F9D /* iCloudManager.m */; };
+		2AFF58D9280E47F9001E5820 /* 动态模板0419.eva in Resources */ = {isa = PBXBuildFile; fileRef = 2AFF58D8280E47F9001E5820 /* 动态模板0419.eva */; };
 		45B606F422B733C700A9F3A6 /* TuSDKPulse.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 45B606F322B733C700A9F3A6 /* TuSDKPulse.bundle */; };
 		45F0B2AC2299FB18006D5F99 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 45F0B2AB2299FB18006D5F99 /* AppDelegate.mm */; };
 		45F0B2B22299FB18006D5F99 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45F0B2B02299FB18006D5F99 /* Main.storyboard */; };
@@ -18,6 +21,12 @@
 		45F0B2B72299FB18006D5F99 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45F0B2B52299FB18006D5F99 /* LaunchScreen.storyboard */; };
 		45F0B2BA2299FB18006D5F99 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 45F0B2B92299FB18006D5F99 /* main.m */; };
 		52D4415369A9A1384EB88409 /* Pods_TuSDKEvaDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D05AF8FB5B9041608DA425B /* Pods_TuSDKEvaDemo.framework */; };
+		A62A8B442850902800ADDDFB /* EVAMutiAssetPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = A62A8B432850902800ADDDFB /* EVAMutiAssetPickerController.m */; };
+		A62A8B4A28509E6300ADDDFB /* TTMutiAssetPickSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = A62A8B4928509E6300ADDDFB /* TTMutiAssetPickSelectView.m */; };
+		A62A8B4D2850AE9F00ADDDFB /* TTMutiAssetPickSelectCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A62A8B4C2850AE9F00ADDDFB /* TTMutiAssetPickSelectCell.m */; };
+		A62A8B582851E1BC00ADDDFB /* TuViewSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = A62A8B542851E1BC00ADDDFB /* TuViewSlider.m */; };
+		A62A8B592851E1BC00ADDDFB /* TuPanelBar.m in Sources */ = {isa = PBXBuildFile; fileRef = A62A8B572851E1BC00ADDDFB /* TuPanelBar.m */; };
+		A649F21D285A3BC500F78376 /* TTItemReplaceView.m in Sources */ = {isa = PBXBuildFile; fileRef = A649F21C285A3BC500F78376 /* TTItemReplaceView.m */; };
 		A68905B826AA0B8000EC15AE /* TuTouchImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A68905B526AA0B7F00EC15AE /* TuTouchImageView.m */; };
 		A68905B926AA0B8000EC15AE /* TuMaskRegionView.m in Sources */ = {isa = PBXBuildFile; fileRef = A68905B626AA0B7F00EC15AE /* TuMaskRegionView.m */; };
 		A68905BC26AA0CF800EC15AE /* TuPopupProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = A68905BB26AA0CF700EC15AE /* TuPopupProgress.m */; };
@@ -25,12 +34,15 @@
 		A691C77527675508005BC230 /* TAEModelMediator.m in Sources */ = {isa = PBXBuildFile; fileRef = A691C77427675508005BC230 /* TAEModelMediator.m */; };
 		A691C77927684D1A005BC230 /* TAEWave.m in Sources */ = {isa = PBXBuildFile; fileRef = A691C77827684D1A005BC230 /* TAEWave.m */; };
 		A691C77C27686D47005BC230 /* TAEWaveProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = A691C77B27686D47005BC230 /* TAEWaveProgress.m */; };
-		A6DFAFD027E8591700A80F10 /* TuSDKPulse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6DFAFCB27E8513B00A80F10 /* TuSDKPulse.framework */; };
-		A6DFAFD127E8591700A80F10 /* TuSDKPulse.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A6DFAFCB27E8513B00A80F10 /* TuSDKPulse.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A6DFAFD227E8591700A80F10 /* TuSDKPulseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6DFAFCC27E8513B00A80F10 /* TuSDKPulseCore.framework */; };
-		A6DFAFD327E8591700A80F10 /* TuSDKPulseCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A6DFAFCC27E8513B00A80F10 /* TuSDKPulseCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A6DFAFD427E8591700A80F10 /* TuSDKPulseEva.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6DFAFCA27E8513B00A80F10 /* TuSDKPulseEva.framework */; };
-		A6DFAFD527E8591700A80F10 /* TuSDKPulseEva.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A6DFAFCA27E8513B00A80F10 /* TuSDKPulseEva.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A6B0E70F285AD462001D9047 /* TTDirectorMediator.m in Sources */ = {isa = PBXBuildFile; fileRef = A6B0E70E285AD462001D9047 /* TTDirectorMediator.m */; };
+		A6C417AF288A506D0087993D /* TTMultiAssetPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = A6C417AE288A506D0087993D /* TTMultiAssetPicker.m */; };
+		A6C417B2288A51F50087993D /* TTMultiAssetPickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A6C417B1288A51F50087993D /* TTMultiAssetPickerCell.m */; };
+		A6E34D32288E35ED0074A505 /* TuSDKPulse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6E34D2D288E35B10074A505 /* TuSDKPulse.framework */; };
+		A6E34D33288E35ED0074A505 /* TuSDKPulse.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A6E34D2D288E35B10074A505 /* TuSDKPulse.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A6E34D34288E35ED0074A505 /* TuSDKPulseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6E34D2E288E35B10074A505 /* TuSDKPulseCore.framework */; };
+		A6E34D35288E35ED0074A505 /* TuSDKPulseCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A6E34D2E288E35B10074A505 /* TuSDKPulseCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A6E34D36288E35ED0074A505 /* TuSDKPulseEva.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6E34D2C288E35B10074A505 /* TuSDKPulseEva.framework */; };
+		A6E34D37288E35ED0074A505 /* TuSDKPulseEva.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A6E34D2C288E35B10074A505 /* TuSDKPulseEva.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B8446DD523B8764400E60E41 /* DownLoadListManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B8446DD423B8764400E60E41 /* DownLoadListManager.m */; };
 		B8446E6623B8792600E60E41 /* SDImageHEICCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = B8446DD923B8792500E60E41 /* SDImageHEICCoder.m */; };
 		B8446E6723B8792600E60E41 /* NSImage+Compatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = B8446DDB23B8792500E60E41 /* NSImage+Compatibility.m */; };
@@ -141,7 +153,6 @@
 		D789D63B22C335BB008D8F18 /* ImageEditViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = D789D63A22C335BB008D8F18 /* ImageEditViewController.mm */; };
 		D789D63E22C335C8008D8F18 /* MusicView.mm in Sources */ = {isa = PBXBuildFile; fileRef = D789D63D22C335C8008D8F18 /* MusicView.mm */; };
 		D789D64022C33B06008D8F18 /* EVAPreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D789D63F22C33B06008D8F18 /* EVAPreviewViewController.xib */; };
-		D7911079236AD94800DE0293 /* lsq_eva_001.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D7911078236AD94800DE0293 /* lsq_eva_001.mp4 */; };
 		D79815202358707900043ED3 /* 51-cover.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D79815152358706F00043ED3 /* 51-cover.jpg */; };
 		D79815212358707900043ED3 /* 45-cover.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D79815162358707000043ED3 /* 45-cover.jpg */; };
 		D79815222358707900043ED3 /* 48-cover.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D79815172358707100043ED3 /* 48-cover.jpg */; };
@@ -179,15 +190,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		A6DFAFD627E8591700A80F10 /* Embed Frameworks */ = {
+		A6E34D38288E35ED0074A505 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A6DFAFD127E8591700A80F10 /* TuSDKPulse.framework in Embed Frameworks */,
-				A6DFAFD527E8591700A80F10 /* TuSDKPulseEva.framework in Embed Frameworks */,
-				A6DFAFD327E8591700A80F10 /* TuSDKPulseCore.framework in Embed Frameworks */,
+				A6E34D33288E35ED0074A505 /* TuSDKPulse.framework in Embed Frameworks */,
+				A6E34D37288E35ED0074A505 /* TuSDKPulseEva.framework in Embed Frameworks */,
+				A6E34D35288E35ED0074A505 /* TuSDKPulseCore.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -198,6 +209,9 @@
 		04B44DF6265F8DB80094308C /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		04B44DF8265F8DF30094308C /* TuSDKPulseCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TuSDKPulseCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D05AF8FB5B9041608DA425B /* Pods_TuSDKEvaDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TuSDKEvaDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A78BE412805202F002BE7F2 /* EditDynamicViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EditDynamicViewController.mm; sourceTree = "<group>"; };
+		2A78BE422805202F002BE7F2 /* EditDynamicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditDynamicViewController.h; sourceTree = "<group>"; };
+		2A78BE432805202F002BE7F2 /* EditDynamicViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditDynamicViewController.xib; sourceTree = "<group>"; };
 		2A7A4D3527DEF067007DBCC5 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		2ACAFE8127DF20B500482F9D /* TTDocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTDocument.h; sourceTree = "<group>"; };
 		2ACAFE8227DF20B500482F9D /* TTDocument.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTDocument.m; sourceTree = "<group>"; };
@@ -205,6 +219,7 @@
 		2ACAFE8627DF215200482F9D /* iCloudManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iCloudManager.m; sourceTree = "<group>"; };
 		2ACAFE8827DF238500482F9D /* TuSDKEvaDemo.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = TuSDKEvaDemo.entitlements; sourceTree = "<group>"; };
 		2AE9C5451D6D41984ADCD5A3 /* Pods-TuSDKEvaDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TuSDKEvaDemo.debug.xcconfig"; path = "Target Support Files/Pods-TuSDKEvaDemo/Pods-TuSDKEvaDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		2AFF58D8280E47F9001E5820 /* 动态模板0419.eva */ = {isa = PBXFileReference; lastKnownFileType = file; path = "动态模板0419.eva"; sourceTree = "<group>"; };
 		45479E2E22ABE99C006040AB /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		45B606F322B733C700A9F3A6 /* TuSDKPulse.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TuSDKPulse.bundle; sourceTree = "<group>"; };
 		45B6077A22B8DF9300A9F3A6 /* libiconv.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.2.tbd; path = usr/lib/libiconv.2.tbd; sourceTree = SDKROOT; };
@@ -227,6 +242,18 @@
 		45F0B2CD2299FB67006D5F99 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		45F0B2CF2299FB6D006D5F99 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		7F6BABB76364914FBC86C688 /* Pods-TuSDKEvaDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TuSDKEvaDemo.release.xcconfig"; path = "Target Support Files/Pods-TuSDKEvaDemo/Pods-TuSDKEvaDemo.release.xcconfig"; sourceTree = "<group>"; };
+		A62A8B422850902800ADDDFB /* EVAMutiAssetPickerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EVAMutiAssetPickerController.h; sourceTree = "<group>"; };
+		A62A8B432850902800ADDDFB /* EVAMutiAssetPickerController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EVAMutiAssetPickerController.m; sourceTree = "<group>"; };
+		A62A8B4828509E6300ADDDFB /* TTMutiAssetPickSelectView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTMutiAssetPickSelectView.h; sourceTree = "<group>"; };
+		A62A8B4928509E6300ADDDFB /* TTMutiAssetPickSelectView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTMutiAssetPickSelectView.m; sourceTree = "<group>"; };
+		A62A8B4B2850AE9F00ADDDFB /* TTMutiAssetPickSelectCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTMutiAssetPickSelectCell.h; sourceTree = "<group>"; };
+		A62A8B4C2850AE9F00ADDDFB /* TTMutiAssetPickSelectCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTMutiAssetPickSelectCell.m; sourceTree = "<group>"; };
+		A62A8B542851E1BC00ADDDFB /* TuViewSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TuViewSlider.m; sourceTree = "<group>"; };
+		A62A8B552851E1BC00ADDDFB /* TuPanelBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuPanelBar.h; sourceTree = "<group>"; };
+		A62A8B562851E1BC00ADDDFB /* TuViewSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuViewSlider.h; sourceTree = "<group>"; };
+		A62A8B572851E1BC00ADDDFB /* TuPanelBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TuPanelBar.m; sourceTree = "<group>"; };
+		A649F21B285A3BC500F78376 /* TTItemReplaceView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TTItemReplaceView.h; path = ../../../../../../TuSDKEVADemo/TuSDKEvaDemo/Classes/EVAModel/TAEEdit/Views/TTItemReplaceView.h; sourceTree = "<group>"; };
+		A649F21C285A3BC500F78376 /* TTItemReplaceView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = TTItemReplaceView.m; path = ../../../../../../TuSDKEVADemo/TuSDKEvaDemo/Classes/EVAModel/TAEEdit/Views/TTItemReplaceView.m; sourceTree = "<group>"; };
 		A68905B426AA0B7F00EC15AE /* TuTouchImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TuTouchImageView.h; sourceTree = "<group>"; };
 		A68905B526AA0B7F00EC15AE /* TuTouchImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TuTouchImageView.m; sourceTree = "<group>"; };
 		A68905B626AA0B7F00EC15AE /* TuMaskRegionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TuMaskRegionView.m; sourceTree = "<group>"; };
@@ -241,9 +268,15 @@
 		A691C77827684D1A005BC230 /* TAEWave.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TAEWave.m; sourceTree = "<group>"; };
 		A691C77A27686D47005BC230 /* TAEWaveProgress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TAEWaveProgress.h; sourceTree = "<group>"; };
 		A691C77B27686D47005BC230 /* TAEWaveProgress.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TAEWaveProgress.m; sourceTree = "<group>"; };
-		A6DFAFCA27E8513B00A80F10 /* TuSDKPulseEva.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TuSDKPulseEva.framework; sourceTree = "<group>"; };
-		A6DFAFCB27E8513B00A80F10 /* TuSDKPulse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TuSDKPulse.framework; sourceTree = "<group>"; };
-		A6DFAFCC27E8513B00A80F10 /* TuSDKPulseCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TuSDKPulseCore.framework; sourceTree = "<group>"; };
+		A6B0E70D285AD462001D9047 /* TTDirectorMediator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTDirectorMediator.h; sourceTree = "<group>"; };
+		A6B0E70E285AD462001D9047 /* TTDirectorMediator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTDirectorMediator.m; sourceTree = "<group>"; };
+		A6C417AD288A506D0087993D /* TTMultiAssetPicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTMultiAssetPicker.h; sourceTree = "<group>"; };
+		A6C417AE288A506D0087993D /* TTMultiAssetPicker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTMultiAssetPicker.m; sourceTree = "<group>"; };
+		A6C417B0288A51F50087993D /* TTMultiAssetPickerCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTMultiAssetPickerCell.h; sourceTree = "<group>"; };
+		A6C417B1288A51F50087993D /* TTMultiAssetPickerCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTMultiAssetPickerCell.m; sourceTree = "<group>"; };
+		A6E34D2C288E35B10074A505 /* TuSDKPulseEva.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TuSDKPulseEva.framework; sourceTree = "<group>"; };
+		A6E34D2D288E35B10074A505 /* TuSDKPulse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TuSDKPulse.framework; sourceTree = "<group>"; };
+		A6E34D2E288E35B10074A505 /* TuSDKPulseCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TuSDKPulseCore.framework; sourceTree = "<group>"; };
 		B8446DD323B8764300E60E41 /* DownLoadListManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownLoadListManager.h; sourceTree = "<group>"; };
 		B8446DD423B8764400E60E41 /* DownLoadListManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DownLoadListManager.m; sourceTree = "<group>"; };
 		B8446DD823B8792500E60E41 /* UIImage+ExtendedCacheData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ExtendedCacheData.h"; sourceTree = "<group>"; };
@@ -440,7 +473,6 @@
 		D789D63C22C335C8008D8F18 /* MusicView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MusicView.h; sourceTree = "<group>"; };
 		D789D63D22C335C8008D8F18 /* MusicView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MusicView.mm; sourceTree = "<group>"; };
 		D789D63F22C33B06008D8F18 /* EVAPreviewViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EVAPreviewViewController.xib; sourceTree = "<group>"; };
-		D7911078236AD94800DE0293 /* lsq_eva_001.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = lsq_eva_001.mp4; sourceTree = "<group>"; };
 		D79815152358706F00043ED3 /* 51-cover.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "51-cover.jpg"; sourceTree = "<group>"; };
 		D79815162358707000043ED3 /* 45-cover.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "45-cover.jpg"; sourceTree = "<group>"; };
 		D79815172358707100043ED3 /* 48-cover.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "48-cover.jpg"; sourceTree = "<group>"; };
@@ -500,12 +532,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				04B44DF7265F8DB80094308C /* MediaPlayer.framework in Frameworks */,
-				A6DFAFD427E8591700A80F10 /* TuSDKPulseEva.framework in Frameworks */,
+				A6E34D36288E35ED0074A505 /* TuSDKPulseEva.framework in Frameworks */,
 				B86D1B3224E284BA00BA6A13 /* libc++.tbd in Frameworks */,
 				B86D1B3124E284AF00BA6A13 /* libz.tbd in Frameworks */,
 				2A7A4D3627DEF067007DBCC5 /* CloudKit.framework in Frameworks */,
-				A6DFAFD027E8591700A80F10 /* TuSDKPulse.framework in Frameworks */,
-				A6DFAFD227E8591700A80F10 /* TuSDKPulseCore.framework in Frameworks */,
+				A6E34D32288E35ED0074A505 /* TuSDKPulse.framework in Frameworks */,
+				A6E34D34288E35ED0074A505 /* TuSDKPulseCore.framework in Frameworks */,
 				D711E9DE22FC1EC200545604 /* libresolv.tbd in Frameworks */,
 				D72A774122F4040E006DB467 /* libiconv.tbd in Frameworks */,
 				52D4415369A9A1384EB88409 /* Pods_TuSDKEvaDemo.framework in Frameworks */,
@@ -547,9 +579,9 @@
 		45F0B2A92299FB18006D5F99 /* TuSDKEvaDemo */ = {
 			isa = PBXGroup;
 			children = (
+				2AFF58D8280E47F9001E5820 /* 动态模板0419.eva */,
 				2ACAFE8827DF238500482F9D /* TuSDKEvaDemo.entitlements */,
 				D774191622CC8F210025625C /* 视频融合文档-iOS.md */,
-				D7911078236AD94800DE0293 /* lsq_eva_001.mp4 */,
 				D77418BF22CA338D0025625C /* resource */,
 				D789D61422C30A84008D8F18 /* Classes */,
 				45F0B2AA2299FB18006D5F99 /* AppDelegate.h */,
@@ -591,6 +623,23 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A62A8B3E28508C2400ADDDFB /* TAEAssetPicker */ = {
+			isa = PBXGroup;
+			children = (
+				A62A8B552851E1BC00ADDDFB /* TuPanelBar.h */,
+				A62A8B572851E1BC00ADDDFB /* TuPanelBar.m */,
+				A62A8B562851E1BC00ADDDFB /* TuViewSlider.h */,
+				A62A8B542851E1BC00ADDDFB /* TuViewSlider.m */,
+				A62A8B422850902800ADDDFB /* EVAMutiAssetPickerController.h */,
+				A62A8B432850902800ADDDFB /* EVAMutiAssetPickerController.m */,
+				A62A8B4828509E6300ADDDFB /* TTMutiAssetPickSelectView.h */,
+				A62A8B4928509E6300ADDDFB /* TTMutiAssetPickSelectView.m */,
+				A62A8B4B2850AE9F00ADDDFB /* TTMutiAssetPickSelectCell.h */,
+				A62A8B4C2850AE9F00ADDDFB /* TTMutiAssetPickSelectCell.m */,
+			);
+			path = TAEAssetPicker;
+			sourceTree = "<group>";
+		};
 		A691C77027675285005BC230 /* TAEEdit */ = {
 			isa = PBXGroup;
 			children = (
@@ -599,6 +648,8 @@
 				A691C76E2766EBEB005BC230 /* TAEExportManager.m */,
 				A691C771276752B0005BC230 /* TAEModelMediator.h */,
 				A691C77427675508005BC230 /* TAEModelMediator.m */,
+				A6B0E70D285AD462001D9047 /* TTDirectorMediator.h */,
+				A6B0E70E285AD462001D9047 /* TTDirectorMediator.m */,
 			);
 			path = TAEEdit;
 			sourceTree = "<group>";
@@ -610,18 +661,21 @@
 				A691C77827684D1A005BC230 /* TAEWave.m */,
 				A691C77A27686D47005BC230 /* TAEWaveProgress.h */,
 				A691C77B27686D47005BC230 /* TAEWaveProgress.m */,
+				A649F21B285A3BC500F78376 /* TTItemReplaceView.h */,
+				A649F21C285A3BC500F78376 /* TTItemReplaceView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
 		};
-		A6DFAFC927E8513B00A80F10 /* TuSDK */ = {
+		A6E34D2B288E35B10074A505 /* TuSDK */ = {
 			isa = PBXGroup;
 			children = (
-				A6DFAFCA27E8513B00A80F10 /* TuSDKPulseEva.framework */,
-				A6DFAFCB27E8513B00A80F10 /* TuSDKPulse.framework */,
-				A6DFAFCC27E8513B00A80F10 /* TuSDKPulseCore.framework */,
+				A6E34D2C288E35B10074A505 /* TuSDKPulseEva.framework */,
+				A6E34D2D288E35B10074A505 /* TuSDKPulse.framework */,
+				A6E34D2E288E35B10074A505 /* TuSDKPulseCore.framework */,
 			);
-			path = TuSDK;
+			name = TuSDK;
+			path = ../../../TuSDKEVADemo/TuSDKEvaDemo/resource/TuSDK;
 			sourceTree = "<group>";
 		};
 		B8446DD623B8792500E60E41 /* SDWebImage */ = {
@@ -821,7 +875,7 @@
 		D77418BF22CA338D0025625C /* resource */ = {
 			isa = PBXGroup;
 			children = (
-				A6DFAFC927E8513B00A80F10 /* TuSDK */,
+				A6E34D2B288E35B10074A505 /* TuSDK */,
 				D774190722CB68D20025625C /* sample_watermark.png */,
 				D77418C022CA338D0025625C /* music */,
 				D77418C722CA338D0025625C /* images */,
@@ -906,6 +960,7 @@
 		D789D62C22C325E3008D8F18 /* EVAModel */ = {
 			isa = PBXGroup;
 			children = (
+				A62A8B3E28508C2400ADDDFB /* TAEAssetPicker */,
 				A691C77027675285005BC230 /* TAEEdit */,
 				D7E956D422C5C66900749D6E /* EditImage */,
 				D7E956AE22C5B39600749D6E /* ImagePicker */,
@@ -916,6 +971,9 @@
 				D789D63022C3357D008D8F18 /* EditViewController.h */,
 				D789D63122C3357D008D8F18 /* EditViewController.mm */,
 				B88946A624ECC91E00BAAD7E /* EditViewController.xib */,
+				2A78BE422805202F002BE7F2 /* EditDynamicViewController.h */,
+				2A78BE412805202F002BE7F2 /* EditDynamicViewController.mm */,
+				2A78BE432805202F002BE7F2 /* EditDynamicViewController.xib */,
 				D789D63C22C335C8008D8F18 /* MusicView.h */,
 				D789D63D22C335C8008D8F18 /* MusicView.mm */,
 				D71E5AA0233B4893009D2FDC /* MusicView.xib */,
@@ -952,6 +1010,10 @@
 				D7E956B122C5B5CE00749D6E /* MultiAssetPicker.mm */,
 				D7E956B022C5B5CE00749D6E /* MultiAssetPickerCell.h */,
 				D7E956B222C5B5CE00749D6E /* MultiAssetPickerCell.m */,
+				A6C417AD288A506D0087993D /* TTMultiAssetPicker.h */,
+				A6C417AE288A506D0087993D /* TTMultiAssetPicker.m */,
+				A6C417B0288A51F50087993D /* TTMultiAssetPickerCell.h */,
+				A6C417B1288A51F50087993D /* TTMultiAssetPickerCell.m */,
 			);
 			path = ImagePicker;
 			sourceTree = "<group>";
@@ -1016,7 +1078,8 @@
 				45F0B2A42299FB18006D5F99 /* Frameworks */,
 				45F0B2A52299FB18006D5F99 /* Resources */,
 				B86D1B3624E2863000BA6A13 /* ShellScript */,
-				A6DFAFD627E8591700A80F10 /* Embed Frameworks */,
+				A6E34D38288E35ED0074A505 /* Embed Frameworks */,
+				D6E68CCA1DAAF9F7C09085EE /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1081,7 +1144,7 @@
 				D774191722CC8F210025625C /* 视频融合文档-iOS.md in Resources */,
 				45B606F422B733C700A9F3A6 /* TuSDKPulse.bundle in Resources */,
 				D79815212358707900043ED3 /* 45-cover.jpg in Resources */,
-				D7911079236AD94800DE0293 /* lsq_eva_001.mp4 in Resources */,
+				2A78BE452805202F002BE7F2 /* EditDynamicViewController.xib in Resources */,
 				45F0B2B72299FB18006D5F99 /* LaunchScreen.storyboard in Resources */,
 				D77418FF22CA35D90025625C /* 02-cover.jpg in Resources */,
 				D7E956E122C60B6D00749D6E /* VideoCuteMaskView.xib in Resources */,
@@ -1106,6 +1169,7 @@
 				D79815262358707900043ED3 /* 50-cover.jpg in Resources */,
 				D7E956D622C5C68300749D6E /* ImageEditViewController.xib in Resources */,
 				D77418DD22CA338D0025625C /* Eye of Forgiveness.mp3 in Resources */,
+				2AFF58D9280E47F9001E5820 /* 动态模板0419.eva in Resources */,
 				D718845023701BF700B80E5F /* test.mp3 in Resources */,
 				45F0B2B22299FB18006D5F99 /* Main.storyboard in Resources */,
 				D716715023A39AC200720410 /* 143-cover.jpg in Resources */,
@@ -1156,6 +1220,23 @@
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/sh\n#\n# Copyright 2016 Bugly, Tencent. All rights reserved.\n#\n# V1.4.0\n#\n# 2016.08.03\n#\n#\n#\n######################################################\n# 1. 脚本集成到Xcode工程的Target\n######################################################\n#\n# --- Copy the SCRIPT to the Run Script of Build Phases in the Xcode project ---\n#\n# #\nBUGLY_APP_ID=\"33b8065dbd\"\n# #\nBUGLY_APP_KEY=\"e38aa254-1361-45bd-9614-b6c07afefce4\"\n# #\nBUNDLE_IDENTIFIER=\"org.lasque.tutu.TuSDKEvaDemo\"\n# #\nUPLOAD_DSYM_ONLY=1\n#\n# # 脚本默认配置的版本格式为CFBundleShortVersionString(CFBundleVersion),  如果你修改默认的版本格式, 请设置此变量, 如果不想修改, 请忽略此设置\n# CUSTOMIZED_APP_VERSION=\"\"\n#\n# # Debug模式编译是否上传，1＝上传 0＝不上传，默认不上传\n UPLOAD_DEBUG_SYMBOLS=1\n#\n# # 模拟器编译是否上传，1=上传 0=不上传，默认不上传\n UPLOAD_SIMULATOR_SYMBOLS=1\n#\n# #只有Archive操作时上传, 1=支持Archive上传 0=所有Release模式编译都上传\n# UPLOAD_ARCHIVE_ONLY=0\n#\n# #\n# source dSYMUpload.sh\n#\n# --- END OF SCRIPT ---\n#\n#\n#\n#\n#######################################################\n# 2. 脚本根据输入参数处理\n#######################################################\n#\n# #命令行下输入应用基本信息, .dSYM文件的父目录路径, 输出文件目录即可\n#\n# sh dSYMUpload.sh <bugly_app_id> <bugly_app_key> <app_bundle_identifier> <app_version> <dSYM_src_dir> <bSYMBOL_dest_dir>\n#\n# #\n#\n# #注意:\n# # 1. dSYMUpload.sh会调用buglySymboliOS.jar进行.dSYM解析，所以依赖Java运行时环境\n# # 2. dSYMUpload.sh和buglySymboliOS.jar的文件路径需一致\n#\n#\n\n#\n# --- CONTENT OF SCRIPT ---\n#\n\n# Bugly服务域名\nBUGLY_DSYM_UPLOAD_DOMAIN=\"api.bugly.qq.com\"\n\n# 注意jar工具的路径跟dSYMUpload.sh脚本路径一致, 请务必保证jar路径的正确性\nBUGLY_SYMBOL_JAR_PATH=\"dsymtool/buglySymboliOS.jar\"\n# 查找添加到系统目录的jar工具\nif [ ! -f \"${BUGLY_SYMBOL_JAR_PATH}\" ]; then\n    BUGLY_SYMBOL_JAR_PATH=\"$HOME/bin/buglySymboliOS.jar\"\nfi\n\n# 打印错误信息\nfunction exitWithMessage(){\n    echo \"--------------------------------\"\n    echo \"${1}\"\n    echo \"--------------------------------\"\n    exit ${2}\n}\n\n# 上传bSYMBOL文件\nfunction dSYMUpload() {\n    P_APP_ID=\"$1\"\n    P_APP_KEY=\"$2\"\n    P_APP_BUNDLE_ID=\"$3\"\n    P_APP_VERSION=\"$4\"\n    P_BSYMBOL_ZIP_FILE=\"$5\"\n\n    #\n    P_BSYMBOL_ZIP_FILE_NAME=${P_BSYMBOL_ZIP_FILE##*/}\n    P_BSYMBOL_ZIP_FILE_NAME=${P_BSYMBOL_ZIP_FILE_NAME//&/_}\n    P_BSYMBOL_ZIP_FILE_NAME=\"${P_BSYMBOL_ZIP_FILE_NAME// /_}\"\n\n    DSYM_UPLOAD_URL=\"https://${BUGLY_DSYM_UPLOAD_DOMAIN}/openapi/file/upload/symbol?app_id=${P_APP_ID}&app_key=${P_APP_KEY}\"\n    echo \"dSYM upload url: ${DSYM_UPLOAD_URL}\"\n\n    echo \"-----------------------------\"\n    STATUS=$(/usr/bin/curl -k \"${DSYM_UPLOAD_URL}\" --form \"api_version=1\" --form \"app_id=${P_APP_ID}\" --form \"app_key=${P_APP_KEY}\" --form \"symbolType=2\"  --form \"bundleId=${BUNDLE_IDENTIFIER}\" --form \"productVersion=${BUGLY_APP_VERSION}\" --form \"fileName=${P_BSYMBOL_ZIP_FILE_NAME}\" --form \"file=@${P_BSYMBOL_ZIP_FILE}\" --verbose)\n    echo \"-----------------------------\"\n\n    UPLOAD_RESULT=\"FAILTURE\"\n    echo \"Bugly server response: ${STATUS}\"\n    if [ ! \"${STATUS}\" ]; then\n        echo \"Error: Failed to upload the zip archive file.\"\n    elif [[ \"${STATUS}\" == *\"{\\\"reponseCode\\\":\\\"0\\\"}\"* ]]; then\n        echo \"Success to upload the dSYM for the app [${BUNDLE_IDENTIFIER} ${BUGLY_APP_VERSION}]\"\n        UPLOAD_RESULT=\"SUCCESS\"\n    else\n        echo \"Error: Failed to upload the zip archive file to Bugly.\"\n    fi\n\n    #Remove temp dSYM archive\n    #echo \"Remove temporary zip archive: ${DSYM_ZIP_FPATH}\"\n    #/bin/rm -f \"${DSYM_ZIP_FPATH}\"\n\n    if [ \"$?\" -ne 0 ]; then\n        exitWithMessage \"Error: Failed to remove temporary zip archive.\" 0\n    fi\n\n    echo \"--------------------------------\"\n    echo \"${UPLOAD_RESULT} - dSYM upload complete.\"\n\n    if [[ \"${UPLOAD_RESULT}\" == \"FAILTURE\" ]]; then\n        echo \"--------------------------------\"\n        echo \"Failed to upload the dSYM\"\n        echo \"Please check the script and try it again.\"\n    fi\n}\n\n# .dSYM解析为bSYMBOL文件\nfunction dSYMParse() {\n    DSYM_FILE=\"$1\"\n    DSYM_SYMBOL_FILE=\"$2\"\n\n    echo \"--------------------------------\"\n    echo \"Extract symbol info from .dSYM file. to ${DSYM_SYMBOL_FILE}\"\n    (/usr/bin/java -Xms512m -Xmx1024m -Dfile.encoding=UTF8 -jar \"${BUGLY_SYMBOL_JAR_PATH}\" -i \"${DSYM_FILE}\" -o \"${DSYM_SYMBOL_FILE}\" ) || exitWithMessage \"Error: Failed to extract symbols.\" 1\n    echo \"--------------------------------\"\n\n}\n\n# 执行\nfunction run() {\n\n    CONFIG_BUGLY_APP_ID=\"$1\"\n    CONFIG_BUGLY_APP_KEY=\"$2\"\n\n    CONFIG_BUGLY_APP_BUNDLE_IDENTIFIER=\"$3\"\n    CONFIG_BUGLY_APP_VERSION=\"$4\"\n    CONFIG_DSYM_SOURCE_DIR=\"$5\"\n    CONFIG_DSYM_DEST_DIR=\"$6\"\n    CONFIG_UPLOAD_DSYM_ONLY=\"$7\"\n\n    # 检查必须参数是否设置\n    if [ ! \"${CONFIG_BUGLY_APP_ID}\" ]; then\n        exitWithMessage \"Error: Bugly App ID not defined. Please set 'BUGLY_APP_ID' \" 0\n    fi\n\n    if [[ \"${CONFIG_BUGLY_APP_ID}\" == *\"App ID\"* ]]; then\n        exitWithMessage \"Error: Bugly App ID not defined.\" 0\n    fi\n\n    if [ ! \"${CONFIG_BUGLY_APP_KEY}\" ]; then\n        exitWithMessage \"Error: Bugly App Key not defined.\" 0\n    fi\n\n    if [ ! \"${CONFIG_BUGLY_APP_BUNDLE_IDENTIFIER}\" ]; then\n        exitWithMessage \"Error: Bundle Identifier not defined.\" 0\n    fi\n\n    if [ ! \"${CONFIG_BUGLY_APP_VERSION}\" ]; then\n        exitWithMessage \"Error: App Version not defined.\" 0\n    fi\n\n    if [ ! -e \"${CONFIG_DSYM_SOURCE_DIR}\" ]; then\n        exitWithMessage \"Error: Invalid dir ${CONFIG_DSYM_SOURCE_DIR}\" 0\n    fi\n\n    if [ ! \"${CONFIG_DSYM_DEST_DIR}\" ]; then\n        exitWithMessage \"Error: Invalid dir ${CONFIG_DSYM_DEST_DIR}\" 0\n    fi\n\n    if [ ! -e \"${CONFIG_DSYM_DEST_DIR}\" ]; then\n        mkdir ${CONFIG_DSYM_DEST_DIR}\n    fi\n\n    DSYM_FOLDER=\"${CONFIG_DSYM_SOURCE_DIR}\"\n    IFS=$'\\n'\n\n    echo \"Scaning dSYM FOLDER: ${DSYM_FOLDER} ...\"\n    RET=\"F\"\n    \n    #\n    for dsymFile in $(find \"$DSYM_FOLDER\" -name '*.dSYM'); do\n        RET=\"T\"\n        echo \"Found dSYM file: $dsymFile\"\n\n        DSYM_FILE_NAME=${dsymFile##*/}\n        DSYM_SYMBOL_ZIP_FILE_NAME=\"${DSYM_FILE_NAME}.zip\"\n        DSYM_SYMBOL_ZIP_FILE_NAME=\"${DSYM_SYMBOL_ZIP_FILE_NAME// /_}\"\n        DSYM_SYMBOL_ZIP_FILE=${CONFIG_DSYM_DEST_DIR}/${DSYM_SYMBOL_ZIP_FILE_NAME}\n\n        if [ $CONFIG_UPLOAD_DSYM_ONLY -eq 1 ]; then\n            if [ -e $DSYM_SYMBOL_ZIP_FILE ]; then\n                rm -f $DSYM_SYMBOL_ZIP_FILE\n            fi\n            # 如果只上传dSYM，直接压缩dSYM目录\n            zip -r -j $DSYM_SYMBOL_ZIP_FILE $dsymFile -x *.plist\n        else\n            # 使用符号表工具来生成Symbol文件\n            dSYMParse $dsymFile $DSYM_SYMBOL_ZIP_FILE\n        fi\n        \n        # 上传\n        dSYMUpload $CONFIG_BUGLY_APP_ID $CONFIG_BUGLY_APP_KEY $CONFIG_BUGLY_APP_BUNDLE_IDENTIFIER $CONFIG_BUGLY_APP_VERSION $DSYM_SYMBOL_ZIP_FILE\n    done\n\n    if [ $RET = \"F\" ]; then\n        exitWithMessage \"No .dSYM found in ${DSYM_FOLDER}\" 0\n    fi\n}\n\n# 在Xcode工程中执行\nfunction runInXcode(){\n    echo \"Uploading dSYM to Bugly in Xcode ...\"\n\n    echo \"Info.Plist : ${INFOPLIST_FILE}\"\n\n    BUNDLE_VERSION=$(/usr/libexec/PlistBuddy -c 'Print CFBundleVersion' \"${INFOPLIST_FILE}\")\n    BUNDLE_SHORT_VERSION=$(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' \"${INFOPLIST_FILE}\")\n\n    # 组装Bugly默认识别的版本信息(格式为CFBundleShortVersionString(CFBundleVersion), 例如: 1.0(1))\n    if [ ! \"${CUSTOMIZED_APP_VERSION}\" ]; then\n        BUGLY_APP_VERSION=\"${BUNDLE_SHORT_VERSION}(${BUNDLE_VERSION})\"\n    else\n        BUGLY_APP_VERSION=\"${CUSTOMIZED_APP_VERSION}\"\n    fi\n\n    echo \"--------------------------------\"\n    echo \"Prepare application information.\"\n    echo \"--------------------------------\"\n\n    echo \"Product Name: ${PRODUCT_NAME}\"\n    echo \"Bundle Identifier: ${BUNDLE_IDENTIFIER}\"\n    echo \"Version: ${BUNDLE_SHORT_VERSION}\"\n    echo \"Build: ${BUNDLE_VERSION}\"\n\n    echo \"Bugly App ID: ${BUGLY_APP_ID}\"\n    echo \"Bugly App key: ${BUGLY_APP_KEY}\"\n    echo \"Bugly App Version: ${BUGLY_APP_VERSION}\"\n\n    echo \"--------------------------------\"\n    echo \"Check the arguments ...\"\n\n    ##检查模拟器编译是否允许上传符号\n    if [ \"$EFFECTIVE_PLATFORM_NAME\" == \"-iphonesimulator\" ]; then\n    if [ $UPLOAD_SIMULATOR_SYMBOLS -eq 0 ]; then\n        exitWithMessage \"Warning: Build for simulator and skipping to upload. \\nYou can modify 'UPLOAD_SIMULATOR_SYMBOLS' to 1 in the script.\" 0\n    fi\n    fi\n\n    ##检查是否是Release模式编译\n    if [ \"${CONFIGURATION=}\" == \"Debug\" ]; then\n    if [ $UPLOAD_DEBUG_SYMBOLS -eq 0 ]; then\n        exitWithMessage \"Warning: Build for debug mode and skipping to upload. \\nYou can modify 'UPLOAD_DEBUG_SYMBOLS' to 1 in the script.\" 0\n    fi\n    fi\n\n    ##检查是否Archive操作\n    if [ $UPLOAD_ARCHIVE_ONLY -eq 1 ]; then\n    if [[ \"$TARGET_BUILD_DIR\" == *\"/Archive\"* ]]; then\n        echo \"Archive the package\"\n    else\n        exitWithMessage \"Warning: Build for NOT Archive mode and skipping to upload. \\nYou can modify 'UPLOAD_ARCHIVE_ONLY' to 0 in the script.\" 0\n    fi\n    fi\n\n    #\n    run ${BUGLY_APP_ID} ${BUGLY_APP_KEY} ${BUNDLE_IDENTIFIER} ${BUGLY_APP_VERSION} ${DWARF_DSYM_FOLDER_PATH} ${BUILD_DIR}/BuglySymbolTemp ${UPLOAD_DSYM_ONLY}\n}\n\n# 根据Xcode的环境变量判断是否处于Xcode环境\nINFO_PLIST_FILE=\"${INFOPLIST_FILE}\"\n\nBuildInXcode=\"F\"\nif [ -f \"${INFO_PLIST_FILE}\" ]; then\n    BuildInXcode=\"T\"\nfi\n\nif [ $BuildInXcode = \"T\" ]; then\n    runInXcode\nelse\n    echo \"\\nUsage: dSYMUpload.sh <bugly_app_id> <bugly_app_key> <app_bundle_identifier> <app_version> <dSYM_src_dir> <bSYMBOL_dest_dir> [upload_dsym_only]\\n\"\n    # 你可以在此处直接设置BuglyAppID和BuglyAppKey，排除不常变参数的输入\n    BUGLY_APP_ID=\"$1\"\n    BUGLY_APP_KEY=\"$2\"\n    BUNDLE_IDENTIFIER=\"$3\"\n    BUGLY_APP_VERSION=\"$4\"\n    DWARF_DSYM_FOLDER_PATH=\"$5\"\n    SYMBOL_OUTPUT_PATH=\"$6\"\n    UPLOAD_DSYM_ONLY=$7\n    run ${BUGLY_APP_ID} ${BUGLY_APP_KEY} ${BUNDLE_IDENTIFIER} ${BUGLY_APP_VERSION} ${DWARF_DSYM_FOLDER_PATH} ${SYMBOL_OUTPUT_PATH} ${UPLOAD_DSYM_ONLY}\nfi\n\n";
 		};
+		D6E68CCA1DAAF9F7C09085EE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TuSDKEvaDemo/Pods-TuSDKEvaDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TuSDKEvaDemo/Pods-TuSDKEvaDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TuSDKEvaDemo/Pods-TuSDKEvaDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1166,6 +1247,7 @@
 				D789D63222C3357D008D8F18 /* EditViewController.mm in Sources */,
 				B8446EA823B8792600E60E41 /* UIColor+HexString.m in Sources */,
 				B8446E8223B8792600E60E41 /* NSButton+WebCache.m in Sources */,
+				A62A8B442850902800ADDDFB /* EVAMutiAssetPickerController.m in Sources */,
 				B8446E8E23B8792600E60E41 /* SDWebImageTransition.m in Sources */,
 				B8446E9223B8792600E60E41 /* SDImageGraphics.m in Sources */,
 				A68905B926AA0B8000EC15AE /* TuMaskRegionView.m in Sources */,
@@ -1178,6 +1260,7 @@
 				D789D63822C335AB008D8F18 /* VideoEditViewController.mm in Sources */,
 				B8446E9D23B8792600E60E41 /* SDWebImageDownloaderRequestModifier.m in Sources */,
 				B8446E7523B8792600E60E41 /* SDWebImageCacheSerializer.m in Sources */,
+				A649F21D285A3BC500F78376 /* TTItemReplaceView.m in Sources */,
 				B8446E7823B8792600E60E41 /* UIImage+GIF.m in Sources */,
 				B8446E7F23B8792600E60E41 /* SDWebImageError.m in Sources */,
 				A68905B826AA0B8000EC15AE /* TuTouchImageView.m in Sources */,
@@ -1189,6 +1272,7 @@
 				D7E956DF22C609C900749D6E /* VideoCuteMaskView.m in Sources */,
 				B8446E6F23B8792600E60E41 /* SDAnimatedImageView.m in Sources */,
 				D789D62922C32165008D8F18 /* CollectionViewLayout.m in Sources */,
+				A62A8B4D2850AE9F00ADDDFB /* TTMutiAssetPickSelectCell.m in Sources */,
 				D7E956CA22C5B9D300749D6E /* TrimmerMaskView+Util.m in Sources */,
 				D7E956CF22C5B9D300749D6E /* TrimmerMaskView.m in Sources */,
 				D789D62722C3215C008D8F18 /* HomeViewController.mm in Sources */,
@@ -1198,12 +1282,14 @@
 				D789D62822C3215C008D8F18 /* HomeCollectionViewCell.mm in Sources */,
 				B8446DD523B8764400E60E41 /* DownLoadListManager.m in Sources */,
 				B8446E9B23B8792600E60E41 /* UIImage+Metadata.m in Sources */,
+				A6C417AF288A506D0087993D /* TTMultiAssetPicker.m in Sources */,
 				A691C77927684D1A005BC230 /* TAEWave.m in Sources */,
 				B8446E9523B8792600E60E41 /* SDImageCacheConfig.m in Sources */,
 				D71E5AAE233B6A03009D2FDC /* DownLoadFileModel.m in Sources */,
 				B8446EA423B8792600E60E41 /* SDFileAttributeHelper.m in Sources */,
 				B8446E6C23B8792600E60E41 /* SDImageIOAnimatedCoder.m in Sources */,
 				B8446E9F23B8792600E60E41 /* SDImageCachesManagerOperation.m in Sources */,
+				A6B0E70F285AD462001D9047 /* TTDirectorMediator.m in Sources */,
 				D7E956CB22C5B9D300749D6E /* VideoThumbnailsView.m in Sources */,
 				B8446E6623B8792600E60E41 /* SDImageHEICCoder.m in Sources */,
 				A691C77527675508005BC230 /* TAEModelMediator.m in Sources */,
@@ -1212,13 +1298,16 @@
 				D789D63E22C335C8008D8F18 /* MusicView.mm in Sources */,
 				B8446EA323B8792600E60E41 /* SDInternalMacros.m in Sources */,
 				B8446E8C23B8792600E60E41 /* SDImageLoadersManager.m in Sources */,
+				A62A8B4A28509E6300ADDDFB /* TTMutiAssetPickSelectView.m in Sources */,
 				B8446E8323B8792600E60E41 /* SDImageIOCoder.m in Sources */,
 				D7E9564622C37EC900749D6E /* EditCollectionViewCell.m in Sources */,
 				B8446E6D23B8792600E60E41 /* UIImageView+HighlightedWebCache.m in Sources */,
 				B8446E8523B8792600E60E41 /* SDAnimatedImageRep.m in Sources */,
 				B8446E7E23B8792600E60E41 /* SDWebImageDownloaderResponseModifier.m in Sources */,
 				A68905BC26AA0CF800EC15AE /* TuPopupProgress.m in Sources */,
+				A62A8B582851E1BC00ADDDFB /* TuViewSlider.m in Sources */,
 				B8446E8D23B8792600E60E41 /* SDImageCachesManager.m in Sources */,
+				A62A8B592851E1BC00ADDDFB /* TuPanelBar.m in Sources */,
 				B8446E7A23B8792600E60E41 /* UIImage+MultiFormat.m in Sources */,
 				B8446E9923B8792600E60E41 /* UIView+WebCacheOperation.m in Sources */,
 				B8446E8A23B8792600E60E41 /* SDImageFrame.m in Sources */,
@@ -1235,6 +1324,7 @@
 				B8446EA923B8792600E60E41 /* SDAssociatedObject.m in Sources */,
 				B8446E9C23B8792600E60E41 /* UIButton+WebCache.m in Sources */,
 				B8446E6B23B8792600E60E41 /* SDWebImageManager.m in Sources */,
+				2A78BE442805202F002BE7F2 /* EditDynamicViewController.mm in Sources */,
 				B8446E9623B8792600E60E41 /* SDWebImageCacheKeyFilter.m in Sources */,
 				D7E956B322C5B5CE00749D6E /* MultiAssetPicker.mm in Sources */,
 				B8446E7023B8792600E60E41 /* UIImage+ForceDecode.m in Sources */,
@@ -1244,6 +1334,7 @@
 				B86D19AD24DBAB8500BA6A13 /* TuEvaAsset.m in Sources */,
 				45F0B2BA2299FB18006D5F99 /* main.m in Sources */,
 				D7E956DC22C5EF8300749D6E /* ImageEditView.mm in Sources */,
+				A6C417B2288A51F50087993D /* TTMultiAssetPickerCell.m in Sources */,
 				D7E956CC22C5B9D300749D6E /* PanControl.m in Sources */,
 				B8446E7123B8792600E60E41 /* SDAnimatedImagePlayer.m in Sources */,
 				D7E956CD22C5B9D300749D6E /* ThumbView.m in Sources */,
@@ -1419,7 +1510,7 @@
 				CODE_SIGN_ENTITLEMENTS = TuSDKEvaDemo/TuSDKEvaDemo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20211101;
+				CURRENT_PROJECT_VERSION = 20220722;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 9U2KRZU6GT;
 				ENABLE_BITCODE = NO;
@@ -1442,7 +1533,7 @@
 					"\"$(SRCROOT)/../../iOS-eva-dev/ios/TuSDK/framework/TuSDK\"/**",
 					"\"$(SRCROOT)/../libTuSDKCore\"",
 				);
-				MARKETING_VERSION = 3.0.3;
+				MARKETING_VERSION = 3.1.2;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"$(inherited)",
@@ -1464,7 +1555,7 @@
 				CODE_SIGN_ENTITLEMENTS = TuSDKEvaDemo/TuSDKEvaDemo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20211101;
+				CURRENT_PROJECT_VERSION = 20220722;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 9U2KRZU6GT;
 				ENABLE_BITCODE = NO;
@@ -1487,7 +1578,7 @@
 					"\"$(SRCROOT)/../../iOS-eva-dev/ios/TuSDK/framework/TuSDK\"/**",
 					"\"$(SRCROOT)/../libTuSDKCore\"",
 				);
-				MARKETING_VERSION = 3.0.3;
+				MARKETING_VERSION = 3.1.2;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"$(inherited)",

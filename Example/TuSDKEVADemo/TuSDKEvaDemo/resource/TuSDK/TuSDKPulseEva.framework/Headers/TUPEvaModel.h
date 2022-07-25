@@ -29,6 +29,17 @@ typedef NS_ENUM(NSUInteger, TUPEvaModelAssetType) {
     kAUDIO,
 };
 
+typedef NS_ENUM(NSUInteger, TUPEvaModelType) {
+    TUPEvaModelType_STATIC = 1,
+    TUPEvaModelType_DYNAMIC
+};
+
+@interface ItemIOTimeItem : NSObject
+
+@property(nonatomic) NSInteger in_time;
+@property(nonatomic) NSInteger out_time;
+
+@end
 
 @interface ReplaceItem : NSObject
 
@@ -37,6 +48,8 @@ typedef NS_ENUM(NSUInteger, TUPEvaModelAssetType) {
 @property(nonatomic, copy) NSString* name;
 @property(nonatomic) NSInteger startTime;
 @property(nonatomic) NSInteger endTime;
+///时间片数组
+@property(nonatomic) NSArray<ItemIOTimeItem *> *io_times;
 
 
 @end
@@ -76,7 +89,14 @@ typedef NS_ENUM(NSUInteger, TUPEvaModelAssetType) {
 
 @end
 
+@interface DynReplaceItem : ReplaceItem
 
+@property(nonatomic, assign) NSInteger width;
+@property(nonatomic, assign) NSInteger height;
+@property(nonatomic, copy) NSString *resPath;
+@property(nonatomic, strong) UIImage *thumbnail;
+
+@end
 
 @interface TUPEvaReplaceConfig : NSObject {
 
@@ -84,7 +104,6 @@ typedef NS_ENUM(NSUInteger, TUPEvaModelAssetType) {
 @property(nonatomic) NSInteger start;//trim start
 @property(nonatomic) NSInteger duration;//trim length
 @property(nonatomic) int repeat; // 0: for none, 1: trailing frame/silence, 2: repeat
-
 @end
 
 @interface TUPEvaReplaceConfig_ImageOrVideo : TUPEvaReplaceConfig {
@@ -93,6 +112,7 @@ typedef NS_ENUM(NSUInteger, TUPEvaModelAssetType) {
 @property(nonatomic) CGRect crop;// src crop
 @property(nonatomic) NSInteger maxSide;// input video's max-side
 @property(nonatomic) float audioMixWeight;// audio mix weight
+@property(nonatomic, copy) NSString *path; // 仅限动态模板使用 待替换素材的地址
 
 
 - (void) unwrap:(void*)config;//EvaReplaceConfig_ImageOrVideo*
@@ -122,6 +142,7 @@ typedef NS_ENUM(NSUInteger, TUPEvaModelAssetType) {
 
 - (instancetype) init:(NSString*)path;
 
+- (instancetype) init:(NSString*)path modelType:(TUPEvaModelType)modelType;
 - (CGSize) getSize;
 
 - (NSArray<TextReplaceItem*>*) listReplaceableTextAssets;
@@ -134,7 +155,7 @@ typedef NS_ENUM(NSUInteger, TUPEvaModelAssetType) {
 
 - (NSArray<AudioReplaceItem*>*) listReplaceableAudioAssets;
 
-
++ (void)clearAllCaches;
 
 @end
 

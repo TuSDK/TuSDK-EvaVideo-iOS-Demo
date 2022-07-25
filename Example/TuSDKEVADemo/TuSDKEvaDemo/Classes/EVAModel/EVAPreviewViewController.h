@@ -20,6 +20,10 @@ NS_ASSUME_NONNULL_BEGIN
  资源文件路径
  */
 @property (nonatomic, strong) NSString *evaPath;
+/**
+ * 模板ID
+ */
+@property (nonatomic, strong) NSString *ID;
 
 /**
  模板名称

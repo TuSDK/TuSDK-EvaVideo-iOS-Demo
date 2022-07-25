@@ -8,13 +8,17 @@
 		<data>
 		sp7TeTXJFfovXoPJsUyuUtWjdfc=
 		</data>
+		<key>Headers/TUPDynEvaDirector.h</key>
+		<data>
+		P+RySpS5eVBt8naY87Aau34cu4Y=
+		</data>
 		<key>Headers/TUPEvaDirector.h</key>
 		<data>
-		aA9QIqlFp68CXFaJRSf0gSS5LwQ=
+		2tYzUpsq+DLEYePyV7IIRjRYuRA=
 		</data>
 		<key>Headers/TUPEvaModel.h</key>
 		<data>
-		RxqNa0p+pq6jiNyjtgLVWecXdy4=
+		B857Ag29FTVBC2WS++HPrgx7XSA=
 		</data>
 		<key>Headers/TUPEvaPlayer.h</key>
 		<data>
@@ -30,7 +34,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		yJ0/Cblok0rqqpTO5w7j/eqoifg=
+		h0bI72tFh8C/fh0nTolmjNsAioU=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -50,26 +54,37 @@
 			ADd7CUQ7HdytbM+hbjKgB9ItMXONxtMWYI12XKnFklg=
 			</data>
 		</dict>
+		<key>Headers/TUPDynEvaDirector.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			P+RySpS5eVBt8naY87Aau34cu4Y=
+			</data>
+			<key>hash2</key>
+			<data>
+			nY44lbyCLtVJV3Yg5O72mejJY4k7OzmaruUYPSEieMQ=
+			</data>
+		</dict>
 		<key>Headers/TUPEvaDirector.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			aA9QIqlFp68CXFaJRSf0gSS5LwQ=
+			2tYzUpsq+DLEYePyV7IIRjRYuRA=
 			</data>
 			<key>hash2</key>
 			<data>
-			4ThnFzaK56N+/HiRXsEEGeoACE8cXYEYwAD7Y7Hiafk=
+			+4gaB9rrkQPEttMwVjHSEUfOS/a07TuzTd5LokK5/bc=
 			</data>
 		</dict>
 		<key>Headers/TUPEvaModel.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			RxqNa0p+pq6jiNyjtgLVWecXdy4=
+			B857Ag29FTVBC2WS++HPrgx7XSA=
 			</data>
 			<key>hash2</key>
 			<data>
-			P1ko0BIsYyw/MJCG6WdCEwIBVevwSPHhnQPmblx9f4s=
+			bo+aQi6hcUiKxHMband41yEuzhkgatHTKHd44zInxK0=
 			</data>
 		</dict>
 		<key>Headers/TUPEvaPlayer.h</key>

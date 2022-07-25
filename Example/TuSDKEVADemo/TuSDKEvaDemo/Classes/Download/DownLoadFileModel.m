@@ -22,6 +22,7 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary {
     if (self = [super init]) {
         if (dictionary) {
+            _ID = [dictionary valueForKey:@"id"];
             _isChange = [[dictionary valueForKey:@"isChange"] boolValue];
             _width = [[dictionary valueForKey:@"width"] integerValue];
             _height = [[dictionary valueForKey:@"height"] integerValue];
@@ -47,7 +48,14 @@
         _temFilePath = nil;
     }
     // 标记也清除掉
-    [self checkDownLoadWithFile:_fileName];
+    NSString *bundleString = [[NSBundle mainBundle] pathForResource:@"TuSDKPulse" ofType:@"bundle"];
+    NSString *file = [NSString stringWithFormat:@"%@/eva/%@", [[NSBundle bundleWithPath:bundleString] bundlePath], _fileName];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:file]) { // bundle 处理
+        _filePath = nil;
+    } else {
+        _filePath = [self checkDownLoadWithFile:_fileName];
+    }
+    
     _fileLength = 0;
     _cacheLength = 0;
 }

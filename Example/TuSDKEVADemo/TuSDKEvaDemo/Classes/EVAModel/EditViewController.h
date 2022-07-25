@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "TuSDKFramework.h"
 #import <TuSDKPulse/TUPDisplayView.h>
+#import "TAEModelMediator.h"
 NS_ASSUME_NONNULL_BEGIN
 
 
@@ -25,12 +26,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  eva 资源加载器
  */
-@property (nonatomic, strong) TUPDisplayView *displayView;
+//@property (nonatomic, strong) TUPDisplayView *displayView;
 
-/**
- 资源文件路径
- */
-@property (nonatomic, strong) NSString *evaPath;
+
+@property (nonatomic, strong) TAEModelMediator *mediator;
+
+@property (nonatomic, copy)void(^editCompleted)(TAEModelMediator *mediator);
 
 @end
 

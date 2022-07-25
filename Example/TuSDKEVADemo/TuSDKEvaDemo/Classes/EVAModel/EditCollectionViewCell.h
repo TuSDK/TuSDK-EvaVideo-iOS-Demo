@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "TAEModelMediator.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface EditCollectionViewCell : UICollectionViewCell
@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic) IBOutlet UIImageView *typeImage;
 @property (weak, nonatomic) IBOutlet UILabel *text;
 @property (weak, nonatomic) IBOutlet UILabel *typeText;
+
+@property (nonatomic) id item;
 
 @end
 

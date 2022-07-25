@@ -126,6 +126,11 @@ static const NSTimeInterval kMinCutDuration = 1.0;
 
 - (void)setupUI {
     
+    if (_inputAssets.count == 0 && self.filePath) {
+        AVURLAsset *asset = [AVURLAsset assetWithURL:[NSURL fileURLWithPath:self.filePath]];
+        self.inputAssets = @[asset];
+    }
+    
     NSArray *tracks = [self.inputAssets.firstObject tracksWithMediaType:AVMediaTypeVideo];
     if([tracks count] > 0) {
         AVAssetTrack *videoTrack = [tracks objectAtIndex:0];
@@ -245,7 +250,7 @@ static const NSTimeInterval kMinCutDuration = 1.0;
     _transCoder.savePath = self.savePath;
     _transCoder.delegate = self;
     
-    NSString *videoPath = [@"file://" stringByAppendingString:self.filePath];
+    NSString *videoPath = self.filePath;
     [_transCoder open:videoPath];
     [_transCoder start];
 
@@ -491,12 +496,10 @@ static const NSTimeInterval kMinCutDuration = 1.0;
                 config.maxSide = 720;
                 //NSLog(@"处理视频完成");
                 config.crop = self.playerView.cutFrame;
-
+ 
                 if (self.editCompleted) {
                     self.editCompleted(config, self.savePath);
                 }
-               
-                
             });
         }
     });

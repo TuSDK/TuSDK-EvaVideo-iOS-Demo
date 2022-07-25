@@ -26,6 +26,7 @@ static DownLoadListManager *_manager;
         _manager = [[self alloc] init];
     });
     return _manager;
+    
 }
 
 - (NSMutableArray *)listArr{
@@ -126,6 +127,7 @@ static DownLoadListManager *_manager;
             NSString *name = dic[@"nm"];
             NSString *imageURL = [NSString stringWithFormat:@"%@%@.jpg",evaHost,idStr];
             
+            [listDic setValue:idStr forKey:@"id"];
             [listDic setValue:name forKey:@"name"];
             [listDic setValue:evaStr forKey:@"path"];
             [listDic setValue:@(450) forKey:@"width"];

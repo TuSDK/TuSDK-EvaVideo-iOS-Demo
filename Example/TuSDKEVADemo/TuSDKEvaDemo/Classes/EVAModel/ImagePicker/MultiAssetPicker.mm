@@ -122,7 +122,7 @@ static const CGFloat kCellMargin = 3;
     [self setupUI];
     
     [self.collectionView registerClass:[MultiAssetPickerCell class] forCellWithReuseIdentifier:kCellReuseIdentifier];
-    [self.collectionView registerClass:[MultiVideoPickerFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:kFooterReuseIdentifier];
+//    [self.collectionView registerClass:[MultiVideoPickerFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:kFooterReuseIdentifier];
     
     // 测试相册访问权限，并载入相册数据
     [TuTSAssetsManager testLibraryAuthor:^(NSError *error) {
@@ -147,10 +147,11 @@ static const CGFloat kCellMargin = 3;
     flowLayout.itemSize = CGSizeMake(cellWidth, cellWidth);
     flowLayout.minimumInteritemSpacing = kCellMargin;
     flowLayout.minimumLineSpacing = kCellMargin;
-    flowLayout.footerReferenceSize = CGSizeMake(width, 100);
+//    flowLayout.footerReferenceSize = CGSizeMake(width, 100);
 
     self.collectionView.alwaysBounceVertical = YES;
     self.collectionView.allowsMultipleSelection = NO;
+    self.collectionView.backgroundColor = [UIColor blackColor];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -239,7 +240,7 @@ static const CGFloat kCellMargin = 3;
     }
     
     // 更新单元格显示索引
-    [self updateSelectedCellIndex];
+    //[self updateSelectedCellIndex];
 }
 
 #pragma mark - private
@@ -327,12 +328,12 @@ static const CGFloat kCellMargin = 3;
 /**
  更新所有选中索引的显示
  */
-- (void)updateSelectedCellIndex {
-    [_selectedIndexPaths enumerateObjectsUsingBlock:^(NSIndexPath *indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
-        MultiAssetPickerCell *cell = (MultiAssetPickerCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
-        cell.selectedIndex = idx;
-    }];
-}
+//- (void)updateSelectedCellIndex {
+//    [_selectedIndexPaths enumerateObjectsUsingBlock:^(NSIndexPath *indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
+//        MultiAssetPickerCell *cell = (MultiAssetPickerCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+//        cell.selectedIndex = idx;
+//    }];
+//}
 
 /**
  按 PHAsset 获取索引
@@ -423,8 +424,8 @@ static const CGFloat kCellMargin = 3;
     PHAsset *asset = [self phAssetAtIndexPathItem:indexPath.item];
     MultiAssetPickerCell *cell = (MultiAssetPickerCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kCellReuseIdentifier forIndexPath:indexPath];
     cell.selectButton.selected = [_selectedPhAssets containsObject:asset];
-    cell.selectedIndex = [_selectedPhAssets indexOfObject:asset];
-    
+//    cell.selectedIndex = [_selectedPhAssets indexOfObject:asset];
+    cell.selectButton.hidden = _disableMultipleSelection;
     cell.asset = asset;
     
     __weak typeof(self) weakSelf = self;
@@ -447,20 +448,25 @@ static const CGFloat kCellMargin = 3;
             }
         }
         // 应用选中
-        sender.selected = selected;
-        [weakSelf cell:cell didSelect:selected];
+        PHAsset *phAsset = [weakSelf phAssetAtIndexPathItem:indexPath.item];
+        if ([weakSelf.delegate respondsToSelector:@selector(picker:didSelectButtonItemWithIndexPath:phAsset:)]) {
+            [weakSelf.delegate picker:weakSelf didSelectButtonItemWithIndexPath:indexPath phAsset:phAsset];
+        }
+        
+//        sender.selected = selected;
+//        [weakSelf cell:cell didSelect:selected];
     };
     return cell;
 }
 
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
-        MultiVideoPickerFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:kFooterReuseIdentifier forIndexPath:indexPath];
-        footerView.videoCount = self.assets.count;
-        return footerView;
-    }
-    return nil;
-}
+//- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+//    if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+//        MultiVideoPickerFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:kFooterReuseIdentifier forIndexPath:indexPath];
+//        footerView.videoCount = self.assets.count;
+//        return footerView;
+//    }
+//    return nil;
+//}
 
 #pragma mark <UICollectionViewDelegate>
 
