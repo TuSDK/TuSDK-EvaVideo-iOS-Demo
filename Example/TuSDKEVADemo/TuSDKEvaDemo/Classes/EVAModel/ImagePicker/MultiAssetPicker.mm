@@ -142,7 +142,7 @@ static const CGFloat kCellMargin = 3;
 
 - (void)setupUI {
     CGFloat width = self.view.frame.size.width;
-    CGFloat cellWidth = (width + kCellMargin) / 4 - kCellMargin;
+    CGFloat cellWidth = (width + kCellMargin) / 3 - kCellMargin;
     UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionViewLayout;
     flowLayout.itemSize = CGSizeMake(cellWidth, cellWidth);
     flowLayout.minimumInteritemSpacing = kCellMargin;
@@ -450,7 +450,7 @@ static const CGFloat kCellMargin = 3;
         // 应用选中
         PHAsset *phAsset = [weakSelf phAssetAtIndexPathItem:indexPath.item];
         if ([weakSelf.delegate respondsToSelector:@selector(picker:didSelectButtonItemWithIndexPath:phAsset:)]) {
-            [weakSelf.delegate picker:weakSelf didSelectButtonItemWithIndexPath:indexPath phAsset:phAsset];
+            BOOL status = [weakSelf.delegate picker:weakSelf didSelectButtonItemWithIndexPath:indexPath phAsset:phAsset];
         }
         
 //        sender.selected = selected;

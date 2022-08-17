@@ -90,6 +90,9 @@
     if (self.delegate && [self.delegate respondsToSelector:@selector(downloadFileModel:progressChanged:)]) {
         [self.delegate downloadFileModel:self progressChanged:progress];
     }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(downloadFileModel:cacheLength:fileLength:)]) {
+        [self.delegate downloadFileModel:self cacheLength:cacheLength fileLength:_fileLength];
+    }
 }
 
 

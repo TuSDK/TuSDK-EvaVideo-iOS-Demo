@@ -7,8 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
+@class AVURLAsset, PHAsset, TTMultiAssetPicker;
 
 NS_ASSUME_NONNULL_BEGIN
+
+/**
+ * 保存的PHAsset组件
+ */
+@interface TTPHAssetItem : NSObject
+/// asset唯一ID
+@property (nonatomic, copy) NSString *assetID;
+/// 已选择次数
+@property (nonatomic, assign) NSInteger selectCount;
+
+@property (nonatomic, assign) PHAsset *asset;
+
+@end
 
 typedef NS_ENUM(NSInteger, TTAssetMediaType)
 {
@@ -20,7 +34,7 @@ typedef NS_ENUM(NSInteger, TTAssetMediaType)
     TTAssetMediaTypeImage,
 };
 
-@class AVURLAsset, PHAsset, TTMultiAssetPicker;
+
 
 @protocol TTMultiAssetPickerDelegate <NSObject>
 @optional
@@ -38,23 +52,8 @@ typedef NS_ENUM(NSInteger, TTAssetMediaType)
  * @param indexPath 点击的 NSIndexPath 对象
  * @param phAsset 对应的 PHAsset 对象
  */
-- (void)picker:(TTMultiAssetPicker *)picker didSelectButtonItemWithIndexPath:(NSIndexPath *)indexPath phAsset:(PHAsset *)phAsset;
+- (BOOL)picker:(TTMultiAssetPicker *)picker didSelectButtonItemWithIndexPath:(NSIndexPath *)indexPath phAsset:(PHAsset *)phAsset;
 
-/**
- * 目标项是否可选中
- * @param picker 多视频选择器
- * @param indexPath 目标 indexPath
- * @return 目标项是否可选中
- */
-- (BOOL)picker:(TTMultiAssetPicker *)picker shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath;
-
-/**
- * 目标项是否可取消选中
- * @param picker 多视频选择器
- * @param indexPath 目标 indexPath
- * @return 目标项是否可取消选中
- */
-- (BOOL)picker:(TTMultiAssetPicker *)picker shouldDeselectItemAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
@@ -71,21 +70,6 @@ typedef NS_ENUM(NSInteger, TTAssetMediaType)
  */
 @property (nonatomic)NSArray<NSNumber *> *fetchMediaTypes;
 
-/**
- * 所有选中的视频
- */
-@property (nonatomic, strong, readonly) NSArray<AVURLAsset *> *allSelectedAssets;
-
-/**
- * 选中的 PHAsset
- */
-@property (nonatomic, readonly) NSArray<PHAsset *> *allSelectedPhAssets;
-
-
-/**
- 选中视频总时长
- */
-@property (nonatomic, assign, readonly) NSTimeInterval selectedVideosDutation;
 
 /**
  * iCloud 请求中
@@ -112,19 +96,12 @@ typedef NS_ENUM(NSInteger, TTAssetMediaType)
 - (PHAsset *)phAssetAtIndexPathItem:(NSInteger)indexPathItem;
 
 /**
- * 给定 indexPath 的选中索引，若该 indexPath 没有选中，则返回 -1
- * @param indexPath 索引的路径
- * @return 索引
+ * 移除指定的PHAsset
+ * @param asset 视频对象
+ * @return 是否移除成功
  */
-- (NSInteger)selectedIndexForIndexPath:(NSIndexPath *)indexPath;
+- (BOOL)removePHAsset:(PHAsset *)asset;
 
-/**
- * 设置给定的 phAsset、indexPath 选中状态
- * @param phAsset 视频文件的对象
- * @param indexPath 索引的路径
- * @param selected 是否选择
- */
-- (void)setPhAsset:(PHAsset *)phAsset indexPath:(NSIndexPath *)indexPath selected:(BOOL)selected;
 
 + (instancetype)picker;
 

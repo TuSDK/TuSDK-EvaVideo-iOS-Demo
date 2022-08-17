@@ -52,22 +52,20 @@ static const CGFloat kTimeLabelHeight = 16;
     _selectButton = [CustomTouchBoundsButton buttonWithType:UIButtonTypeCustom];
     [self.contentView addSubview:_selectButton];
     [_selectButton setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
-//    [_selectButton setBackgroundImage:[UIImage imageNamed:@"edit_checkbox_sel"] forState:UIControlStateSelected];
-//    [_selectButton setBackgroundImage:[UIImage imageNamed:@"edit_checkbox_unsel"] forState:UIControlStateNormal];
+
     [_selectButton setBackgroundImage:[UIImage imageNamed:@"style_add"] forState:UIControlStateNormal];
-    _selectButton.backgroundColor = [UIColor colorWithRed:213.f / 255 green:213.f / 255 blue:213.f / 255 alpha:1];
-    _selectButton.layer.cornerRadius = 10;
+    _selectButton.backgroundColor = [UIColor colorWithRed:213.f / 255 green:213.f / 255 blue:213.f / 255 alpha:0.51];
+    _selectButton.layer.cornerRadius = 15;
     _selectButton.titleLabel.font = [UIFont systemFontOfSize:11];
     [_selectButton addTarget:self action:@selector(selectButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
     _bottomMaskView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.contentView addSubview:_bottomMaskView];
-//    _bottomMaskView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.4];
     
     _timeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [self.contentView addSubview:_timeLabel];
     _timeLabel.textColor = [UIColor whiteColor];
-    _timeLabel.font = [UIFont systemFontOfSize:11];
+    _timeLabel.font = [UIFont systemFontOfSize:13];
     _timeLabel.textAlignment = NSTextAlignmentRight;
     
     _tagLabel = [[UILabel alloc] initWithFrame:CGRectZero];
@@ -88,7 +86,7 @@ static const CGFloat kTimeLabelHeight = 16;
     CGFloat height = CGRectGetHeight(self.contentView.bounds);
     
     _imageView.frame = self.contentView.frame;
-    _selectButton.frame = CGRectMake(width - 26, 6, 20, 20);
+    _selectButton.frame = CGRectMake(width - 36, 6, 30, 30);
     
     _bottomMaskView.frame = CGRectMake(0, height - kTimeLabelHeight, width, kTimeLabelHeight);
     _timeLabel.frame = CGRectMake(kTimeLabelHeight / 2, height - kTimeLabelHeight, width - kTimeLabelHeight, kTimeLabelHeight);
@@ -147,7 +145,14 @@ static const CGFloat kTimeLabelHeight = 16;
 
 - (void)setDuration:(NSTimeInterval)duration {
     _duration = duration;
-    _timeLabel.text = [self.class textWithTimeInterval:duration];
+    
+    NSShadow *shadow = [[NSShadow alloc] init];
+    shadow.shadowBlurRadius = 5;
+    shadow.shadowOffset = CGSizeMake(0, 0);
+    shadow.shadowColor = [UIColor blackColor];
+    NSString *timeStr = [self.class textWithTimeInterval:duration];
+    NSAttributedString *attString = [[NSAttributedString alloc] initWithString:timeStr attributes:@{NSShadowAttributeName:shadow}];
+    _timeLabel.attributedText = attString;
 }
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex {
@@ -164,7 +169,6 @@ static const CGFloat kTimeLabelHeight = 16;
  */
 - (void)selectButtonAction:(UIButton *)sender {
     if (self.selectButtonActionHandler) self.selectButtonActionHandler(self, sender);
-    //_tagLabel.hidden = NO;
 }
 
 @end

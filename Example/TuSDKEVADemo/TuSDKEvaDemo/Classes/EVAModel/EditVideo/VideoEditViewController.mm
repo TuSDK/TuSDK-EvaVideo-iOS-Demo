@@ -127,8 +127,15 @@ static const NSTimeInterval kMinCutDuration = 1.0;
 - (void)setupUI {
     
     if (_inputAssets.count == 0 && self.filePath) {
-        AVURLAsset *asset = [AVURLAsset assetWithURL:[NSURL fileURLWithPath:self.filePath]];
-        self.inputAssets = @[asset];
+        if ([self.filePath hasPrefix:@"file://"]) {
+            
+            AVURLAsset *asset = [AVURLAsset assetWithURL:[NSURL URLWithString:self.filePath]];
+            self.inputAssets = @[asset];
+        } else {
+            
+            AVURLAsset *asset = [AVURLAsset assetWithURL:[NSURL fileURLWithPath:self.filePath]];
+            self.inputAssets = @[asset];
+        }
     }
     
     NSArray *tracks = [self.inputAssets.firstObject tracksWithMediaType:AVMediaTypeVideo];
@@ -151,7 +158,7 @@ static const NSTimeInterval kMinCutDuration = 1.0;
             // LandscapeLeft
             size = videoTrack.naturalSize;
         }
-        NSLog(@"=====hello  width:%f===height:%f",size.width,size.height);//宽高
+        NSLog(@"TUEVA:video width:%f, video height:%f",size.width,size.height);//宽高
         self.playerView.videoSize = size;
     }
     [self setupPlayer];

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -33,21 +33,42 @@
                             <action selector="click:" destination="Aas-5h-1Rr" eventType="touchUpInside" id="9uE-tw-K1A"/>
                         </connections>
                     </button>
+                    <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="1oM-qC-PQ3">
+                        <rect key="frame" x="0.0" y="216" width="183" height="5"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="5" id="U6z-NU-VFI"/>
+                        </constraints>
+                    </progressView>
+                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JW5-Hn-ia0">
+                        <rect key="frame" x="57" y="212" width="120" height="0.0"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                        <size key="shadowOffset" width="-2" height="-2"/>
+                    </label>
                 </subviews>
             </view>
+            <viewLayoutGuide key="safeArea" id="hct-cT-itf"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="4b2-LW-eZs" secondAttribute="bottom" id="7L1-h1-Dye"/>
                 <constraint firstAttribute="trailing" secondItem="4b2-LW-eZs" secondAttribute="trailing" id="8Md-7Q-06o"/>
+                <constraint firstItem="JW5-Hn-ia0" firstAttribute="leading" secondItem="Aas-5h-1Rr" secondAttribute="leading" constant="57" id="FjI-dA-7Zq"/>
+                <constraint firstItem="1oM-qC-PQ3" firstAttribute="top" secondItem="JW5-Hn-ia0" secondAttribute="bottom" constant="4" id="Jyb-lw-ZMQ"/>
+                <constraint firstAttribute="bottom" secondItem="1oM-qC-PQ3" secondAttribute="bottom" id="WTl-jh-1cI"/>
                 <constraint firstItem="4b2-LW-eZs" firstAttribute="top" secondItem="Aas-5h-1Rr" secondAttribute="top" id="Ymt-Vm-sBw"/>
                 <constraint firstAttribute="trailing" secondItem="5VJ-fH-h0h" secondAttribute="trailing" constant="6" id="hO1-XR-q6c"/>
+                <constraint firstItem="JW5-Hn-ia0" firstAttribute="trailing" secondItem="5VJ-fH-h0h" secondAttribute="trailing" id="hnH-QH-UmK"/>
+                <constraint firstAttribute="trailing" secondItem="1oM-qC-PQ3" secondAttribute="trailing" id="ioe-dU-EFE"/>
                 <constraint firstAttribute="bottom" secondItem="5VJ-fH-h0h" secondAttribute="bottom" constant="6" id="kKq-A9-fK1"/>
+                <constraint firstItem="1oM-qC-PQ3" firstAttribute="leading" secondItem="Aas-5h-1Rr" secondAttribute="leading" id="mq5-jZ-aXi"/>
                 <constraint firstItem="4b2-LW-eZs" firstAttribute="leading" secondItem="Aas-5h-1Rr" secondAttribute="leading" id="uNj-YX-K5p"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="hct-cT-itf"/>
             <size key="customSize" width="183" height="221"/>
             <connections>
                 <outlet property="actionButton" destination="5VJ-fH-h0h" id="gQL-yz-RJ3"/>
                 <outlet property="image" destination="4b2-LW-eZs" id="2Hd-xS-GY0"/>
+                <outlet property="progressLabel" destination="JW5-Hn-ia0" id="HqZ-zj-vPJ"/>
+                <outlet property="progressView" destination="1oM-qC-PQ3" id="ath-nK-5SS"/>
             </connections>
             <point key="canvasLocation" x="138.40579710144928" y="143.63839285714286"/>
         </collectionViewCell>

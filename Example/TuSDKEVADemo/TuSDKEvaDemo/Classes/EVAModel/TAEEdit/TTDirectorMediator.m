@@ -108,8 +108,6 @@ static TTDirectorMediator *_directorMediator;
         NSLog(@"TUEVA:eva播放器加载失败");
         return success;
     }
-    
-    success = [self.evaPlayer play];
     return success;
 }
 /**

@@ -27,7 +27,9 @@
 NSString *const kICloudCacheDir = @"eva_cache_dir_iCloud";
 NSString *const kDynamicCacheDir = @"eva_cache_dir_dynamic";
 
-@interface HomeViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, CollectionViewLayoutDelegate, UIDocumentPickerDelegate>
+NSString *const kCollectFooterViewID = @"CollectFooterView";
+
+@interface HomeViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, CollectionViewLayoutDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet CollectionViewLayout *collectionViewLayout;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -62,8 +64,15 @@ NSString *const kDynamicCacheDir = @"eva_cache_dir_dynamic";
     
     self.view.backgroundColor = [UIColor colorWithRed:19.0/255.0 green:19.0/255.0 blue:19.0/255.0 alpha:1.0];
     
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    flowLayout.minimumLineSpacing = 5;
+    flowLayout.minimumInteritemSpacing = 5;
+    flowLayout.footerReferenceSize = CGSizeMake(CGRectGetWidth(self.view.frame), 50);
+    
+    self.collectionView.collectionViewLayout = flowLayout;
     [self.collectionView registerNib:[UINib nibWithNibName:@"HomeCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"HomeCollectionViewCell"];
-    self.collectionViewLayout.delegate = self;
+    [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:kCollectFooterViewID];
+    //self.collectionViewLayout.delegate = self;
     self.collectionView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
     [[DownLoadListManager manager] downLoadFileCompletionHandler:^(NSMutableArray * modelArr) {
         // 将 modelArr 转成 DownLoadFileModel 数组
@@ -102,6 +111,19 @@ NSString *const kDynamicCacheDir = @"eva_cache_dir_dynamic";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     return _models.count;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath;
+{
+    DownLoadFileModel *model = _models[indexPath.item];
+    CGFloat width = model.width;
+    CGFloat height = model.height;
+    //NSLog(@"width,height--%f,%f",width,height);
+    
+    CGFloat cellW = CGRectGetWidth(self.view.frame) / 2 - 5;
+    CGFloat cellH = height * cellW / width;
+    
+    return CGSizeMake(cellW, cellH); // 0.0 是文字高度 暂时隐藏
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -147,6 +169,35 @@ NSString *const kDynamicCacheDir = @"eva_cache_dir_dynamic";
     [(HomeCollectionViewCell*)cell willDisplay];
 }
 
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionReusableView *reusableview = nil;
+    
+    if (kind == UICollectionElementKindSectionFooter) {
+        reusableview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:kCollectFooterViewID forIndexPath:indexPath];
+        
+        //获取版本信息
+        NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+        NSString *bundleShortVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+        NSString *bundleVersion = [infoDictionary objectForKey:@"CFBundleVersion"];
+        //获取时间信息
+        NSDate *date = [NSDate date];
+        NSDateFormatter *formate = [[NSDateFormatter alloc] init];
+        [formate setDateFormat:@"yyyy"];
+        NSString *dateStr = [formate stringFromDate:date];
+        
+        UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 50)];
+        infoLabel.textColor = [UIColor whiteColor];
+        infoLabel.textAlignment = NSTextAlignmentCenter;
+        infoLabel.numberOfLines = 0;
+        infoLabel.font = [UIFont systemFontOfSize:13];
+        infoLabel.text = [NSString stringWithFormat:@"TuSDK EVA SDK %@ - %@ \n @%@ TUTUCLOUD.COM", bundleShortVersion, bundleVersion, dateStr];
+        [reusableview addSubview:infoLabel];
+    }
+    
+    return reusableview;
+}
+
 
 #pragma mark - CollectionViewLayoutDelegate
 
@@ -186,17 +237,7 @@ NSString *const kDynamicCacheDir = @"eva_cache_dir_dynamic";
     }
     return _indicatorView;
 }
-- (void)iCloudShowAction {
-    if (![iCloudManager iCloudEnable]) {
-        [TuPopupProgress showErrorWithStatus:@"iCloud云盘不可用"];
-        return;
-    }
-    [self.indicatorView startAnimating];
-    NSArray *documentTypes = @[@"public.content", @"public.text", @"public.data", @"public.executable",@"public.item"];
-    UIDocumentPickerViewController *documentPickerViewController = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:documentTypes inMode:UIDocumentPickerModeOpen];
-    documentPickerViewController.delegate = self;
-    [self presentViewController:documentPickerViewController animated:YES completion:nil];
-}
+
 
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentAtURL:(NSURL *)url {
     NSArray *array = [[url absoluteString] componentsSeparatedByString:@"/"];
@@ -258,6 +299,7 @@ NSString *const kDynamicCacheDir = @"eva_cache_dir_dynamic";
     vc.filePath = path;
     [self showViewController:vc sender:nil];
 }
+
 
 - (NSString *)generateDirectory:(NSString *)directory {
     NSFileManager *manager = [NSFileManager defaultManager];

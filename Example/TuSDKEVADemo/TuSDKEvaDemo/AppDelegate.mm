@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 #import "TuSDKFramework.h"
 #import "TuPopupProgress.h"
-//#import <Bugly/Bugly.h>
 #import "TAEExportManager.h"
 #ifdef DEBUG
 //#import <DoraemonKit/DoraemonManager.h>
@@ -34,9 +33,12 @@
 //    [[DoraemonManager shareInstance] install];
 #endif
     
-//    BuglyConfig *config = [[BuglyConfig alloc] init];
-//    config.reportLogLevel = BuglyLogLevelWarn;
-   // [Bugly startWithAppId:@"33b8065dbd" config:config];
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        BuglyConfig *config = [[BuglyConfig alloc] init];
+//        config.reportLogLevel = BuglyLogLevelWarn;
+//        [Bugly startWithAppId:@"ef72f7b463" config:config];
+//    });
+    
     
     // 添加文件引入
     //#import <TuSDK/TuSDK.h>

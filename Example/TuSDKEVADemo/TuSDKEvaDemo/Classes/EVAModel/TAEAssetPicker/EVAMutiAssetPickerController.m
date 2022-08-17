@@ -13,6 +13,7 @@
 #import "EditViewController.h"
 
 #import "TTMultiAssetPicker.h"
+#import "TTDirectorMediator.h"
 #import "TuPopupProgress.h"
 #import "TuSDKFrameWork.h"
 #import "TuPanelBar.h"
@@ -81,7 +82,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 - (void)setupUI
 {
     self.view.backgroundColor = UIColor.blackColor;
-    
+    self.isCurrent = YES;
     [self setupShowContainer];
     [self setupPageBar];
     [self setPickerView];
@@ -123,7 +124,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     if (!self.evaMediator) {
         self.evaMediator = [[TAEModelMediator alloc] initWithEvaPath:self.filePath];
     }
-    
+    self.pickerSelectView.isCurrent = self.isCurrent;
     self.pickerSelectView.mediator = self.evaMediator;
     // 最大资源选择数量
     self.maxSelectCount = [self.evaMediator imageVideoCount];
@@ -152,7 +153,6 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
             //判断当前选择数量和模版内坑位数量
             NSInteger needReplaceCount = [self.evaMediator replaceVideoCount];
             if (needReplaceCount > 0) {
-//                NSInteger count = self.maxSelectCount - replaceCount;
                 [TuPopupProgress showErrorWithStatus:[NSString stringWithFormat:@"还需要选择%ld个素材", (long)needReplaceCount]];
                 return;
             }
@@ -160,6 +160,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
             EditViewController *edit = [[EditViewController alloc] initWithNibName:nil bundle:nil];
             edit.mediator = self.evaMediator;
             edit.editCompleted = ^(TAEModelMediator * _Nonnull mediator) {
+                self.pickerSelectView.isCurrent = self.isCurrent;
                 self.pickerSelectView.mediator = mediator;
             };
             [self showViewController:edit sender:nil];
@@ -176,6 +177,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 - (void)mutiAssetPickerSelectView:(TTMutiAssetPickSelectView *)view selectItem:(TAEModelVideoItem *)selectItem;
 {
     _selectItem = selectItem;
+    
     //Demo里为无素材坑位模板，只有替换了素材后才能对素材进行编辑操作
     if (_selectItem.isReplace && self.isCurrent) {
         if (_selectItem.isSelectVideo) {
@@ -199,7 +201,8 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
         } else {
             //图片素材
             ImageEditViewController *edit = [[ImageEditViewController alloc] initWithNibName:nil bundle:nil];
-            edit.inputImage = self.selectItem.thumbnail;
+            //输入原始图片素材
+            edit.inputImage = self.selectItem.originalImage;
             edit.index = self.selectItem.itemIndex;
             edit.cutSize = self.selectItem.size;
             [edit setEditCompleted:^(NSURL * _Nonnull outputUrl) {
@@ -209,6 +212,19 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
             [self showViewController:edit sender:nil];
         }
     }
+}
+
+/**
+ * 删除选中素材资源
+ * @param selectItem  选中组件
+ */
+- (void)mutiAssetPickerSelectView:(TTMutiAssetPickSelectView *)view deleteItem:(TAEModelVideoItem *)selectItem;
+{
+    NSLog(@"TUEVA::删除素材");
+    _selectItem = selectItem;
+    if (!selectItem.asset) return;
+    //移除asset
+    BOOL success = [_allPicker removePHAsset:_selectItem.asset];
 }
 
 #pragma mark - TuPanelTabbarDelegate
@@ -239,16 +255,18 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     [TAEModelMediator requestImageWith:selectedPath resultHandle:^(UIImage * _Nonnull reslut) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.evaMediator addTempFilePath:fileUrl.path];
-
-            weakSelf.selectItem.replaceResPath = selectedPath;
-            weakSelf.selectItem.isReplace = YES;
-            weakSelf.selectItem.isSelectVideo = NO;
-
-            weakSelf.selectItem.thumbnail = reslut;
+//            [weakSelf.evaMediator addTempFilePath:fileUrl.path];
+//
+//            weakSelf.selectItem.replaceResPath = selectedPath;
+//            weakSelf.selectItem.isReplace = YES;
+//            weakSelf.selectItem.isSelectVideo = NO;
+//
+//            weakSelf.selectItem.thumbnail = reslut;
+//
+//            [weakSelf.evaMediator replaceVideoItem:self.selectItem];
+//            [weakSelf.pickerSelectView reloadData];
             
-            [weakSelf.evaMediator replaceVideoItem:self.selectItem];
-            [weakSelf.pickerSelectView reloadData];
+            [weakSelf updateImageResource:fileUrl image:reslut];
         });
         
     }];
@@ -274,7 +292,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
  * 更新视频图片资源
  * @param config 视频裁剪配置
  * @param path 视频裁剪后路径
- * @param videoPath 源视频路径
+ * @param videoPath 源视频路径（非file:// 开头地址）
  */
 - (void)updateVideoResource:(TUPEvaReplaceConfig_ImageOrVideo *)config path:(NSString *)path videoPath:(NSString *)videoPath
 {
@@ -283,28 +301,30 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     
     [TAEModelMediator requestVideoImageWith:selectedPath cropRect:config.crop resultHandle:^(UIImage * _Nonnull reslut) {
         
-        [weakSelf.evaMediator addTempFilePath:selectedPath];
-        NSLog(@"TUEVA:视频图片获取完成");
-        weakSelf.selectItem.isReplace = YES;
-        weakSelf.selectItem.isSelectVideo = YES;
-        weakSelf.selectItem.replaceResPath = selectedPath;
-        weakSelf.selectItem.thumbnail = reslut;
-        if (config) {
-            weakSelf.selectItem.crop = config.crop;
-            weakSelf.selectItem.start = config.start;
-            weakSelf.selectItem.duration = config.duration;
-            weakSelf.selectItem.maxSide = config.maxSide;
-        }
-        
-        [weakSelf.evaMediator replaceVideoItem:self.selectItem];
-        [weakSelf.pickerSelectView reloadData];
+//        [weakSelf.evaMediator addTempFilePath:selectedPath];
+//        NSLog(@"TUEVA:视频图片获取完成");
+//        weakSelf.selectItem.isReplace = YES;
+//        weakSelf.selectItem.isSelectVideo = YES;
+//        weakSelf.selectItem.replaceResPath = selectedPath;
+//        weakSelf.selectItem.thumbnail = reslut;
+//        if (config) {
+//            weakSelf.selectItem.crop = config.crop;
+//            weakSelf.selectItem.start = config.start;
+//            weakSelf.selectItem.duration = config.duration;
+//            weakSelf.selectItem.maxSide = config.maxSide;
+//        }
+//
+//        [weakSelf.evaMediator replaceVideoItem:self.selectItem];
+//        [weakSelf.pickerSelectView reloadData];
+        [weakSelf updateVideoResource:config path:path videoPath:selectedPath image:reslut];
+        [TuPopupProgress dismiss];
     }];
 }
 /**
  * 更新视频图片资源
  * @param config 视频裁剪配置
  * @param path 视频裁剪后路径
- * @param videoPath 源视频路径
+ * @param videoPath 源视频路径（非file:// 开头地址）
  * @param image 封面图
  */
 - (void)updateVideoResource:(TUPEvaReplaceConfig_ImageOrVideo *)config path:(NSString *)path videoPath:(NSString *)videoPath image:(UIImage *)image
@@ -334,14 +354,23 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
  * @param indexPath 点击的 NSIndexPath 对象
  * @param phAsset 对应的 PHAsset 对象
  */
-- (void)picker:(TTMultiAssetPicker *)picker didSelectButtonItemWithIndexPath:(NSIndexPath *)indexPath phAsset:(PHAsset *)phAsset;
+- (BOOL)picker:(TTMultiAssetPicker *)picker didSelectButtonItemWithIndexPath:(NSIndexPath *)indexPath phAsset:(PHAsset *)phAsset;
 {
     NSLog(@"TUEVA:单选按钮点击回调");
+    
+    if (phAsset.mediaType == PHAssetMediaTypeVideo && _selectItem.type == TAEModelAssetType_Image) {
+        [TuPopupProgress showErrorWithStatus:@"只允许选择图片素材"];
+        return NO;
+    }
+    if (phAsset.mediaType == PHAssetMediaTypeImage && _selectItem.type == TAEModelAssetType_Video) {
+        [TuPopupProgress showErrorWithStatus:@"只允许选择视频素材"];
+        return NO;
+    }
     
     if (self.pickerSelectView.selectCount == self.maxSelectCount) {
         
         [TuPopupProgress showSuccessWithStatus:@"已达到素材添加上限"];
-        return;
+        return NO;
     }
     
     self.selectItem.asset = phAsset;
@@ -353,6 +382,8 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
             //选择图片资源
             if (inputPhAsset.mediaType == PHAssetMediaTypeImage) {
                 UIImage *image = (UIImage *)returnValue;
+                //保存原始的图片素材
+                weakSelf.selectItem.originalImage = image;
                 [TAEModelMediator requestImagePathWith:image imageIndex:weakAsset.itemIndex resultHandle:^(NSString * _Nonnull filePath) {
                     if (!filePath) return;
                     [weakSelf updateImageResource:[NSURL fileURLWithPath:filePath] image:image];
@@ -360,6 +391,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
             } else {
                 NSLog(@"TUEVA:视频图片获取开始");
                 AVURLAsset *asset = (AVURLAsset *)returnValue;
+                NSLog(@"TUEVA::视频宽高 == %@", NSStringFromCGSize(asset.naturalSize));
                 NSString *videoPath = asset.URL.absoluteString;
                 [TAEModelMediator requestVideoPathWith:asset videoIndex:weakAsset.itemIndex resultHandle:^(NSString * _Nonnull filePath, UIImage * _Nonnull fileImage) {
                     [weakSelf updateVideoResource:nil path:filePath videoPath:videoPath image:fileImage];
@@ -367,6 +399,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
             }
         });
     }];
+    return YES;
 }
 
 /**
@@ -411,7 +444,6 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
                     [weakSelf.navigationController popToViewController:weakSelf animated:YES];
                     NSLog(@"TUEVA:视频选择路径==%@", savePath);
                     [weakSelf updateVideoResource:config path:savePath videoPath:assets.URL.absoluteString];
-                    
                 }];
                 [picker showViewController:controller sender:nil];
             }
@@ -453,6 +485,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
         
         PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
         options.networkAccessAllowed = YES;
+        options.deliveryMode = PHVideoRequestOptionsDeliveryModeMediumQualityFormat;
         // 配置请求
         options.progressHandler = ^(double progress, NSError * _Nullable error, BOOL * _Nonnull stop, NSDictionary * _Nullable info) {
             
@@ -461,15 +494,47 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
                     [TuPopupProgress dismiss];
                 });
             } else {
-                [TuPopupProgress showProgress:progress status:@"iCloud 同步中"];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [TuPopupProgress showProgress:progress status:@"iCloud 同步中"];
+                });
+                
             }
             
         };
         
-        [[PHImageManager defaultManager] requestAVAssetForVideo:phAsset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-            
-            if (completion) completion(phAsset, asset);
-        }];
+        //NSLog(@"TUEVA::原视频size===%@", NSStringFromCGSize(CGSizeMake(phAsset.pixelWidth, phAsset.pixelHeight)));
+        CGFloat minSide = MIN(phAsset.pixelWidth, phAsset.pixelHeight);
+//        if (minSide <= 540) {
+//
+            [[PHImageManager defaultManager] requestAVAssetForVideo:phAsset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+
+                if (completion) completion(phAsset, asset);
+            }];
+//
+//        } else {
+//
+//            [TuPopupProgress showWithStatus:@"处理中.."];
+//
+//            [[PHImageManager defaultManager] requestExportSessionForVideo:phAsset options:options exportPreset:AVAssetExportPreset960x540 resultHandler:^(AVAssetExportSession * _Nullable exportSession, NSDictionary * _Nullable info) {
+//
+//                TTDirectorMediator *mediator = [[TTDirectorMediator alloc] init];
+//                NSString *filePath = [mediator generateTempFile];
+//                exportSession.outputURL = [NSURL fileURLWithPath:filePath];
+//                exportSession.shouldOptimizeForNetworkUse = YES;
+//                exportSession.outputFileType = AVFileTypeMPEG4;
+//                [exportSession exportAsynchronouslyWithCompletionHandler:^{
+//
+//                    if (exportSession.status == AVAssetExportSessionStatusCompleted) {
+//                        AVURLAsset *asset = [AVURLAsset assetWithURL:[NSURL fileURLWithPath:filePath]];
+////                        NSLog(@"TUEVA::压缩后的视频路径==%@", filePath);
+//                        [self.evaMediator addTempFilePath:filePath];
+////                        NSLog(@"TUEVA::导出后的视频路径==%@", [NSURL fileURLWithPath:filePath]);
+//                        if (completion) completion(phAsset, asset);
+//
+//                    }
+//                }];
+//            }];
+//        }
     }
 }
 
@@ -513,7 +578,6 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
         _allPicker.fetchMediaTypes = @[@(PHAssetMediaTypeVideo), @(PHAssetMediaTypeImage)];
         _allPicker.delegate = self;
         _allPicker.disableMultipleSelection = NO;
-//        _allPicker.disableMultipleSelection = YES;
         _allPicker.collectionView.contentInset = UIEdgeInsetsMake(0, 0, 0, 0);
         
     }

@@ -14,6 +14,7 @@
 
 @interface HomeCollectionViewCell()<DownLoadFileModelDelegate>
 
+
 @end
 
 
@@ -26,6 +27,13 @@
 //    self.image.layer.masksToBounds = YES;
     
     self.backgroundColor = lsqRGB(34,34,34);
+    
+    self.progressView.trackTintColor = [UIColor colorWithRed:77 / 255.0 green:88 / 255.0 blue:102 / 255.0 alpha:0.8];
+    self.progressView.progress = 0;
+    self.progressView.progressTintColor = [UIColor lsqClorWithHex:@"#776AF7"];
+    
+    
+    
 }
 
 
@@ -71,12 +79,29 @@
 #pragma mark - DownLoadFileModelDelegate
 - (void)downloadFileModel:(DownLoadFileModel *)fileModel progressChanged:(float)progress {
     // 进度改变
+    self.progressView.progress = progress;
 //    NSLog(@"下载进度: %02f", progress);
+}
+
+- (void)downloadFileModel:(DownLoadFileModel *)fileModel cacheLength:(NSInteger)cacheLength fileLength:(NSInteger)fileLength
+{
+    self.actionButton.hidden = YES;
+    self.progressLabel.hidden = NO;
+    
+    NSShadow *shadow = [[NSShadow alloc] init];
+    shadow.shadowBlurRadius = 5;
+    shadow.shadowOffset = CGSizeMake(0, 0);
+    shadow.shadowColor = [UIColor blackColor];
+    NSString *progressStr = [NSString stringWithFormat:@"%.2f/%.2fMB", cacheLength / 1024.0 / 1024.0, fileLength / 1024.0 / 1024.0];
+    NSAttributedString *attString = [[NSAttributedString alloc] initWithString:progressStr attributes:@{NSShadowAttributeName:shadow}];
+    self.progressLabel.attributedText = attString;
 }
 
 - (void)downloadFileModel:(DownLoadFileModel *)fileModel statusChanged:(DownloadState)status {
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        self.progressView.hidden = self.progressLabel.hidden = NO;
+        
         // 状态改变
         switch (status) {
             case DownloadStateNone:
@@ -107,6 +132,7 @@
                 // 完成
                 NSLog(@"status: 下载完成");
                 self.actionButton.selected = NO;
+                self.progressView.hidden = self.progressLabel.hidden = YES;
                 [self stopRotating];
                 break;
                 
@@ -114,6 +140,7 @@
                 // 出错
                 NSLog(@"status: 下载出错");
                 self.actionButton.selected = NO;
+                self.progressView.hidden = self.progressLabel.hidden = YES;
                 [self stopRotating];
                 break;
                 
@@ -121,6 +148,7 @@
                 NSLog(@"status: 下载的资源不存在");
                 //[[TuSDK shared].messageHub showToast:@"下载的资源不存在"];
                 self.actionButton.selected = NO;
+                self.progressView.hidden = self.progressLabel.hidden = YES;
                 break;
             default:
                 break;

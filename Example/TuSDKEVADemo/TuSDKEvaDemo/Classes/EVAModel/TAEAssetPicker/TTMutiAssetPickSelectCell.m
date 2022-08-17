@@ -64,6 +64,7 @@
     self.editLabel.text = @"点击剪辑";
     self.editLabel.textAlignment = NSTextAlignmentCenter;
     self.editLabel.textColor = [UIColor whiteColor];
+    self.editLabel.hidden = YES;
     self.editLabel.font = [UIFont systemFontOfSize:10];
     [self.thumbImageView addSubview:self.editLabel];
     [self.editLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -81,6 +82,7 @@
        
         make.right.bottom.offset(-3);
     }];
+    
     // 标签
     self.tagLabel = [[UILabel alloc] init];
     self.tagLabel.textColor = [UIColor whiteColor];
@@ -92,6 +94,8 @@
         make.top.offset(3);
         make.right.offset(-3);
     }];
+    
+    
 }
 
 - (void)setItem:(TAEModelVideoItem *)item
@@ -108,10 +112,21 @@
         self.tagLabel.text = @"蒙版视频 ";
     }
 
+    self.thumbImageView.layer.borderWidth = item.isSelected ? 1.0 : 0;
+    
+    self.closeButton.hidden = self.editLabel.hidden  = !self.item.isReplace;
+    self.tagLabel.hidden = self.timeLabel.hidden  = !self.closeButton.hidden;
+    
     if (item.thumbnail) {
         _thumbImageView.image = item.thumbnail;
         [self drawRectImage:item.thumbnail];
     } else {
+
+        if (!item.replaceResPath) {
+            self.item.enableReplace = YES;
+            self.thumbImageView.image = nil;
+            return;
+        };
         
         __weak typeof(self)weakSelf = self;
         
@@ -119,7 +134,7 @@
            
             if ([item.resPath hasSuffix:@"mp4"] || [item.resPath hasSuffix:@"MOV"]) {
                 
-                [TAEModelMediator requestVideoImageWith:item.resPath cropRect:CGRectZero resultHandle:^(UIImage * _Nonnull reslut) {
+                [TAEModelMediator requestVideoImageWith:item.replaceResPath cropRect:CGRectZero resultHandle:^(UIImage * _Nonnull reslut) {
                     weakSelf.thumbImageView.image = reslut;
                     weakSelf.item.thumbnail = reslut;
                     //如果无法正常获取图片封面，则需要替换
@@ -130,7 +145,7 @@
                 }];
                 
             } else {
-                [TAEModelMediator requestImageWith:item.resPath resultHandle:^(UIImage * _Nonnull reslut) {
+                [TAEModelMediator requestImageWith:item.replaceResPath resultHandle:^(UIImage * _Nonnull reslut) {
                     weakSelf.thumbImageView.image = reslut;
                     weakSelf.item.thumbnail = reslut;
                     //如果无法正常获取图片封面，则需要替换
@@ -143,10 +158,7 @@
             
         });
     }
-    self.thumbImageView.layer.borderWidth = item.isSelected ? 1.0 : 0;
     
-    self.closeButton.hidden = self.editLabel.hidden = !self.item.isReplace;
-    self.tagLabel.hidden = self.timeLabel.hidden = !self.closeButton.hidden;
 }
 
 - (void)drawRectImage:(UIImage *)image

@@ -48,7 +48,9 @@ static NSString * const kCellReuseIdentifier = @"TTMutiAssetPickSelectCell";
     [self.nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.nextButton.titleLabel.font = [UIFont systemFontOfSize:13];
     [self.nextButton addTouchUpInsideTarget:self action:@selector(nextButtonAction:)];
-    self.nextButton.backgroundColor = self.nextButton.enabled ? [UIColor lsqClorWithHex:@"#776AF7"] : [UIColor lsqClorWithHex:@"#272731"];
+    //776AF7
+    self.nextButton.backgroundColor = [UIColor lsqClorWithHex:@"#135FF9"];
+//    self.nextButton.backgroundColor = self.nextButton.enabled ? [UIColor lsqClorWithHex:@"#5648FF"] : [UIColor lsqClorWithHex:@"#272731"];
     self.nextButton.layer.cornerRadius = 15;
     [self addSubview:self.nextButton];
     [self.nextButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -106,7 +108,15 @@ static NSString * const kCellReuseIdentifier = @"TTMutiAssetPickSelectCell";
     [self.items removeAllObjects];
     [self.items addObjectsFromArray:self.mediator.videoItems];
     [self.collectionView reloadData];
-    [self collectionView:self.collectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
+    //在相册选择页当前控制器需要默认选中第一个
+    if (_isCurrent) {
+        [self collectionView:self.collectionView didSelectItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
+    }
+}
+
+- (void)setIsCurrent:(BOOL)isCurrent
+{
+    _isCurrent = isCurrent;
 }
 
 #pragma mark - UICollectionViewDelegate, UICollectionViewDataSource
@@ -157,13 +167,16 @@ static NSString * const kCellReuseIdentifier = @"TTMutiAssetPickSelectCell";
 {
     _selectItem.isSelected = NO;
     
+    //删除后选中资源重置
     TAEModelVideoItem *selectItem = self.items[sender.tag];
+    //资源重置
     selectItem.isReplace = NO;
-    selectItem.replaceResPath = @"";
+    selectItem.replaceResPath = nil;
     selectItem.thumbnail = nil;
+    selectItem.originalImage = nil;
     selectItem.isSelected = YES;
-    [self.mediator replaceVideoItem:selectItem];
     _selectItem = selectItem;
+    [self.mediator replaceVideoItem:selectItem];
 
     
     [self.collectionView reloadData];
@@ -176,13 +189,10 @@ static NSString * const kCellReuseIdentifier = @"TTMutiAssetPickSelectCell";
         }
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:selectIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
         //点选了item
-        if (self.delegate && [self.delegate respondsToSelector:@selector(mutiAssetPickerSelectView:selectItem:)]) {
-            [self.delegate mutiAssetPickerSelectView:self selectItem:selectItem];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(mutiAssetPickerSelectView:deleteItem:)]) {
+            [self.delegate mutiAssetPickerSelectView:self deleteItem:selectItem];
         }
     }
-    
-    
-    
 }
 
 

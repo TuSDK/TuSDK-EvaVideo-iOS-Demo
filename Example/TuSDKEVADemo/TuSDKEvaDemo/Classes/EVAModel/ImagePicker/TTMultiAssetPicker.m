@@ -11,6 +11,20 @@
 #import <Photos/Photos.h>
 #import "TTMultiAssetPickerCell.h"
 
+@implementation TTPHAssetItem
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        self.selectCount = 1;
+    }
+    return self;
+}
+
+@end
+
+
 // CollectionView Cell 重用 ID
 static NSString * const kCellReuseIdentifier = @"Cell";
 // 单元格间距
@@ -39,12 +53,7 @@ static const CGFloat kCellMargin = 3;
 /**
  选中的 PHAsset
  */
-@property (nonatomic, strong) NSMutableArray<PHAsset *> *selectedPhAssets;
-//
-///**
-// 选中的索引
-// */
-//@property (nonatomic, strong) NSMutableArray<NSIndexPath *> *selectedIndexPaths;
+@property (nonatomic, strong) NSMutableArray<TTPHAssetItem *> *selectedPhAssets;
 
 /**
  请求中的视频 ID
@@ -71,15 +80,6 @@ static const CGFloat kCellMargin = 3;
     return _selectedPhAssets;
 }
 
-//
-//
-//- (NSMutableArray *)selectedIndexPaths {
-//    if (!_selectedIndexPaths) {
-//        _selectedIndexPaths = [NSMutableArray array];
-//    }
-//    return _selectedIndexPaths;
-//}
-
 - (NSMutableDictionary *)requstingAssetIds {
     if (!_requstingAssetIds) {
         _requstingAssetIds = [NSMutableDictionary dictionary];
@@ -91,21 +91,6 @@ static const CGFloat kCellMargin = 3;
     return _requstingAssetIds.count > 0;
 }
 
-- (NSArray<AVURLAsset *> *)allSelectedAssets {
-    return self.requesting ? nil : self.requestedAvAssets.copy;
-}
-
--(NSArray<PHAsset *> *)allSelectedPhAssets;{
-    return _selectedPhAssets;
-}
-
-- (NSTimeInterval)selectedVideosDutation {
-    NSTimeInterval selectedVideosDutation = .0;
-    for (PHAsset *phAsset in _selectedPhAssets) {
-        selectedVideosDutation += phAsset.duration;
-    }
-    return selectedVideosDutation;
-}
 
 - (void)setAssetMediaType:(TTAssetMediaType)assetMediaType
 {
@@ -153,7 +138,7 @@ static const CGFloat kCellMargin = 3;
 
 - (void)setupUI {
     CGFloat width = self.view.frame.size.width;
-    CGFloat cellWidth = (width + kCellMargin) / 4 - kCellMargin;
+    CGFloat cellWidth = (width + kCellMargin) / 3 - kCellMargin;
     UICollectionViewFlowLayout *flowLayout = (UICollectionViewFlowLayout *)self.collectionViewLayout;
     flowLayout.itemSize = CGSizeMake(cellWidth, cellWidth);
     flowLayout.minimumInteritemSpacing = kCellMargin;
@@ -193,25 +178,6 @@ static const CGFloat kCellMargin = 3;
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:NO];
     [allAssets sortUsingDescriptors:@[sortDescriptor]];
     
-    
-//    NSMutableArray *newestSelecteds = [NSMutableArray arrayWithCapacity:10];
-//    NSMutableArray *newestSelectedIndex = [NSMutableArray arrayWithCapacity:10];
-//    NSMutableArray *newestSelectedAvAssets = [NSMutableArray arrayWithCapacity:10];
-//    [self.selectedPhAssets enumerateObjectsUsingBlock:^(PHAsset * _Nonnull asset, NSUInteger idx, BOOL * _Nonnull stop) {
-//        if ([allAssets containsObject:asset]) {
-//            [newestSelecteds addObject:asset];
-//            NSIndexPath *indexPath = [self indexPathForPhAsset:asset];
-//            [newestSelectedIndex addObject:indexPath];
-//            [newestSelectedAvAssets addObject:[self.requestedAvAssets objectAtIndex:idx]];
-//        }
-//    }];
-//    [self.selectedPhAssets removeAllObjects];
-//    [self.selectedPhAssets addObjectsFromArray:newestSelecteds];
-//    [self.requestedAvAssets removeAllObjects];
-//    [self.requestedAvAssets addObjectsFromArray:newestSelectedAvAssets];
-//    [self.selectedIndexPaths removeAllObjects];
-//    [self.selectedIndexPaths addObjectsFromArray:newestSelectedIndex];
-    
     _assets = allAssets;
     
     for (int i = 0; i < _assets.count; i++) {
@@ -244,131 +210,50 @@ static const CGFloat kCellMargin = 3;
     }
 }
 
-//- (NSInteger)selectedIndexForIndexPath:(NSIndexPath *)indexPath {
-//    NSInteger selectedIndex = -1;
-//    if ([_selectedIndexPaths containsObject:indexPath]) {
-//        selectedIndex = [_selectedIndexPaths indexOfObject:indexPath];
-//    }
-//    return selectedIndex;
-//}
-
-//- (void)setPhAsset:(PHAsset *)phAsset indexPath:(NSIndexPath *)indexPath selected:(BOOL)selected {
-//    if (!phAsset && !indexPath) return;
-//
-//    if (!indexPath) {
-//        indexPath = [self indexPathForPhAsset:phAsset];
-//    }
-//
-//    if (!phAsset) {
-//        phAsset = [self phAssetAtIndexPathItem:indexPath.item];
+/**
+ * 移除指定的PHAsset
+ * @param asset 视频对象
+ * @return 是否移除成功
+ */
+- (BOOL)removePHAsset:(PHAsset *)asset;
+{
+    BOOL state = NO;
+    if (_selectedPhAssets.count == 0) return state;
+    
+    
+//    for (PHAsset *seletAsset in _selectedPhAssets) {
+//        if (seletAsset == asset) {
+//            [_selectedPhAssets removeObject:asset];
+//            state = YES;
+//            break;
+//        }
 //    }
     
-//    if (_disableMultipleSelection) {
-//        // 处理单选
-//        [self singleSelectPhAsset:phAsset indexPath:indexPath];
-//    } else {
-//        // 处理多选
-//        [self multipleSelectPhAsset:phAsset indexPath:indexPath selected:selected];
+    for (int i = 0; i < _selectedPhAssets.count; i++) {
+        TTPHAssetItem *item = _selectedPhAssets[i];
+        if ([item.assetID isEqualToString: asset.localIdentifier]) {
+            --item.selectCount;
+            if (item.selectCount == 0) {
+                [_selectedPhAssets removeObject:item];
+            }
+            state = YES;
+            [self.collectionView reloadData];
+            break;
+        }
+    }
+    
+    
+//    //选中数组中包含视频对象
+//    if ([_selectedPhAssets containsObject:asset.localIdentifier]) {
+//        [_selectedPhAssets removeObject:asset.localIdentifier];
+//        [self.collectionView reloadData];
+//        return YES;
 //    }
     
-    // 更新单元格显示索引
-    //[self updateSelectedCellIndex];
-//}
-
+    return state;
+}
 
 #pragma mark - private
-
-///**
-// 多选时，对单元格的勾选或取消勾选
-//
-// @param phAsset 选中的 PHAsset
-// @param indexPath 选中的索引
-// @param selected 是否选中
-// */
-//- (void)multipleSelectPhAsset:(PHAsset *)phAsset indexPath:(NSIndexPath *)indexPath selected:(BOOL)selected {
-//    __weak typeof(self) weakSelf = self;
-//    // 同步 UI
-//    TTMultiAssetPickerCell *cell = (TTMultiAssetPickerCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
-//    if (cell.selectButton.selected != selected) cell.selectButton.selected = selected;
-//
-//    // 处理选中、取消选中后的的数据
-//    if (selected) {
-//        // 确保唯一性
-//        if (![_selectedPhAssets containsObject:phAsset]) {
-//            [self.requestedAvAssets addObject:phAsset];
-//            [self.selectedPhAssets addObject:phAsset];
-//            [self.selectedIndexPaths addObject:indexPath];
-//            [self requestAVAssetForVideo:phAsset completion:^(PHAsset *inputPhAsset, AVAsset *avAsset) {
-//                if (![weakSelf.requestedAvAssets containsObject:inputPhAsset]) return;
-//                NSUInteger replaceIndex = [weakSelf.requestedAvAssets indexOfObject:inputPhAsset];
-//                [weakSelf.requestedAvAssets replaceObjectAtIndex:replaceIndex withObject:avAsset];
-//            }];
-//        }
-//    } else {
-//        NSUInteger assetIndex = [_selectedPhAssets indexOfObject:phAsset];
-//        if (assetIndex < _selectedPhAssets.count) {
-//            [_requestedAvAssets removeObjectAtIndex:assetIndex];
-//            [_selectedPhAssets removeObjectAtIndex:assetIndex];
-//            [_selectedIndexPaths removeObjectAtIndex:assetIndex];
-//            [self cancelRequestWithVideo:phAsset];
-//        }
-//    }
-//}
-//
-///**
-// 单选单元格
-//
-// @param phAsset 选中的 PHAsset
-// @param indexPath 选中的索引
-// */
-//- (void)singleSelectPhAsset:(PHAsset *)phAsset indexPath:(NSIndexPath *)indexPath {
-//    __weak typeof(self) weakSelf = self;
-//    for (NSIndexPath *indexPathSelected in _selectedIndexPaths) {
-//        TTMultiAssetPickerCell *cell = (TTMultiAssetPickerCell *)[self.collectionView cellForItemAtIndexPath:indexPathSelected];
-//        cell.selectButton.selected = NO;
-//    }
-//    TTMultiAssetPickerCell *cellShouldBeSelected = (TTMultiAssetPickerCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
-//    cellShouldBeSelected.selectButton.selected = YES;
-//
-//    for (PHAsset *requestingPhAsset in _requstingAssetIds.allKeys) {
-//        [self cancelRequestWithVideo:requestingPhAsset];
-//    }
-//    [_requestedAvAssets removeAllObjects];
-//    [_selectedPhAssets removeAllObjects];
-//    [_selectedIndexPaths removeAllObjects];
-//    if (_selectedPhAssets.count > 1 || ![_selectedPhAssets containsObject:phAsset]) {
-//        [self.selectedPhAssets addObject:phAsset];
-//        [self.selectedIndexPaths addObject:indexPath];
-//        [self requestAVAssetForVideo:phAsset completion:^(PHAsset *inputPhAsset, AVAsset *avAsset) {
-//            [weakSelf.requestedAvAssets addObject:avAsset];
-//        }];
-//    }
-//}
-
-/**
- 单元格被勾选
-
- @param cell 相册展示单元格
- @param selected 是否选择
- */
-//- (void)cell:(TTMultiAssetPickerCell *)cell didSelect:(BOOL)selected {
-//    NSIndexPath *indexPath = [self.collectionView indexPathForCell:cell];
-//    PHAsset *phAsset = [self phAssetAtIndexPathItem:indexPath.item];
-//
-//    [self setPhAsset:phAsset indexPath:indexPath selected:selected];
-//}
-
-/**
- 按 PHAsset 获取索引
-
- @param phAsset 视频文件对象
- @return 索引
- */
-//- (NSIndexPath *)indexPathForPhAsset:(PHAsset *)phAsset {
-//    NSInteger phAssetIndex = [_assets indexOfObject:phAsset];
-//    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:(_assets.count - 1 - phAssetIndex) inSection:0];
-//    return indexPath;
-//}
 
 /**
  请求 PHAsset 为 AVAsset，维护 _requstingAssetIds
@@ -452,10 +337,19 @@ static const CGFloat kCellMargin = 3;
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     PHAsset *asset = [self phAssetAtIndexPathItem:indexPath.item];
     TTMultiAssetPickerCell *cell = (TTMultiAssetPickerCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kCellReuseIdentifier forIndexPath:indexPath];
-    cell.selectButton.selected = [_selectedPhAssets containsObject:asset];
-//    cell.selectedIndex = [_selectedPhAssets indexOfObject:asset];
+    
+    cell.tagLabel.hidden = YES;
+    for (int i = 0; i < _selectedPhAssets.count; i++) {
+        TTPHAssetItem *item = _selectedPhAssets[i];
+        if ([item.assetID isEqualToString:asset.localIdentifier]) {
+            cell.tagLabel.hidden = NO;
+            break;
+        }
+    }
+
     cell.selectButton.hidden = _disableMultipleSelection;
-    cell.tagLabel.hidden = ![_selectedPhAssets containsObject:asset];
+    
+
     cell.asset = asset;
     
     __weak typeof(self) weakSelf = self;
@@ -465,24 +359,35 @@ static const CGFloat kCellMargin = 3;
         if (selected && weakSelf.requesting) {
             return;
         }
-        // 不允许选中则跳过
-        if (selected && [weakSelf.delegate respondsToSelector:@selector(picker:shouldSelectItemAtIndexPath:)]) {
-            if (![weakSelf.delegate picker:weakSelf shouldSelectItemAtIndexPath:indexPath]) {
-                return;
-            }
-        }
-        // 不允许取消选中则跳过
-        if (!selected && [weakSelf.delegate respondsToSelector:@selector(picker:shouldDeselectItemAtIndexPath:)]) {
-            if (![weakSelf.delegate picker:weakSelf shouldDeselectItemAtIndexPath:indexPath]) {
-                return;
-            }
-        }
-        
         // 应用选中
         PHAsset *phAsset = [weakSelf phAssetAtIndexPathItem:indexPath.item];
-        [self.selectedPhAssets addObject:phAsset];
         if ([weakSelf.delegate respondsToSelector:@selector(picker:didSelectButtonItemWithIndexPath:phAsset:)]) {
-            [weakSelf.delegate picker:weakSelf didSelectButtonItemWithIndexPath:indexPath phAsset:phAsset];
+            BOOL status = [weakSelf.delegate picker:weakSelf didSelectButtonItemWithIndexPath:indexPath phAsset:phAsset];
+            if (status) {
+                cell.tagLabel.hidden = NO;
+                if (weakSelf.selectedPhAssets.count == 0) {
+                    TTPHAssetItem *item = [[TTPHAssetItem alloc] init];
+                    item.assetID = phAsset.localIdentifier;
+                    item.asset = phAsset;
+                    [weakSelf.selectedPhAssets addObject:item];
+                    
+                    return;
+                }
+                //创建空的资源Item
+                TTPHAssetItem *selectItem = [[TTPHAssetItem alloc] init];
+                //如果选中资源数组中存在，则选中数量+1，，如果不存在
+                for (TTPHAssetItem *item in weakSelf.selectedPhAssets) {
+                    if ([item.assetID isEqualToString:phAsset.localIdentifier]) {
+                        ++item.selectCount;
+                        selectItem = item;
+                    }
+                }
+                if (!selectItem.assetID) {
+                    selectItem.assetID = phAsset.localIdentifier;
+                    selectItem.asset = phAsset;
+                    [weakSelf.selectedPhAssets addObject:selectItem];
+                }
+            }
         }
     };
     return cell;

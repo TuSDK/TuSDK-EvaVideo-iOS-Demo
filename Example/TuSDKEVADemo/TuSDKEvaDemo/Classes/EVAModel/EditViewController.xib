@@ -20,7 +20,6 @@
                 <outlet property="previewSuperView" destination="STi-mE-Cxd" id="gi1-i6-IdG"/>
                 <outlet property="previewWidth" destination="Wrp-mG-RoW" id="sbC-ZC-2OH"/>
                 <outlet property="replaceView" destination="EXl-DI-7tc" id="poW-lK-vfX"/>
-                <outlet property="resetBtn" destination="wCj-rx-DbV" id="KnX-Ok-W0H"/>
                 <outlet property="textField" destination="DFR-70-DxA" id="LxQ-3E-QoY"/>
                 <outlet property="textFiledBottom" destination="q82-bI-2uZ" id="UwG-s7-7LX"/>
                 <outlet property="view" destination="iN0-l3-epB" id="XEh-d0-VmN"/>
@@ -148,22 +147,19 @@
                         <action selector="changeMusic:" destination="-1" eventType="touchUpInside" id="FWy-Ch-xn8"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wCj-rx-DbV">
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wCj-rx-DbV">
                     <rect key="frame" x="235" y="605" width="128" height="40"/>
                     <color key="backgroundColor" red="0.10196078431372549" green="0.10196078431372549" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                     <state key="normal" title="一键重置">
                         <color key="titleColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
-                    <connections>
-                        <action selector="reset:" destination="-1" eventType="touchUpInside" id="mN3-9x-nrf"/>
-                    </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fyW-6T-abP">
-                    <rect key="frame" x="0.0" y="364" width="375" height="40"/>
+                    <rect key="frame" x="0.0" y="376" width="375" height="40"/>
                     <subviews>
                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="6zV-ap-N7p" customClass="EvaProgressSlider">
-                            <rect key="frame" x="-1.5" y="0.0" width="378" height="41"/>
+                            <rect key="frame" x="58" y="0.0" width="259" height="41"/>
                             <color key="minimumTrackTintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <color key="maximumTrackTintColor" red="1" green="1" blue="1" alpha="0.59999999999999998" colorSpace="calibratedRGB"/>
                             <connections>
@@ -174,11 +170,11 @@
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstItem="6zV-ap-N7p" firstAttribute="leading" secondItem="fyW-6T-abP" secondAttribute="leading" constant="0.5" id="9hf-LG-Hip"/>
-                        <constraint firstAttribute="bottom" secondItem="6zV-ap-N7p" secondAttribute="bottom" id="FhD-Lb-pm6"/>
-                        <constraint firstAttribute="trailing" secondItem="6zV-ap-N7p" secondAttribute="trailing" constant="0.5" id="GDB-Qt-bzE"/>
-                        <constraint firstItem="6zV-ap-N7p" firstAttribute="top" secondItem="fyW-6T-abP" secondAttribute="top" id="T2M-7s-wUa"/>
                         <constraint firstAttribute="height" constant="40" id="ffa-Tk-9jr"/>
+                        <constraint firstItem="6zV-ap-N7p" firstAttribute="centerY" secondItem="fyW-6T-abP" secondAttribute="centerY" id="p4y-MR-Ggy"/>
+                        <constraint firstItem="6zV-ap-N7p" firstAttribute="top" secondItem="fyW-6T-abP" secondAttribute="top" id="rPr-Qk-Fas"/>
+                        <constraint firstItem="6zV-ap-N7p" firstAttribute="leading" secondItem="fyW-6T-abP" secondAttribute="leading" constant="60" id="uqU-T8-7BZ"/>
+                        <constraint firstItem="6zV-ap-N7p" firstAttribute="centerX" secondItem="fyW-6T-abP" secondAttribute="centerX" id="wtB-Qg-2FD"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="19U-ey-fac">
@@ -228,7 +224,7 @@
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="wCj-rx-DbV" secondAttribute="trailing" constant="12" id="ogA-gn-plA"/>
                 <constraint firstAttribute="bottom" secondItem="19U-ey-fac" secondAttribute="bottom" constant="-48" id="q82-bI-2uZ"/>
                 <constraint firstItem="STi-mE-Cxd" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="qPj-Vq-C8Y"/>
-                <constraint firstItem="fyW-6T-abP" firstAttribute="bottom" secondItem="Kj4-0Y-oJz" secondAttribute="bottom" constant="16" id="qvt-0B-t9f"/>
+                <constraint firstItem="fyW-6T-abP" firstAttribute="bottom" secondItem="Kj4-0Y-oJz" secondAttribute="bottom" constant="28" id="qvt-0B-t9f"/>
                 <constraint firstItem="wCj-rx-DbV" firstAttribute="top" secondItem="wby-Ej-qZc" secondAttribute="top" id="zJu-RG-ggz"/>
             </constraints>
             <point key="canvasLocation" x="132" y="121"/>

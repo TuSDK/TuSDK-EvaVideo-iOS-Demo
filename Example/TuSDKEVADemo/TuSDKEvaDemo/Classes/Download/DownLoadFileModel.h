@@ -27,7 +27,8 @@ typedef NS_ENUM(NSInteger, DownloadState) {
 
 // 进度通知
 - (void)downloadFileModel:(DownLoadFileModel *)fileModel progressChanged:(float)progress;
-
+// 获取下载文件进度
+- (void)downloadFileModel:(DownLoadFileModel *)fileModel cacheLength:(NSInteger)cacheLength fileLength:(NSInteger)fileLength;
 // 状态通知
 - (void)downloadFileModel:(DownLoadFileModel *)fileModel statusChanged:(DownloadState)status;
 

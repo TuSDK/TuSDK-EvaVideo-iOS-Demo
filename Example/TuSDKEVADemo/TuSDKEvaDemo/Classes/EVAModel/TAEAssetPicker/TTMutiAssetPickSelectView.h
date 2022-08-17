@@ -31,9 +31,17 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)mutiAssetPickerSelectView:(TTMutiAssetPickSelectView *)view selectItem:(TAEModelVideoItem *)selectItem;
 
+/**
+ * 删除选中素材资源
+ * @param selectItem  选中组件
+ */
+- (void)mutiAssetPickerSelectView:(TTMutiAssetPickSelectView *)view deleteItem:(TAEModelVideoItem *)selectItem;
+
 @end
 
 @interface TTMutiAssetPickSelectView : UIView
+/// 是否在当前控制器
+@property (nonatomic, assign) BOOL isCurrent;
 @property (nonatomic, weak) id<TTMutiAssetPickSelectViewDelegate> delegate;
 @property (nonatomic, strong) TAEModelMediator *mediator;
 /// 获取已选择总数

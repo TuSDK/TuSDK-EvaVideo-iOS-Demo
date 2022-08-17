@@ -21,7 +21,7 @@
 #import "TTItemReplaceView.h"
 #import "TAEExportManager.h"
 #import "TTDirectorMediator.h"
-
+#import <Masonry/Masonry.h>
 //#import <GPUUtilization/GPUUtilization.h>
 
 typedef NS_ENUM(NSUInteger, TuSelectFilePathState) {
@@ -52,7 +52,6 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 @property (weak, nonatomic) IBOutlet UIButton *changeMusicBtn;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UISlider *volmSlider;
-@property (weak, nonatomic) IBOutlet UIButton *resetBtn;
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *textFiledBottom;
 @property (weak, nonatomic) IBOutlet UIView *volumView;
@@ -65,6 +64,11 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 ///**剩余播放时长*/
 //@property (nonatomic, strong) UILabel *resetTimelabel;
 //@property (nonatomic, strong) UIView *timeView;
+
+/**当前播放时长*/
+@property (nonatomic, strong) UILabel *currentTimelabel;
+/**总时长*/
+@property (nonatomic, strong) UILabel *totalTimelabel;
 
 /**
  已经选择的路径
@@ -108,7 +112,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 /**eva总时长*/
 @property (nonatomic, assign) NSInteger totalTime;
 
-@property (nonatomic, assign) BOOL isStart;
+//@property (nonatomic, assign) BOOL isStart;
 /// 选中的文字模块
 @property (nonatomic, strong) TAEModelTextItem *selectTextItem;
 /// 选中的视频图片模块
@@ -129,11 +133,11 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.selectIndex = -1;
+    self.selectIndex = 0;
     
     [self commonInit];
     
-    self.isStart = YES;
+//    self.isStart = YES;
 
     // 添加后台、前台切换的通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterBackFromFront) name:UIApplicationWillResignActiveNotification object:nil];
@@ -223,8 +227,6 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     
     self.changeMusicBtn.layer.cornerRadius = 4;
     self.changeMusicBtn.layer.masksToBounds = YES;
-    self.resetBtn.layer.cornerRadius = 4;
-    self.resetBtn.layer.masksToBounds = YES;
     
     [self.collectionView registerNib:[UINib nibWithNibName:@"EditCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"EditCollectionViewCell"];
     [self.collectionView reloadData];
@@ -248,6 +250,8 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     self.volumeView.frame = CGRectMake(CGRectGetMinX(self.volmSlider.frame), 7, CGRectGetWidth(self.volmSlider.frame), CGRectGetHeight(self.volmSlider.frame));
     self.volumeViewSlider.frame = self.volumeView.bounds;
     [self.volumeViewSlider addTarget:self action:@selector(volumeValueChange:) forControlEvents:UIControlEventValueChanged];
+    
+    
     // 页面布局
     // 视频预览视图宽高，两边留边12pt
     CGFloat sWidth  = [UIScreen mainScreen].bounds.size.width;
@@ -293,9 +297,9 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 
     [self.view layoutIfNeeded];
     
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    self.volmSlider.value = audioSession.outputVolume;
-    NSLog(@"系统媒体音量 === %.2f", audioSession.outputVolume);
+//    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+//    self.volmSlider.value = audioSession.outputVolume;
+//    NSLog(@"TUEVA::系统媒体音量 === %.2f", audioSession.outputVolume);
     
     //系统音量监听
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(volumeClicked:) name:@"AVSystemController_SystemVolumeDidChangeNotification" object:nil];
@@ -303,36 +307,65 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     
     //        //创建时长视图
     //        [self creatShowTimeView];
+    [self creatTimeView];
 }
 
-  
+/**
+ * 播放器设置
+ */
 - (void)setupPlayer
 {
     [self.directorMediator setupView:self.preview rect:self.displayRect];
     self.totalTime = [self.directorMediator getDuration];
     
-    
-    //如果素材选择页面存在替换，则需要替换
-    for (id item in self.mediator.resource) {
-        if ([item isKindOfClass:[TAEModelVideoItem class]]) {
-            TAEModelVideoItem *videoItem = (TAEModelVideoItem *)item;
-            if (videoItem.isReplace) {
-                
-                videoItem.audioMixWeight = self.volmSlider.value;
-                [self.directorMediator updateVideoOrImage:videoItem];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //如果素材选择页面存在替换，则需要替换
+        for (id item in self.mediator.resource) {
+            if ([item isKindOfClass:[TAEModelVideoItem class]]) {
+                TAEModelVideoItem *videoItem = (TAEModelVideoItem *)item;
+                if (videoItem.isReplace) {
+                    
+                    videoItem.audioMixWeight = self.volmSlider.value;
+                    [self.directorMediator updateVideoOrImage:videoItem];
+                }
             }
+            TAEModelItem *modelItem = (TAEModelItem *)item;
+            modelItem.isSelected = NO;
         }
-        TAEModelItem *modelItem = (TAEModelItem *)item;
-        modelItem.isSelected = NO;
+        [self.directorMediator seekTo:0];
+        [self.directorMediator previewFrame:0];
+    });
+    
+    //首次进入编辑页时，默认选中第一个坑位
+    for (int index = 0; index < self.mediator.resource.count; index++) {
+        TAEModelItem *item = self.mediator.resource[index];
+        item.isSelected = index == 0 ? YES : NO;
     }
 }
-    
 
+#pragma mark - voice change
+/**
+ * 系统音量监听
+ */
 - (void)volumeClicked:(NSNotification *)noti
 {
     NSDictionary *userInfo = noti.userInfo;
     float volume = [userInfo[@"AVSystemController_AudioVolumeNotificationParameter"] floatValue];
     self.volmSlider.value = volume;
+}
+
+/**
+ * 系统音量变化
+ */
+- (void)volumeValueChange:(UISlider *)sender
+{
+    self.volumeViewSlider.value = sender.value;
+    NSLog(@"TUEVA::音量变化===%.2f", sender.value);
+}
+
+// 音量改变
+- (IBAction)volmValueChanged:(UISlider *)sender {
+    self.volumeViewSlider.value = sender.value;
 }
 
 #pragma mark - setter getter
@@ -367,10 +400,6 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     [self.directorMediator seekTo:self.pauseTime];
 }
 
-- (void)volumeValueChange:(UISlider *)sender
-{
-    self.volumeViewSlider.value = sender.value;
-}
 
 
 #pragma mark - UICollectionDatasouce, UICollectionDelegate
@@ -397,6 +426,19 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     if (self.playerState == kPLAYING) {
         [self.directorMediator pause];
     }
+    
+    id item = self.mediator.resource[indexPath.item];
+    if ([item isKindOfClass:[TAEModelTextItem class]]) {
+        TAEModelTextItem *textItem = (TAEModelTextItem *)item;
+        _selectTextItem = textItem;
+        _selectVideoItem = nil;
+    }
+    if ([item isKindOfClass:[TAEModelVideoItem class]]) {
+        TAEModelVideoItem *videoItem = (TAEModelVideoItem *)item;
+        _selectTextItem = nil;
+        _selectVideoItem = videoItem;
+    }
+    
     //判断当前item与点选是否一致
     if (_selectIndex != indexPath.item) {
         [self.itemReplaceView removeFromSuperview];
@@ -405,26 +447,55 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
             item.isSelected = NO;
         }
         
-        id item = self.mediator.resource[indexPath.item];
-        if ([item isKindOfClass:[TAEModelTextItem class]]) {
-            TAEModelTextItem *textItem = (TAEModelTextItem *)item;
-            _selectTextItem = textItem;
-            _selectVideoItem = nil;
-            textItem.isSelected = YES;
-            [self.directorMediator seekTo:textItem.startTime + extraDuration];
-            [self.directorMediator previewFrame:textItem.startTime + extraDuration];
-        }
-        if ([item isKindOfClass:[TAEModelVideoItem class]]) {
-            TAEModelVideoItem *videoItem = (TAEModelVideoItem *)item;
-            _selectTextItem = nil;
-            _selectVideoItem = videoItem;
-            videoItem.isSelected = YES;
-//            [self.directorMediator seekTo:videoItem.startTime + videoItem.duration / 2];
-//            [self.directorMediator previewFrame:videoItem.startTime + videoItem.duration / 2];
+        //选中了文字坑位
+        if (!_selectVideoItem && _selectTextItem) {
+            _selectTextItem.isSelected = YES;
+            if (extraDuration > _selectTextItem.duration / 2) {
+                extraDuration = _selectTextItem.duration / 2;
+            }
             
-            [self.directorMediator seekTo:videoItem.startTime + extraDuration];
-            [self.directorMediator previewFrame:videoItem.startTime + extraDuration];
+            [self.directorMediator seekTo:_selectTextItem.startTime + extraDuration];
+            [self.directorMediator previewFrame:_selectTextItem.startTime + extraDuration];
         }
+        
+        //选中了视频图片坑位
+        if (_selectVideoItem && !_selectTextItem) {
+            _selectVideoItem.isSelected = YES;
+            if (extraDuration > _selectVideoItem.duration / 2) {
+                extraDuration = _selectVideoItem.duration / 2;
+            }
+            
+            [self.directorMediator seekTo:_selectVideoItem.startTime + extraDuration];
+            [self.directorMediator previewFrame:_selectVideoItem.startTime + extraDuration];
+        }
+        
+//        id item = self.mediator.resource[indexPath.item];
+//        if ([item isKindOfClass:[TAEModelTextItem class]]) {
+//            TAEModelTextItem *textItem = (TAEModelTextItem *)item;
+//            _selectTextItem = textItem;
+//            _selectVideoItem = nil;
+//            textItem.isSelected = YES;
+//
+//            if (extraDuration > textItem.duration / 2) {
+//                extraDuration = textItem.duration / 2;
+//            }
+//
+//            [self.directorMediator seekTo:textItem.startTime + extraDuration];
+//            [self.directorMediator previewFrame:textItem.startTime + extraDuration];
+//        }
+//        if ([item isKindOfClass:[TAEModelVideoItem class]]) {
+//            TAEModelVideoItem *videoItem = (TAEModelVideoItem *)item;
+//            _selectTextItem = nil;
+//            _selectVideoItem = videoItem;
+//            videoItem.isSelected = YES;
+//
+//            if (extraDuration > videoItem.duration / 2) {
+//                extraDuration = videoItem.duration / 2;
+//            }
+//
+//            [self.directorMediator seekTo:videoItem.startTime + extraDuration];
+//            [self.directorMediator previewFrame:videoItem.startTime + extraDuration];
+//        }
         _selectIndex = indexPath.item;
         [collectionView reloadData];
 
@@ -448,6 +519,9 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     }
 }
 
+
+
+#pragma mark - resource replace
 //获取当前cell在屏幕中的位置
 - (CGRect)getSelectCellRectAtSuperView;
 {
@@ -500,7 +574,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     [self showViewController:picker sender:nil];
 }
 
-//编辑素材
+/// 编辑素材
 - (void)editResource
 {
     [self.itemReplaceView removeFromSuperview];
@@ -529,7 +603,8 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
         } else {
             //图片素材
             ImageEditViewController *edit = [[ImageEditViewController alloc] initWithNibName:nil bundle:nil];
-            edit.inputImage = self.selectVideoItem.thumbnail;
+            //输入原始图片素材
+            edit.inputImage = self.selectVideoItem.originalImage;
             edit.index = self.selectVideoItem.itemIndex;
             edit.cutSize = self.selectVideoItem.size;
             [edit setEditCompleted:^(NSURL * _Nonnull outputUrl) {
@@ -572,15 +647,18 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
                 [TAEModelMediator requestVideoPathWith:asset videoIndex:weakAsset.itemIndex resultHandle:^(NSString * _Nonnull filePath, UIImage * _Nonnull fileImage) {
                     [weakSelf updateVideoResource:nil path:filePath videoPath:videoPath image:fileImage];
                     [weakSelf replaceEvaTemplate];
+                    [TuPopupProgress dismiss];
                 }];
             }
             if (inputPhAsset.mediaType == PHAssetMediaTypeImage) {
 
                 UIImage *image = (UIImage *)returnValue;
+                self.selectVideoItem.originalImage = image;
                 [TAEModelMediator requestImagePathWith:image imageIndex:weakAsset.itemIndex resultHandle:^(NSString * _Nonnull filePath) {
                     if (!filePath) return;
                     [weakSelf updateImageResource:[NSURL fileURLWithPath:filePath]];
                     [weakSelf replaceEvaTemplate];
+                    
                 }];
             }
         });
@@ -663,7 +741,6 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 - (void)updateVideoResource:(TUPEvaReplaceConfig_ImageOrVideo *)config path:(NSString *)path videoPath:(NSString *)videoPath image:(UIImage *)image
 {
     self.selectedPath = videoPath;
-//    NSString *selectedPath = [path componentsSeparatedByString:@"file://"].lastObject;
     [self.mediator addTempFilePath:self.selectedPath];
     self.selectVideoItem.isReplace = YES;
     self.selectVideoItem.isSelectVideo = YES;
@@ -685,11 +762,6 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 }
 
 #pragma mark - actions
-
-// 音量改变
-- (IBAction)volmValueChanged:(UISlider *)sender {
-    self.volumeViewSlider.value = sender.value;
-}
 
 // 进度条值改变
 - (IBAction)evaPregressValueChanged:(UISlider *)sender {
@@ -726,7 +798,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
             if (seekTime >= time.in_time && seekTime <= time.out_time) {
                 
                 if (!item.isSelected) {
-                    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
+                    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
                     item.isSelected = YES;
                     self->_selectIndex = index;
                 }
@@ -770,37 +842,6 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
         [weakSelf replaceEvaTemplate];
     }];
 }
-
-
-/**
- 一键重置，将资源重置回源资源
- */
-- (IBAction)reset:(UIButton *)sender {
-
-    if (![self.mediator canReset]) return;
-    
-    [self stopEvaPlayer];
-
-    [self.directorMediator reset];
-
-    //资源重置
-    BOOL success = [self.mediator reset];
-    _selectIndex = -1;
-    _selectedPath = nil;
-    [self.collectionView reloadData];
-    
-    //编辑数据回调
-    if (self.editCompleted) {
-        self.editCompleted(self.mediator);
-    }
-
-    //重载播放器
-    [self setupPlayer];
-
-    [self.directorMediator seekTo:0];
-    [self.directorMediator previewFrame:0];
-}
-
 
 // 替换资源后，播放器重载资源
 - (void)replaceEvaTemplate {
@@ -946,10 +987,9 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 }
 
 /**
-*  生成临时文件路径
-*
-*  @return 文件路径
-*/
+ * 生成临时文件路径
+ * @return 文件路径
+ */
 - (NSString *) generateTempFile;
 {
     NSString *path = [TuTSFileManager createDir:[TuTSFileManager pathInCacheWithDirPath:NSTemporaryDirectory() filePath:@""]];
@@ -1060,11 +1100,35 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
             }
             
         };
+        CGFloat minSide = MIN(phAsset.pixelWidth, phAsset.pixelHeight);
         
-        [[PHImageManager defaultManager] requestAVAssetForVideo:phAsset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+        if (minSide <= 540) {
+            [[PHImageManager defaultManager] requestAVAssetForVideo:phAsset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+                
+                if (completion) completion(phAsset, asset);
+            }];
+        } else {
+            [TuPopupProgress showWithStatus:@"处理中.."];
             
-            if (completion) completion(phAsset, asset);
-        }];
+            [[PHImageManager defaultManager] requestExportSessionForVideo:phAsset options:options exportPreset:AVAssetExportPreset960x540 resultHandler:^(AVAssetExportSession * _Nullable exportSession, NSDictionary * _Nullable info) {
+
+                TTDirectorMediator *mediator = [[TTDirectorMediator alloc] init];
+                NSString *filePath = [mediator generateTempFile];
+                exportSession.outputURL = [NSURL fileURLWithPath:filePath];
+                exportSession.shouldOptimizeForNetworkUse = YES;
+                exportSession.outputFileType = AVFileTypeMPEG4;
+                [exportSession exportAsynchronouslyWithCompletionHandler:^{
+
+                    if (exportSession.status == AVAssetExportSessionStatusCompleted) {
+                        AVURLAsset *asset = [AVURLAsset assetWithURL:[NSURL fileURLWithPath:filePath]];
+//                        NSLog(@"TUEVA::压缩后的视频路径==%@", filePath);
+                        [self.mediator addTempFilePath:filePath];
+//                        NSLog(@"TUEVA::导出后的视频路径==%@", [NSURL fileURLWithPath:filePath]);
+                        if (completion) completion(phAsset, asset);
+                    }
+                }];
+            }];
+        }
     }
 }
 
@@ -1092,6 +1156,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
             if ([view.class.description isEqualToString:@"MPVolumeSlider"])
             {
                 self.volumeViewSlider = (UISlider *)view;
+                
             }
         }
     }
@@ -1149,26 +1214,30 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     NSLog(@"TUEVA:播放状态 ===%ld", (long)state);
     NSLog(@"TUEVA:播放时间 ===%ld", (long)ts);
 
-    if (self.isStart && ts != 0) {
-        [self.directorMediator pause];
-        self.isStart = NO;
-    }
     dispatch_async(dispatch_get_main_queue(), ^{
+        
         self.playBtn.hidden = self.playerState == kPLAYING;
+        if (self.playerState == kAUDIO_EOS) {
+            self.playBtn.hidden = YES;
+        }
         if(self.playerState == kPLAYING && self.itemReplaceView) {
             [self.itemReplaceView removeFromSuperview];
         }
 
         NSInteger totalTime = [self.directorMediator getDuration];
+        self.totalTimelabel.text = [self.mediator evaFileTotalTime:totalTime];
+
         self.lastProgress = [[NSString stringWithFormat:@"%.5f", ts * 1000.f / totalTime / 1000] floatValue];
         //NSLog(@"TUEVA:进度条 === %.5f", self.lastProgress);
         if (self.lastProgress != 0) {
             self.evaSlider.value = self.lastProgress;
             self.pauseTime = ts;
+            self.currentTimelabel.text = [self.mediator evaFileTotalTime:self.lastProgress * totalTime];
         }
+
         //在播放过程中切换选中状态
         if (state == kPLAYING) {
-            if (!self->_canSelect) return;
+//            if (!self->_canSelect) return;
 #if 0
             //两种动画方式 1、符合时间的所有坑位均选中高亮
             for (int index = 0; index < self.mediator.resource.count; index++) {
@@ -1195,25 +1264,28 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
                 TAEModelItem *item = self.mediator.resource[index];
                 if (self.pauseTime >= item.startTime && self.pauseTime <= item.endTime) {
 
-                    if (!item.isSelected) {
-                        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
-                        item.isSelected = YES;
-                        self->_selectIndex = index;
-                    }
-                    if (index != 0) {
-                        TAEModelItem *lastItem = self.mediator.resource[index - 1];
-                        if (lastItem.isSelected) {
-                            lastItem.isSelected = NO;
+                    if (self->_selectIndex > index) {
+                        if (item.isSelected) {
+                            item.isSelected = NO;
+                            [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
+                        }
+                    } else {
+                        if (!item.isSelected) {
+                            [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+                            item.isSelected = YES;
+                            self->_selectIndex = index;
+                            [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
                         }
                     }
-//                } else {
-//                    if (item.isSelected) {
-//                        item.isSelected = NO;
-//                    }
+                } else {
+                    if (item.isSelected) {
+                        item.isSelected = NO;
+                        [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
+                    }
                 }
             }
 #endif
-            [self.collectionView reloadData];
+//            [self.collectionView reloadData];
         }
         
         //播放完成则置为0
@@ -1222,9 +1294,10 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
             //播放完成后全部重置为未选中状态
             for (int index = 0; index < self.mediator.resource.count; index++) {
                 TAEModelItem *item = self.mediator.resource[index];
-                item.isSelected = NO;
+                item.isSelected = index == 0 ? YES : NO;
             }
-            
+            self.currentTimelabel.text = [self.mediator evaFileTotalTime:0];
+            self.selectIndex = 0;
             self.evaSlider.value = 0;
             [self.directorMediator seekTo:0];
             [self.directorMediator previewFrame:0];
@@ -1233,17 +1306,24 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
             [self.collectionView reloadData];
         }
         
-        //避免第一次play的时候的时候添加选中标记导致第一个坑位为文字时点击无法正常修改
+        //首次进来时如果音量为不为1则置为最大
         if (self.playerState == kDO_PAUSE) {
             if (!self->_canSelect) {
                 self->_canSelect = YES;
+                
+                //默认将系统音量调整到最大
+                if (self.volumeViewSlider.value < 1.0) {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//                        [self.volumeViewSlider setValue:1.0 animated:NO];
+                        [self.volumeViewSlider sendActionsForControlEvents:UIControlEventTouchUpInside];
+                    });
+                }
             }
         }
         
 //        self.totalTimelabel.text = [NSString stringWithFormat:@"总时长(TS) : %ld", totalTime];
 //        self.currentPlaylabel.text = [NSString stringWithFormat:@"当前播放视频时间(TS) : %ld", self.pauseTime];
 //        self.resetTimelabel.text = [NSString stringWithFormat:@"剩余时长 : %ld", totalTime - self.pauseTime];
-        
         //NSLog(@"暂停时间=== %ld", self.pauseTime);
     });
 }
@@ -1262,8 +1342,8 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
         return;
     }
     self.producerSate = state;
-//    NSLog(@"视频时长 ===%ld", [self.evaPlayer getDuration]);
-    NSLog(@"导出状态 === %ld", state);
+//    NSLog(@"TUEVA::视频时长 ===%ld", [self.evaPlayer getDuration]);
+    NSLog(@"TUEVA::导出状态 === %ld", state);
     dispatch_async(dispatch_get_main_queue(), ^{
         
         float percent = ts * 1.f / self.totalTime;
@@ -1301,6 +1381,34 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 }
 
 #pragma mark - 时间UI
+- (void)creatTimeView
+{
+    //总时长
+    self.totalTimelabel = [[UILabel alloc] init];
+    self.totalTimelabel.textColor = [UIColor whiteColor];
+    self.totalTimelabel.textAlignment = NSTextAlignmentRight;
+    self.totalTimelabel.font = [UIFont systemFontOfSize:13];
+    [self.view addSubview:self.totalTimelabel];
+    [self.totalTimelabel mas_makeConstraints:^(MASConstraintMaker *make) {
+       
+        make.right.offset(-10);
+        make.centerY.mas_equalTo(self.evaSlider);
+//        make.bottom.offset(0);
+    }];
+    
+    self.currentTimelabel = [[UILabel alloc] init];
+    self.currentTimelabel.textColor = [UIColor whiteColor];
+    self.currentTimelabel.font = [UIFont systemFontOfSize:13];
+    self.currentTimelabel.text = [self.mediator evaFileTotalTime:0];
+    [self.view addSubview:self.currentTimelabel];
+    [self.currentTimelabel mas_makeConstraints:^(MASConstraintMaker *make) {
+       
+        make.left.offset(10);
+        make.centerY.mas_equalTo(self.evaSlider);
+//        make.bottom.offset(0);
+    }];
+}
+
 //- (void)creatShowTimeView
 //{
 //    _timeView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 100)];

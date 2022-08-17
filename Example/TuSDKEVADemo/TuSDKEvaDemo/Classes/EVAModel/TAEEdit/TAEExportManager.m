@@ -111,7 +111,7 @@ static TAEExportManager *_exportManager;
     _producerSate = kDO_START;
 
     TUPEvaModel *model = [[TUPEvaModel alloc] init: self.option.evaPath];
-    
+
     self.evaDirector = [[TUPEvaDirector alloc] init];
     [self.evaDirector openModel:model];
     
@@ -129,36 +129,71 @@ static TAEExportManager *_exportManager;
         else if ([item isKindOfClass:[TAEModelVideoItem class]])
         {
             TAEModelVideoItem *videoItem = (TAEModelVideoItem *)item;
-            if (videoItem.isReplace)
-            {
-                //判断是否为图片
-                if (videoItem.type == TAEModelAssetType_Image)
-                {
-                    TUPEvaReplaceConfig_ImageOrVideo *imageConfig = [[TUPEvaReplaceConfig_ImageOrVideo alloc] init];
-                    imageConfig.start = videoItem.startTime;
-                    imageConfig.duration = videoItem.endTime - videoItem.startTime;
-                    imageConfig.audioMixWeight = videoItem.audioMixWeight;
-                    [self.evaDirector updateImage:videoItem.Id withPath:videoItem.resPath andConfig:imageConfig];
-                }
-                else if (videoItem.type == TAEModelAssetType_Video)
-                {
-                    TUPEvaReplaceConfig_ImageOrVideo *config = [[TUPEvaReplaceConfig_ImageOrVideo alloc] init];
-                    config.start = videoItem.start;
-                    config.duration = videoItem.duration;
-                    //设置导出视频最大尺寸
-                    config.maxSide = 720;
-                    config.crop = videoItem.crop;
-                    //判断isVideo
-                    if (videoItem.isVideo)
-                    {
-                        [self.evaDirector updateVideo:videoItem.Id withPath:videoItem.resPath andConfig:config];
-                    }
-                    else
-                    {
-                        [self.evaDirector updateImage:videoItem.Id withPath:videoItem.resPath andConfig:config];
-                    }
-                }
+            TUPEvaReplaceConfig_ImageOrVideo *config = [[TUPEvaReplaceConfig_ImageOrVideo alloc] init];
+            config.start = videoItem.start;
+            config.duration = videoItem.duration;
+            
+            config.audioMixWeight = videoItem.audioMixWeight;
+            config.crop = videoItem.crop;
+            if (videoItem.isEdit) {
+                config.crop = videoItem.crop;
+            } else {
+                //未编辑的资源默认居中裁剪处理
+                config.crop = CGRectMake(0, 0, 0, 0);
             }
+            //设置导出视频最大尺寸
+            config.maxSide = videoItem.maxSide;
+            NSString *filePath = videoItem.replaceResPath;
+            if ([filePath hasPrefix:@"file://"]) {
+                filePath = [filePath componentsSeparatedByString:@"file://"].lastObject;
+            }
+            //判断isVideo
+            if (videoItem.isVideo)
+            {
+                [self.evaDirector updateVideo:videoItem.Id withPath:filePath andConfig:config];
+            }
+            else
+            {
+                [self.evaDirector updateImage:videoItem.Id withPath:filePath andConfig:config];
+            }
+//            if (videoItem.isReplace)
+//            {
+//                //判断是否为图片
+//                if (videoItem.type == TAEModelAssetType_Image)
+//                {
+//                    TUPEvaReplaceConfig_ImageOrVideo *imageConfig = [[TUPEvaReplaceConfig_ImageOrVideo alloc] init];
+//                    imageConfig.start = videoItem.startTime;
+//                    imageConfig.duration = videoItem.endTime - videoItem.startTime;
+//                    imageConfig.audioMixWeight = videoItem.audioMixWeight;
+//                    [self.evaDirector updateImage:videoItem.Id withPath:videoItem.replaceResPath andConfig:imageConfig];
+//                }
+//                else if (videoItem.type == TAEModelAssetType_Video)
+//                {
+//                    TUPEvaReplaceConfig_ImageOrVideo *config = [[TUPEvaReplaceConfig_ImageOrVideo alloc] init];
+//                    config.start = videoItem.start;
+//                    config.duration = videoItem.duration;
+//
+//                    config.audioMixWeight = videoItem.audioMixWeight;
+//                    config.crop = videoItem.crop;
+//                    if (videoItem.isEdit) {
+//                        config.crop = videoItem.crop;
+//                    } else {
+//                        //未编辑的资源默认居中裁剪处理
+//                        config.crop = CGRectMake(0, 0, 0, 0);
+//                    }
+//                    //设置导出视频最大尺寸
+//                    config.maxSide = videoItem.maxSide;
+//                    //判断isVideo
+//                    if (videoItem.isVideo)
+//                    {
+//                        [self.evaDirector updateVideo:videoItem.Id withPath:videoItem.replaceResPath andConfig:config];
+//                    }
+//                    else
+//                    {
+//                        [self.evaDirector updateImage:videoItem.Id withPath:videoItem.replaceResPath andConfig:config];
+//                    }
+//                }
+//            }
         }
     }
     if (self.mediator.audioItem)

@@ -396,6 +396,7 @@
  */
 - (void)addTempFilePath:(NSString *)filePath;
 {
+    if (!filePath) return;
     [self.tempFileArray addObject:filePath];
 }
 /**
@@ -575,6 +576,29 @@
             
         }];
     }
+}
+
+/**
+ * 时长转换
+ * @param currentTime 时长
+ * @return 返回HH:mm:ss格式字符串
+ */
+- (NSString *)evaFileTotalTime:(NSInteger)currentTime;
+{
+    NSInteger seconds = currentTime / 1000;
+    
+    NSInteger hour = seconds / 3600;
+    //format of hour
+    NSString *str_hour = [NSString stringWithFormat:@"%02ld",hour];
+    //format of minute
+    NSString *str_minute = [NSString stringWithFormat:@"%02ld",(seconds%3600)/60];
+    //format of second
+    NSString *str_second = [NSString stringWithFormat:@"%02ld",seconds%60];
+    
+    if (hour > 0) {
+        return [NSString stringWithFormat:@"%@:%@:%@",str_hour,str_minute,str_second];
+    }
+    return [NSString stringWithFormat:@"%@:%@",str_minute,str_second];
 }
 
 #pragma mark - setter getter

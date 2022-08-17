@@ -81,6 +81,8 @@ typedef NS_ENUM(NSUInteger, TAEModelAssetType)
 @property (nonatomic, copy) NSString *replaceResPath;
 ///封面图
 @property (nonatomic, retain) UIImage *thumbnail;
+///原始图片地址（坑位为图片时使用）
+@property (nonatomic, retain) UIImage *originalImage;
 ///尺寸
 @property (nonatomic, assign) CGSize size;
 /// 是否需要替换
@@ -229,6 +231,13 @@ typedef NS_ENUM(NSUInteger, TAEModelAssetType)
  * 删除所有的临时文件
  */
 - (void)removeTempFilePath;
+
+/**
+ * 时长转换
+ * @param currentTime 时长
+ * @return 返回HH:mm:ss格式字符串
+ */
+- (NSString *)evaFileTotalTime:(NSInteger)currentTime;
 
 @end
 

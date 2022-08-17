@@ -67,7 +67,7 @@ static const CGFloat kTimeLabelHeight = 16;
     _timeLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     [self.contentView addSubview:_timeLabel];
     _timeLabel.textColor = [UIColor whiteColor];
-    _timeLabel.font = [UIFont systemFontOfSize:11];
+    _timeLabel.font = [UIFont systemFontOfSize:13];
     _timeLabel.textAlignment = NSTextAlignmentRight;
     
     _tagLabel = [[UILabel alloc] initWithFrame:CGRectZero];
