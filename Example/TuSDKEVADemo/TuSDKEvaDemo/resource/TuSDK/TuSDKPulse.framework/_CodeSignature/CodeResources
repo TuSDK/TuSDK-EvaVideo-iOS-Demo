@@ -6,15 +6,15 @@
 	<dict>
 		<key>Frameworks/TuSDKPulseCore.framework/Info.plist</key>
 		<data>
-		V5I3MxCQC5wkBZmelKF83v1/Q+8=
+		8KW1IaUQGauRJv/8/p1YYTQlu8Q=
 		</data>
 		<key>Frameworks/TuSDKPulseCore.framework/TuSDKPulseCore</key>
 		<data>
-		iXf7AhdM0bBS1M0AgQXSixCufTo=
+		c9+zXS9YFQbFxOe/jWbPHy0ZzQ4=
 		</data>
 		<key>Frameworks/TuSDKPulseCore.framework/_CodeSignature/CodeResources</key>
 		<data>
-		tGF4UlaGQ+/IV4wOitHXLeIFAzc=
+		XtGgRkAgSUY8wX6RKK++hcajBj8=
 		</data>
 		<key>Headers/TUPBase.h</key>
 		<data>
@@ -92,9 +92,13 @@
 		<data>
 		ha1KHcreOZD/1VqxnSAR7GoiPmc=
 		</data>
+		<key>Headers/transform_effect.hh</key>
+		<data>
+		/bqaBRXl4ctdmfsF7VpbILEwmFY=
+		</data>
 		<key>Info.plist</key>
 		<data>
-		zNA/GICLRLQEy3T5Y7q3nbKjg0c=
+		G0V+Oqqo+9h10bEtr4yXWNgbvmo=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -107,33 +111,33 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			V5I3MxCQC5wkBZmelKF83v1/Q+8=
+			8KW1IaUQGauRJv/8/p1YYTQlu8Q=
 			</data>
 			<key>hash2</key>
 			<data>
-			2NP+eCyQHZZF7Wsm5+PAst+70XNGFR7M6aJlt7Elgsc=
+			s+8R95C/zhX36nWZEez7sHguO0zay1zfRWJb2zVWdvs=
 			</data>
 		</dict>
 		<key>Frameworks/TuSDKPulseCore.framework/TuSDKPulseCore</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			iXf7AhdM0bBS1M0AgQXSixCufTo=
+			c9+zXS9YFQbFxOe/jWbPHy0ZzQ4=
 			</data>
 			<key>hash2</key>
 			<data>
-			IfqSs3UeZxirKE8+7oMol/R8dV59fxB/MA70iduylyQ=
+			io7mGsVGe6xuw8HjNlma3dWQAmnYrpO4xG/NUH14hUk=
 			</data>
 		</dict>
 		<key>Frameworks/TuSDKPulseCore.framework/_CodeSignature/CodeResources</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			tGF4UlaGQ+/IV4wOitHXLeIFAzc=
+			XtGgRkAgSUY8wX6RKK++hcajBj8=
 			</data>
 			<key>hash2</key>
 			<data>
-			y8wDdWW9RJDADKkPFMpO6P4J+a5AsyXZl3B7Rfz8Ibc=
+			IBlu4wZUM2syYvvap/oKoALbsNHtbZq6R82/QB1QvcY=
 			</data>
 		</dict>
 		<key>Headers/TUPBase.h</key>
@@ -343,6 +347,17 @@
 			<key>hash2</key>
 			<data>
 			WPdn3DPAvOuYzzJQGtFfzlX1Fk+F4q2gTIqg6fX3A38=
+			</data>
+		</dict>
+		<key>Headers/transform_effect.hh</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			/bqaBRXl4ctdmfsF7VpbILEwmFY=
+			</data>
+			<key>hash2</key>
+			<data>
+			xfqBxkGGZtm6daNkeAQLaISwHnz1loTKZwHfLnNsM88=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
