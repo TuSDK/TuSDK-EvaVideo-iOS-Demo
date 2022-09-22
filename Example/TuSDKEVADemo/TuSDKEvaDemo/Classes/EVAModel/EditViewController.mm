@@ -1262,6 +1262,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
             //2、顺序选中高亮
             for (int index = 0; index < self.mediator.resource.count; index++) {
                 TAEModelItem *item = self.mediator.resource[index];
+                
                 if (self.pauseTime >= item.startTime && self.pauseTime <= item.endTime) {
 
                     if (self->_selectIndex > index) {
@@ -1392,7 +1393,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     [self.totalTimelabel mas_makeConstraints:^(MASConstraintMaker *make) {
        
         make.right.offset(-10);
-        make.centerY.mas_equalTo(self.evaSlider);
+        make.centerY.mas_equalTo(self.evaSlider).offset(-5);
 //        make.bottom.offset(0);
     }];
     
@@ -1404,7 +1405,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     [self.currentTimelabel mas_makeConstraints:^(MASConstraintMaker *make) {
        
         make.left.offset(10);
-        make.centerY.mas_equalTo(self.evaSlider);
+        make.centerY.mas_equalTo(self.evaSlider).offset(-5);
 //        make.bottom.offset(0);
     }];
 }
