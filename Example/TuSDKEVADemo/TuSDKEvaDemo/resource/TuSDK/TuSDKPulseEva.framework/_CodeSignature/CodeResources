@@ -4,6 +4,10 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>.DS_Store</key>
+		<data>
+		RXrZbS0gek37kspgtf/3xBHA5r4=
+		</data>
 		<key>CMakeLists.txt</key>
 		<data>
 		sp7TeTXJFfovXoPJsUyuUtWjdfc=
@@ -34,7 +38,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		icGvh0gaaZ/timbwXUBPcgjoWM0=
+		bheKMz3wTI4j4x1w7Bedj4YU+8Q=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
