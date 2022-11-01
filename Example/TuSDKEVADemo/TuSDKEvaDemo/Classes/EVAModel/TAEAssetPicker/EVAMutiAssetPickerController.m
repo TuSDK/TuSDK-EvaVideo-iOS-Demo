@@ -284,8 +284,10 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
     self.selectItem.isReplace = YES;
     self.selectItem.isSelectVideo = NO;
     self.selectItem.thumbnail = image;
-    [self.evaMediator replaceVideoItem:self.selectItem];
-    [self.pickerSelectView reloadData];
+    BOOL success = [self.evaMediator replaceVideoItem:self.selectItem];
+    if (success) {
+        [self.pickerSelectView reloadData];
+    }
 }
 
 /**
@@ -329,8 +331,11 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
  */
 - (void)updateVideoResource:(TUPEvaReplaceConfig_ImageOrVideo *)config path:(NSString *)path videoPath:(NSString *)videoPath image:(UIImage *)image
 {
-    NSString *selectedPath = [path componentsSeparatedByString:@"file://"].lastObject;
-    [self.evaMediator addTempFilePath:selectedPath];
+    if (path) {
+        NSString *selectedPath = [path componentsSeparatedByString:@"file://"].lastObject;
+        [self.evaMediator addTempFilePath:selectedPath];
+    }
+    
     self.selectItem.isReplace = YES;
     self.selectItem.isSelectVideo = YES;
     self.selectItem.replaceResPath = videoPath;
@@ -354,7 +359,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
  * @param indexPath 点击的 NSIndexPath 对象
  * @param phAsset 对应的 PHAsset 对象
  */
-- (BOOL)picker:(TTMultiAssetPicker *)picker didSelectButtonItemWithIndexPath:(NSIndexPath *)indexPath phAsset:(PHAsset *)phAsset;
+- (BOOL)picker:(TTMultiAssetPicker *)picker didSelectButtonItemWithIndexPath:(NSIndexPath *)indexPath phAsset:(PHAsset *)phAsset coverImage:(nonnull UIImage *)coverImage;
 {
     NSLog(@"TUEVA:单选按钮点击回调");
     
@@ -381,21 +386,20 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
         dispatch_async(dispatch_get_main_queue(), ^{
             //选择图片资源
             if (inputPhAsset.mediaType == PHAssetMediaTypeImage) {
-                UIImage *image = (UIImage *)returnValue;
+                UIImage *image = coverImage;
                 //保存原始的图片素材
                 weakSelf.selectItem.originalImage = image;
+                //获取沙盒图片路径
                 [TAEModelMediator requestImagePathWith:image imageIndex:weakAsset.itemIndex resultHandle:^(NSString * _Nonnull filePath) {
                     if (!filePath) return;
                     [weakSelf updateImageResource:[NSURL fileURLWithPath:filePath] image:image];
                 }];
             } else {
-                NSLog(@"TUEVA:视频图片获取开始");
                 AVURLAsset *asset = (AVURLAsset *)returnValue;
-                NSLog(@"TUEVA::视频宽高 == %@", NSStringFromCGSize(asset.naturalSize));
+//                NSLog(@"TUEVA::视频宽高 == %@", NSStringFromCGSize(asset.naturalSize));
                 NSString *videoPath = asset.URL.absoluteString;
-                [TAEModelMediator requestVideoPathWith:asset videoIndex:weakAsset.itemIndex resultHandle:^(NSString * _Nonnull filePath, UIImage * _Nonnull fileImage) {
-                    [weakSelf updateVideoResource:nil path:filePath videoPath:videoPath image:fileImage];
-                }];
+
+                [weakSelf updateVideoResource:nil path:nil videoPath:videoPath image:coverImage];
             }
         });
     }];
@@ -408,7 +412,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
  * @param indexPath 点击的 NSIndexPath 对象
  * @param phAsset 对应的 PHAsset 对象
  */
-- (void)picker:(TTMultiAssetPicker *)picker didTapItemWithIndexPath:(NSIndexPath *)indexPath phAsset:(PHAsset *)phAsset {
+- (void)picker:(TTMultiAssetPicker *)picker didTapItemWithIndexPath:(NSIndexPath *)indexPath phAsset:(PHAsset *)phAsset coverImage:(nonnull UIImage *)coverImage {
     
     self.selectItem.asset = phAsset;
     __weak typeof(self)weakSelf = self;

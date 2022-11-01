@@ -127,6 +127,8 @@ typedef NS_ENUM(NSUInteger, TAEModelAssetType)
 @property (nonatomic, strong) NSMutableArray<TAEModelAudioItem *> *audioItems;
 /// eva资源路径
 @property (nonatomic, readonly) NSString *filePath;
+/// 音量
+@property (nonatomic, assign) float weight;
 
 /**
  * 初始化中间件
@@ -195,13 +197,6 @@ typedef NS_ENUM(NSUInteger, TAEModelAssetType)
 + (void)requestImagePathWith:(UIImage *)image imageIndex:(NSInteger)imageIndex resultHandle:(void(^)(NSString *filePath))resultHandler;
 
 /**
- * 请求视频的路径
- * @param asset  视频资源
- * @param videoIndex 视频下标
- */
-+ (void)requestVideoPathWith:(AVURLAsset *)asset videoIndex:(NSInteger)videoIndex resultHandle:(void(^)(NSString *filePath, UIImage *fileImage))resultHandler;
-
-/**
  * 请求视频的图片封面
  * @param path  视频路径
  * @param cropRect 视频裁剪区域
@@ -213,13 +208,13 @@ typedef NS_ENUM(NSUInteger, TAEModelAssetType)
  * 替换视频图片资源
  * @param videoItem  图片/视频 资源
  */
-- (void)replaceVideoItem:(TAEModelVideoItem *)videoItem;
+- (BOOL)replaceVideoItem:(TAEModelVideoItem *)videoItem;
 
 /**
  * 替换文字资源
  * @param textItem  图片/视频 资源
  */
-- (void)replaceTextItem:(TAEModelTextItem *)textItem;
+- (BOOL)replaceTextItem:(TAEModelTextItem *)textItem;
 
 /**
  * 添加需要删除的资源：图片、视频
@@ -238,6 +233,22 @@ typedef NS_ENUM(NSUInteger, TAEModelAssetType)
  * @return 返回HH:mm:ss格式字符串
  */
 - (NSString *)evaFileTotalTime:(NSInteger)currentTime;
+
+
+// MARK: 弃用方法
+/**
+ * 请求视频的路径 - 方法已弃用
+ * @param asset 视频资源
+ * @param videoIndex 视频下标
+ */
++ (void)requestVideoPathWith:(AVURLAsset *)asset videoIndex:(NSInteger)videoIndex resultHandle:(void(^)(NSString *filePath, UIImage *fileImage))resultHandler;
+/**
+ * 请求视频的路径 - 方法已弃用
+ * @param coverImage 视频封面
+ * @param videoIndex 视频下标
+ */
++ (void)requestVideoPathWithImage:(UIImage *)coverImage videoIndex:(NSInteger)videoIndex resultHandle:(void(^)(NSString *filePath))resultHandler;
+
 
 @end
 

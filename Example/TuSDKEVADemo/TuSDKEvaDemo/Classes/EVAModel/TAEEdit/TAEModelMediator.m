@@ -356,9 +356,9 @@
  * 替换视频图片资源
  * @param videoItem  图片/视频 资源
  */
-- (void)replaceVideoItem:(TAEModelVideoItem *)videoItem;
+- (BOOL)replaceVideoItem:(TAEModelVideoItem *)videoItem;
 {
-    if (!videoItem) return;
+    if (!videoItem) return NO;
     
     if (videoItem.resPath == nil) {
         videoItem.resPath = videoItem.replaceResPath;
@@ -372,15 +372,16 @@
             [self.videoItems replaceObjectAtIndex:index withObject:videoItem];
         }
     }
+    return YES;
 }
 
 /**
  * 替换文字资源
  * @param textItem  图片/视频 资源
  */
-- (void)replaceTextItem:(TAEModelTextItem *)textItem;
+- (BOOL)replaceTextItem:(TAEModelTextItem *)textItem;
 {
-    if (!textItem) return;
+    if (!textItem) return NO;
     [self.resource replaceObjectAtIndex:textItem.itemIndex withObject:textItem];
     
     for (NSInteger index = 0; index < self.textItems.count; index++) {
@@ -389,6 +390,7 @@
             [self.textItems replaceObjectAtIndex:index withObject:textItem];
         }
     }
+    return YES;
 }
 /**
  * 添加需要删除的资源：图片、视频
@@ -420,79 +422,6 @@
         resultHandler(filePath);
     } else {
         resultHandler(nil);
-    }
-}
-
-/**
- * 请求视频的路径
- * @param asset  视频资源
- * @param videoIndex 视频下标
- */
-//+ (void)requestVideoPathWith:(AVAsset *)asset videoIndex:(NSInteger)videoIndex resultHandle:(void(^)(NSString *filePath))resultHandler;
-//{
-//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-//
-//    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"result_video_%ld.mp4", (long)videoIndex]];
-//    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-//        BOOL success = [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
-//        if (success) {
-//            NSLog(@"删除成功");
-//        }
-//    }
-//
-//    AVAssetExportSession *session = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPresetHighestQuality];
-//    session.outputURL = [NSURL fileURLWithPath:filePath];
-//    session.outputFileType = AVFileTypeMPEG4;
-//    [session exportAsynchronouslyWithCompletionHandler:^{
-//
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            //视频导入成功
-//            resultHandler(filePath);
-//        });
-//    }];
-//}
-
-/**
- * 请求视频的路径
- * @param asset  视频资源
- * @param videoIndex 视频下标
- */
-+ (void)requestVideoPathWith:(AVURLAsset *)asset videoIndex:(NSInteger)videoIndex resultHandle:(void(^)(NSString *filePath, UIImage *fileImage))resultHandler;
-{
-    AVAssetImageGenerator *assetGen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-    
-    assetGen.appliesPreferredTrackTransform = YES;
-    CMTime time = CMTimeMakeWithSeconds(0, 600);
-    NSError *error = nil;
-    CMTime actualTime;
-    CGImageRef image = [assetGen copyCGImageAtTime:time actualTime:&actualTime error:&error];
-    UIImage *videoImage = [[UIImage alloc] initWithCGImage:image];
-    CGImageRelease(image);
-    
-    CGFloat imageW = videoImage.size.width;
-    CGFloat imageH = videoImage.size.height;
-    //判断视频为横向还是竖向
-    if (imageW > imageH) {
-        videoImage = [videoImage lsqImageCorpWithPrecentRect:CGRectMake(0, 0, 1, 1) outputSize:hOutPutSize];
-
-    } else {
-        videoImage = [videoImage lsqImageCorpWithPrecentRect:CGRectMake(0, 0, 1, 1) outputSize:vOutPutSize];
-    }
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    
-    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"result_%ld.png", (long)videoIndex]];
-    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
-        BOOL success = [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
-        if (success) {
-            NSLog(@"删除成功");
-        }
-    }
-    BOOL result = [UIImagePNGRepresentation(videoImage) writeToFile:filePath atomically:YES];
-    if (result) {
-        resultHandler(filePath, videoImage);
-    } else {
-        resultHandler(nil, nil);
     }
 }
 
@@ -628,6 +557,78 @@
 - (NSInteger)audioCount;
 {
     return self.audioItems.count;
+}
+
+
+
+#pragma mark - deprecated 过期方法
+
+/**
+ * 请求视频的路径
+ * @param asset  视频资源
+ * @param videoIndex 视频下标
+ */
++ (void)requestVideoPathWith:(AVURLAsset *)asset videoIndex:(NSInteger)videoIndex resultHandle:(void(^)(NSString *filePath, UIImage *fileImage))resultHandler;
+{
+    AVAssetImageGenerator *assetGen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+
+    assetGen.appliesPreferredTrackTransform = YES;
+    CMTime time = CMTimeMakeWithSeconds(0, 600);
+    NSError *error = nil;
+    CMTime actualTime;
+    CGImageRef image = [assetGen copyCGImageAtTime:time actualTime:&actualTime error:&error];
+    UIImage *videoImage = [[UIImage alloc] initWithCGImage:image];
+    CGImageRelease(image);
+
+    CGFloat imageW = videoImage.size.width;
+    CGFloat imageH = videoImage.size.height;
+    //判断视频为横向还是竖向
+    if (imageW > imageH) {
+        videoImage = [videoImage lsqImageCorpWithPrecentRect:CGRectMake(0, 0, 1, 1) outputSize:hOutPutSize];
+
+    } else {
+        videoImage = [videoImage lsqImageCorpWithPrecentRect:CGRectMake(0, 0, 1, 1) outputSize:vOutPutSize];
+    }
+
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+
+    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"result_%ld.png", (long)videoIndex]];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        BOOL success = [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+        if (success) {
+            NSLog(@"删除成功");
+        }
+    }
+    BOOL result = [UIImagePNGRepresentation(videoImage) writeToFile:filePath atomically:YES];
+    if (result) {
+        resultHandler(filePath, videoImage);
+    } else {
+        resultHandler(nil, nil);
+    }
+}
+
+/**
+ * 请求视频的路径
+ * @param coverImage 封面图
+ * @param videoIndex 视频下标
+ */
++ (void)requestVideoPathWithImage:(UIImage *)coverImage videoIndex:(NSInteger)videoIndex resultHandle:(void(^)(NSString *filePath))resultHandler;
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+
+    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"result_%ld.png", (long)videoIndex]];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        BOOL success = [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+        if (success) {
+            NSLog(@"删除成功");
+        }
+    }
+    BOOL result = [UIImagePNGRepresentation(coverImage) writeToFile:filePath atomically:YES];
+    if (result) {
+        resultHandler(filePath);
+    } else {
+        resultHandler(nil);
+    }
 }
 
 @end

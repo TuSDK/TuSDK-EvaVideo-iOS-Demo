@@ -98,7 +98,9 @@
     }
     
     if (self.timeObserve) {
-        [self.player pause];
+        if (self.isPlaying) {
+            [self.player pause];
+        }
         [self.player removeTimeObserver:self.timeObserve];
         self.timeObserve = nil;
         [self.player.currentItem removeObserver:self forKeyPath:@"status"];
@@ -110,6 +112,8 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
 }
+
+
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -362,7 +366,6 @@
         NSLog(@"TUEVA::暂停播放");
     } else {
         if (self.slider.value == 1.0) {
-//            self.duration.text = [NSString stringWithFormat:@"00:00/%@", [self.evaMediator evaFileTotalTime:self.totalTime]];
             [self playerProgressChange:0];
             [self.player seekToTime:kCMTimeZero];
         }

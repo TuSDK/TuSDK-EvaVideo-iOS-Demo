@@ -29,7 +29,7 @@ NSString *const kDynamicCacheDir = @"eva_cache_dir_dynamic";
 
 NSString *const kCollectFooterViewID = @"CollectFooterView";
 
-@interface HomeViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, CollectionViewLayoutDelegate, UICollectionViewDelegateFlowLayout>
+@interface HomeViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, CollectionViewLayoutDelegate, UIDocumentPickerDelegate, UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet CollectionViewLayout *collectionViewLayout;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -91,10 +91,12 @@ NSString *const kCollectFooterViewID = @"CollectFooterView";
         
         [[DownLoadListManager manager] downLoadFileCompletionHandler:^(NSMutableArray * modelArr) {
             // 将 modelArr 转成 DownLoadFileModel 数组
-            [self.models removeAllObjects];
-            self.models = [NSMutableArray arrayWithCapacity:modelArr.count];
-            for (NSDictionary *dict in modelArr) {
-                [self.models addObject:[[DownLoadFileModel alloc] initWithDictionary:dict]];
+            if (self.models.count == 0) {
+                [self.models removeAllObjects];
+                self.models = [NSMutableArray arrayWithCapacity:modelArr.count];
+                for (NSDictionary *dict in modelArr) {
+                    [self.models addObject:[[DownLoadFileModel alloc] initWithDictionary:dict]];
+                }
             }
             [self performSelectorOnMainThread:@selector(updateUI) withObject:nil waitUntilDone:NO];
         }];
@@ -129,7 +131,11 @@ NSString *const kCollectFooterViewID = @"CollectFooterView";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     HomeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"HomeCollectionViewCell" forIndexPath:indexPath];
     DownLoadFileModel *model = _models[indexPath.row];
+    
     cell.model = model;
+    if (model.status == DownloadStateResumed) {
+        [cell updateDownladProgress];
+    }
     return cell;
 }
 
@@ -239,68 +245,6 @@ NSString *const kCollectFooterViewID = @"CollectFooterView";
 }
 
 
-- (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentAtURL:(NSURL *)url {
-    NSArray *array = [[url absoluteString] componentsSeparatedByString:@"/"];
-    NSString *fileName = [array lastObject];
-    fileName = [fileName stringByRemovingPercentEncoding];
-    if (![fileName containsString:@"eva"]) {
-        [self iCloudDismissIndicator];
-        return;
-    }
-    
-    [iCloudManager downloadWithDocumentURL:url callBack:^(id obj) {
-        NSData *data = obj;
-        //写入沙盒Documents
-        NSString *cacheDirectory = [self generateDirectory:kICloudCacheDir];
-        NSString *path = [NSString stringWithFormat:@"%@/%@",cacheDirectory,fileName];
-        BOOL ret = [data writeToFile:path atomically:YES];
-        [self iCloudDismissIndicator];
-        if (ret) {
-            [self iCloudPushDetail:path fileName:fileName];
-        }
-    }];
-}
-
-- (void)documentPickerWasCancelled:(UIDocumentPickerViewController *)controller {
-    [self iCloudDismissIndicator];
-}
-
-- (void)iCloudDismissIndicator {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.indicatorView stopAnimating];
-    });
-}
-
-- (void)iCloudOtherAppAction:(NSNotification *)notification {
-    NSDictionary *dict = notification.userInfo;
-    NSString *fileName = dict[@"fileName"];
-    NSString *filePath = dict[@"filePath"];
-    if (![fileName containsString:@"eva"]) {
-        return;
-    }
-    for (UIViewController *vc in self.navigationController.viewControllers) {
-        if ([vc isKindOfClass:[EVAMutiAssetPickerController classForCoder]]) {
-            [self.navigationController popViewControllerAnimated:NO];
-            break;
-        }
-    }
-    [self iCloudPushDetail:filePath fileName:fileName];
-}
-
-- (void)iCloudPushDetail:(NSString *)path fileName:(NSString *)fileName {
-    // 已经下载的
-//    EVAPreviewViewController *vc = [[EVAPreviewViewController alloc] initWithNibName:nil bundle:nil];
-//    vc.evaPath = path;
-//    vc.modelTitle = fileName;
-//    vc.fileName = fileName;
-//    [self showViewController:vc sender:nil];
-    
-    EVAMutiAssetPickerController *vc = [[EVAMutiAssetPickerController alloc] init];
-    vc.filePath = path;
-    [self showViewController:vc sender:nil];
-}
-
-
 - (NSString *)generateDirectory:(NSString *)directory {
     NSFileManager *manager = [NSFileManager defaultManager];
     
@@ -314,13 +258,4 @@ NSString *const kCollectFooterViewID = @"CollectFooterView";
     return cacheDirectory;
 }
 
-- (void)clearCache {
-    NSString *cacheDirectory = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:kICloudCacheDir];
-    [[NSFileManager defaultManager] removeItemAtPath:cacheDirectory error:nil];
-    
-    NSString *dynamicDirectory = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:kDynamicCacheDir];
-    [[NSFileManager defaultManager] removeItemAtPath:dynamicDirectory error:nil];
-    
-    [TUPEvaModel clearAllCaches];
-}
 @end

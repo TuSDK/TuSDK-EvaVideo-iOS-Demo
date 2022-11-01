@@ -4,14 +4,6 @@
 <dict>
 	<key>files</key>
 	<dict>
-		<key>.DS_Store</key>
-		<data>
-		aAEWjTyljs/Vtu225WDDcGltTuk=
-		</data>
-		<key>Headers/.DS_Store</key>
-		<data>
-		i6OQmhmia0BsRLVwxhWYEriTZOs=
-		</data>
 		<key>Headers/TUCCore.h</key>
 		<data>
 		pObYC6Kz5QZBeIsqAfvLTN4Viko=
@@ -102,7 +94,7 @@
 		</data>
 		<key>Headers/category/TuTSDevice+Extend.h</key>
 		<data>
-		Cei0VT8fMvZ1GXljZplnLHaKovw=
+		kTBg7NQtq1yvFwPB+IlqV+pzyTA=
 		</data>
 		<key>Headers/category/TuTSImage+Extend.h</key>
 		<data>
@@ -159,10 +151,6 @@
 		<key>Headers/cx/TuDefindConfigs.h</key>
 		<data>
 		DeTT03yR9sDMoJSGuoUQoBJUCk0=
-		</data>
-		<key>Headers/network/.DS_Store</key>
-		<data>
-		jfDLkr9vIeAJE+O0AnfFMlq5oWc=
 		</data>
 		<key>Headers/network/TuImageViewTask.h</key>
 		<data>
@@ -239,10 +227,6 @@
 		<key>Headers/secrets/TuStatistics.h</key>
 		<data>
 		GLzV3sgFLIbaBn5aYqB8DSZGSHU=
-		</data>
-		<key>Headers/source/.DS_Store</key>
-		<data>
-		r3lBKYENbcG1oScjsvRms6TZ228=
 		</data>
 		<key>Headers/source/brush/TuBrush.h</key>
 		<data>
@@ -358,7 +342,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		i8F13HxZoeEpe4Ry4OqGURF11dY=
+		I866ZsX+NyAg3GtOEfvBcobmGis=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -613,11 +597,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Cei0VT8fMvZ1GXljZplnLHaKovw=
+			kTBg7NQtq1yvFwPB+IlqV+pzyTA=
 			</data>
 			<key>hash2</key>
 			<data>
-			wf5s5N7cTs9bLpiiXr+kNgP8oOZeoJosI17S1qGABZc=
+			dt0aeFL7pE/2i/rmLRcf1vwOB7+nX8yD8+Ma9M8Y7EI=
 			</data>
 		</dict>
 		<key>Headers/category/TuTSImage+Extend.h</key>

@@ -9,10 +9,9 @@
 #import "AppDelegate.h"
 #import "TuSDKFramework.h"
 #import "TuPopupProgress.h"
+#import <Bugly/Bugly.h>
 #import "TAEExportManager.h"
-#ifdef DEBUG
-//#import <DoraemonKit/DoraemonManager.h>
-#endif
+
 @interface AppDelegate ()
 
 @end
@@ -28,15 +27,11 @@
     [TUCCore setLogLevel:TuLogLevelDEBUG];
     // 设置弹框时，背景按钮不可点击
     [TuPopupProgress setDefaultMaskType:TuSDKProgressHUDMaskTypeClear];
-    
-#ifdef DEBUG
-//    [[DoraemonManager shareInstance] install];
-#endif
+
     
 //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        BuglyConfig *config = [[BuglyConfig alloc] init];
-//        config.reportLogLevel = BuglyLogLevelWarn;
-//        [Bugly startWithAppId:@"ef72f7b463" config:config];
+        
+        [Bugly startWithAppId:@"33b8065dbd"];
 //    });
     
     

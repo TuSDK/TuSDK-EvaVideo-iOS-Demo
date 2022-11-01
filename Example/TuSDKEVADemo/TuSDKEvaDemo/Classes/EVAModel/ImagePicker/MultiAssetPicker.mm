@@ -481,8 +481,11 @@ static const CGFloat kCellMargin = 3;
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView deselectItemAtIndexPath:indexPath animated:NO];
     PHAsset *phAsset = [self phAssetAtIndexPathItem:indexPath.item];
-    if ([self.delegate respondsToSelector:@selector(picker:didTapItemWithIndexPath:phAsset:)]) {
-        [self.delegate picker:self didTapItemWithIndexPath:indexPath phAsset:phAsset];
+    
+    MultiAssetPickerCell *cell = (MultiAssetPickerCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    
+    if ([self.delegate respondsToSelector:@selector(picker:didTapItemWithIndexPath:phAsset:coverImage:)]) {
+        [self.delegate picker:self didTapItemWithIndexPath:indexPath phAsset:phAsset coverImage:cell.imageView.image];
     }
 }
 

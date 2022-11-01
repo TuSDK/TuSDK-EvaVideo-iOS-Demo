@@ -74,6 +74,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (BOOL)updateAudio:(TAEModelAudioItem *)audioItem;
 
+/**
+ * 更新音量
+ * @param weight 音量
+ * @return 更新成功
+ */
+- (BOOL)updateAudioMixWeight:(float)weight;
+
 #pragma mark - 播放器相关
 /**
  * 定位到指定时间

@@ -361,11 +361,14 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 {
     self.volumeViewSlider.value = sender.value;
     NSLog(@"TUEVA::音量变化===%.2f", sender.value);
+    [self.directorMediator updateAudioMixWeight:self.volumeViewSlider.value];
 }
 
 // 音量改变
 - (IBAction)volmValueChanged:(UISlider *)sender {
     self.volumeViewSlider.value = sender.value;
+    [self.directorMediator updateAudioMixWeight:self.volumeViewSlider.value];
+    
 }
 
 #pragma mark - setter getter
@@ -620,7 +623,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 }
 
 #pragma mark - MultiPickerDelegate
-- (void)picker:(MultiAssetPicker *)picker didTapItemWithIndexPath:(NSIndexPath *)indexPath phAsset:(PHAsset *)phAsset {
+- (void)picker:(MultiAssetPicker *)picker didTapItemWithIndexPath:(NSIndexPath *)indexPath phAsset:(PHAsset *)phAsset coverImage:(UIImage *)coverImage{
 
     [self.navigationController popToViewController:self animated:YES];
     __weak typeof(self)weakSelf = self;
@@ -644,11 +647,10 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
                 // 去进行视频编辑
                 AVURLAsset *asset = (AVURLAsset *)returnValue;
                 NSString *videoPath = asset.URL.absoluteString;
-                [TAEModelMediator requestVideoPathWith:asset videoIndex:weakAsset.itemIndex resultHandle:^(NSString * _Nonnull filePath, UIImage * _Nonnull fileImage) {
-                    [weakSelf updateVideoResource:nil path:filePath videoPath:videoPath image:fileImage];
-                    [weakSelf replaceEvaTemplate];
-                    [TuPopupProgress dismiss];
-                }];
+                
+                [weakSelf updateVideoResource:nil path:nil videoPath:videoPath image:coverImage];
+                [weakSelf replaceEvaTemplate];
+                [TuPopupProgress dismiss];
             }
             if (inputPhAsset.mediaType == PHAssetMediaTypeImage) {
 
@@ -919,27 +921,7 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
 // 保存导出
 - (void)saveAction
 {
-    NSString *msg = @"退出应用导出将被取消，是否确认导出?";
-    UIAlertController *saveController = [UIAlertController alertControllerWithTitle:nil message:msg preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *receptionAction = [UIAlertAction actionWithTitle:@"前台导出" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-       
-        [self receptionSaveAction];
-        
-    }];
-    UIAlertAction *silenceAction = [UIAlertAction actionWithTitle:@"静默导出" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        
-        [self silenceSaveAction];
-        
-    }];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        
-    }];
-    [saveController addAction:receptionAction];
-    [saveController addAction:silenceAction];
-    [saveController addAction:cancelAction];
-    
-    [self presentViewController:saveController animated:YES completion:nil];
-
+    [self receptionSaveAction];
 }
 
 /**
@@ -964,12 +946,13 @@ static const NSUInteger lsqMaxOutputVideoSizeSide = 1080;
      rangeStart ：导出起始时间
      rangeDuration ：导出视频长度
      */
-    
     // 6S以下540P, 7P及以下的机型保持最高分辨率是中等，即720p，其它的保证原分辨率
     
     CGFloat scale = [UIDevice lsqDevicePlatform] <= TuDevicePlatform_iPhone7p ? ([UIDevice lsqDevicePlatform] < TuDevicePlatform_iPhone6s ? 0.5 : 0.67) : 1;
     
     dispatch_queue_t export_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    self.mediator.weight = self.volumeViewSlider.value;
+
     dispatch_async(export_queue, ^{
         TAEExportOption *option = [[TAEExportOption alloc] init];
         option.rangeStart = 0;

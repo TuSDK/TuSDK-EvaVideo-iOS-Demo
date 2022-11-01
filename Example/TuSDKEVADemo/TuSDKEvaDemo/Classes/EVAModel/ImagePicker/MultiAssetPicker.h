@@ -19,7 +19,7 @@
  * @param indexPath 点击的 NSIndexPath 对象
  * @param phAsset 对应的 PHAsset 对象
  */
-- (void)picker:(MultiAssetPicker *)picker didTapItemWithIndexPath:(NSIndexPath *)indexPath phAsset:(PHAsset *)phAsset;
+- (void)picker:(MultiAssetPicker *)picker didTapItemWithIndexPath:(NSIndexPath *)indexPath phAsset:(PHAsset *)phAsset coverImage:(UIImage *)coverImage;
 /**
  * 点击选中按钮事件回调
  * @param picker 多视频选择器

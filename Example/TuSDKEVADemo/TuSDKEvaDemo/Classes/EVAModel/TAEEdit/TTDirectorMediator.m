@@ -98,6 +98,8 @@ static TTDirectorMediator *_directorMediator;
     }
     [self setupEvaDirector];
     self.displayView = [[TUPDisplayView alloc] init];
+    //设置背景颜色，默认为黑色
+//    [self.displayView setClearColor:[UIColor blackColor]];
     [rootView addSubview:self.displayView];
     [self.displayView setup:nil];
     
@@ -168,6 +170,17 @@ static TTDirectorMediator *_directorMediator;
     
     return [self.evaDirector updateAudio:audioItem.Id withPath:audioItem.resPath andConfig:audioConfig];
 }
+
+/**
+ * 更新音量
+ * @param weight 音量
+ * @return 更新成功
+ */
+- (BOOL)updateAudioMixWeight:(float)weight;
+{
+    return [self.evaDirector updateAudioMixWeight:weight];
+}
+
 
 #pragma mark - player
 /**

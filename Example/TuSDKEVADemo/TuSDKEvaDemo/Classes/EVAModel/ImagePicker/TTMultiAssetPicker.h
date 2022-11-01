@@ -45,14 +45,15 @@ typedef NS_ENUM(NSInteger, TTAssetMediaType)
  * @param indexPath 点击的 NSIndexPath 对象
  * @param phAsset 对应的 PHAsset 对象
  */
-- (void)picker:(TTMultiAssetPicker *)picker didTapItemWithIndexPath:(NSIndexPath *)indexPath phAsset:(PHAsset *)phAsset;
+- (void)picker:(TTMultiAssetPicker *)picker didTapItemWithIndexPath:(NSIndexPath *)indexPath phAsset:(PHAsset *)phAsset coverImage:(UIImage *)coverImage;
 /**
  * 点击选中按钮事件回调
  * @param picker 多视频选择器
  * @param indexPath 点击的 NSIndexPath 对象
  * @param phAsset 对应的 PHAsset 对象
+ * @param coverImage 封面
  */
-- (BOOL)picker:(TTMultiAssetPicker *)picker didSelectButtonItemWithIndexPath:(NSIndexPath *)indexPath phAsset:(PHAsset *)phAsset;
+- (BOOL)picker:(TTMultiAssetPicker *)picker didSelectButtonItemWithIndexPath:(NSIndexPath *)indexPath phAsset:(PHAsset *)phAsset coverImage:(UIImage *)coverImage;
 
 
 @end

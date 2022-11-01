@@ -13,7 +13,8 @@
 #import "UIImageView+WebCache.h"
 
 @interface HomeCollectionViewCell()<DownLoadFileModelDelegate>
-
+//下载进度
+@property (nonatomic, assign) float progress;
 
 @end
 
@@ -31,7 +32,7 @@
     self.progressView.trackTintColor = [UIColor colorWithRed:77 / 255.0 green:88 / 255.0 blue:102 / 255.0 alpha:0.8];
     self.progressView.progress = 0;
     self.progressView.progressTintColor = [UIColor lsqClorWithHex:@"#776AF7"];
-    
+    self.progressView.hidden = self.progressLabel.hidden = YES;
     
     
 }
@@ -46,6 +47,7 @@
     _actionButton.hidden = model.filePath != nil;
     
     _actionButton.selected = (model.status == DownloadStateResumed || model.status == DownloadStateWait);
+    self.progressView.hidden = self.progressLabel.hidden = YES;
     if (_actionButton.selected) {
         [self startRotating];
     } else {
@@ -75,26 +77,35 @@
     [self click:_actionButton];
 }
 
+- (void)updateDownladProgress
+{
+    _actionButton.hidden = YES;
+    self.progressView.hidden = self.progressLabel.hidden = !_actionButton.hidden;
+}
+
 
 #pragma mark - DownLoadFileModelDelegate
 - (void)downloadFileModel:(DownLoadFileModel *)fileModel progressChanged:(float)progress {
     // 进度改变
+    self.progress = progress;
     self.progressView.progress = progress;
-//    NSLog(@"下载进度: %02f", progress);
+    NSLog(@"下载进度: %02f", progress);
 }
 
 - (void)downloadFileModel:(DownLoadFileModel *)fileModel cacheLength:(NSInteger)cacheLength fileLength:(NSInteger)fileLength
 {
-    self.actionButton.hidden = YES;
-    self.progressLabel.hidden = NO;
-    
-    NSShadow *shadow = [[NSShadow alloc] init];
-    shadow.shadowBlurRadius = 5;
-    shadow.shadowOffset = CGSizeMake(0, 0);
-    shadow.shadowColor = [UIColor blackColor];
-    NSString *progressStr = [NSString stringWithFormat:@"%.2f/%.2fMB", cacheLength / 1024.0 / 1024.0, fileLength / 1024.0 / 1024.0];
-    NSAttributedString *attString = [[NSAttributedString alloc] initWithString:progressStr attributes:@{NSShadowAttributeName:shadow}];
-    self.progressLabel.attributedText = attString;
+    if (_model.status == DownloadStateResumed) {
+        self.actionButton.hidden = YES;
+        self.progressLabel.hidden = NO;
+        
+        NSShadow *shadow = [[NSShadow alloc] init];
+        shadow.shadowBlurRadius = 5;
+        shadow.shadowOffset = CGSizeMake(0, 0);
+        shadow.shadowColor = [UIColor blackColor];
+        NSString *progressStr = [NSString stringWithFormat:@"%.2f/%.2fMB", cacheLength / 1024.0 / 1024.0, fileLength / 1024.0 / 1024.0];
+        NSAttributedString *attString = [[NSAttributedString alloc] initWithString:progressStr attributes:@{NSShadowAttributeName:shadow}];
+        self.progressLabel.attributedText = attString;
+    }
 }
 
 - (void)downloadFileModel:(DownLoadFileModel *)fileModel statusChanged:(DownloadState)status {

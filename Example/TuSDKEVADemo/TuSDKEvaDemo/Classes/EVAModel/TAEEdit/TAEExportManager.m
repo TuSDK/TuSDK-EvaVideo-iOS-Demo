@@ -205,6 +205,8 @@ static TAEExportManager *_exportManager;
         [self.evaDirector updateAudio:self.mediator.audioItem.Id withPath:self.mediator.audioItem.resPath andConfig:audioConfig];
     }
     
+    //音量更新
+    [self.evaDirector updateAudioMixWeight:self.mediator.weight];
     
     TUPProducer_OutputConfig *config = [[TUPProducer_OutputConfig alloc] init];
     config.rangeStart = _option.rangeStart;

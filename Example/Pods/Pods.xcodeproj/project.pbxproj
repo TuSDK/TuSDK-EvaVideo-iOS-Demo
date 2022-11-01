@@ -122,7 +122,7 @@
 		0FCB413DCAAE97DBEAF69260AA17D041 /* MJRefreshBackStateFooter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MJRefreshBackStateFooter.m; path = MJRefresh/Custom/Footer/Back/MJRefreshBackStateFooter.m; sourceTree = "<group>"; };
 		0FD57E897AEB1E19C253DBA4A6D5E514 /* MJRefreshAutoNormalFooter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MJRefreshAutoNormalFooter.m; path = MJRefresh/Custom/Footer/Auto/MJRefreshAutoNormalFooter.m; sourceTree = "<group>"; };
 		19B92F04249FE47CF58853526D764FA2 /* MJRefreshAutoGifFooter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MJRefreshAutoGifFooter.h; path = MJRefresh/Custom/Footer/Auto/MJRefreshAutoGifFooter.h; sourceTree = "<group>"; };
-		1EF09E075C812E671BBBD5375F83A502 /* Pods-TuSDKEvaDemo */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-TuSDKEvaDemo"; path = Pods_TuSDKEvaDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1EF09E075C812E671BBBD5375F83A502 /* Pods_TuSDKEvaDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TuSDKEvaDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1FF049DACD2C6AC3EAB33CD872A1BA36 /* MJRefresh-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MJRefresh-prefix.pch"; sourceTree = "<group>"; };
 		1FFED36A657123030ABB700256D73F15 /* Masonry */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Masonry; path = Masonry.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		22D7E9FD551D4D5A5E21A704A774F692 /* UIView+MJExtension.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIView+MJExtension.m"; path = "MJRefresh/UIView+MJExtension.m"; sourceTree = "<group>"; };
@@ -171,7 +171,7 @@
 		93B613246023A06BB69FD916B486FCD7 /* Pods-TuSDKEvaDemo-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-TuSDKEvaDemo-acknowledgements.markdown"; sourceTree = "<group>"; };
 		93DA3AE927BDCF61999427DAB15592E2 /* UIScrollView+MJRefresh.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIScrollView+MJRefresh.m"; path = "MJRefresh/UIScrollView+MJRefresh.m"; sourceTree = "<group>"; };
 		9CD3C410C5BB86EB4674FB79764109BA /* ViewController+MASAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "ViewController+MASAdditions.m"; path = "Masonry/ViewController+MASAdditions.m"; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9E3FCE06088598BF7E4BB52C2418BC4B /* MJRefreshFooter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MJRefreshFooter.h; path = MJRefresh/Base/MJRefreshFooter.h; sourceTree = "<group>"; };
 		A0335855F8CBB6543236C580CD375780 /* MASConstraint+Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "MASConstraint+Private.h"; path = "Masonry/MASConstraint+Private.h"; sourceTree = "<group>"; };
 		A38D7D129CCAA54CB1AE8334B800F8BF /* Pods-TuSDKEvaDemo-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-TuSDKEvaDemo-acknowledgements.plist"; sourceTree = "<group>"; };
@@ -348,7 +348,6 @@
 				9BCA223FBB8D12968898522C71B4D87D /* Resources */,
 				413B871DD5DE859BAFBCB6D829C459AB /* Support Files */,
 			);
-			name = MJRefresh;
 			path = MJRefresh;
 			sourceTree = "<group>";
 		};
@@ -391,7 +390,6 @@
 				9CD3C410C5BB86EB4674FB79764109BA /* ViewController+MASAdditions.m */,
 				106950F7A81571224921C59D527C0E16 /* Support Files */,
 			);
-			name = Masonry;
 			path = Masonry;
 			sourceTree = "<group>";
 		};
@@ -400,7 +398,7 @@
 			children = (
 				1FFED36A657123030ABB700256D73F15 /* Masonry */,
 				E49D6D248DD1CEE584E6776B9164A1B2 /* MJRefresh */,
-				1EF09E075C812E671BBBD5375F83A502 /* Pods-TuSDKEvaDemo */,
+				1EF09E075C812E671BBBD5375F83A502 /* Pods_TuSDKEvaDemo.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -537,7 +535,7 @@
 			);
 			name = "Pods-TuSDKEvaDemo";
 			productName = Pods_TuSDKEvaDemo;
-			productReference = 1EF09E075C812E671BBBD5375F83A502 /* Pods-TuSDKEvaDemo */;
+			productReference = 1EF09E075C812E671BBBD5375F83A502 /* Pods_TuSDKEvaDemo.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		55AF53E6C77A10ED4985E04D74A8878E /* Masonry */ = {

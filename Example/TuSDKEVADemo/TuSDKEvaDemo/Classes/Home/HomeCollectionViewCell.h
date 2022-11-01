@@ -25,6 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)willDisplay;
 
 - (void)clickButton;
+
+- (void)updateDownladProgress;
 @end
 
 NS_ASSUME_NONNULL_END

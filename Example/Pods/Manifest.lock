@@ -1,20 +1,24 @@
 PODS:
+  - Bugly (2.5.93)
   - Masonry (1.1.0)
   - MJRefresh (3.7.5)
 
 DEPENDENCIES:
+  - Bugly
   - Masonry
   - MJRefresh
 
 SPEC REPOS:
   trunk:
+    - Bugly
     - Masonry
     - MJRefresh
 
 SPEC CHECKSUMS:
+  Bugly: b8715e6ec4004b7f7fbffab0643ba80545aee3da
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
 
-PODFILE CHECKSUM: 9104952c7259a8d7f4ddf6d07aed1c579a82d20b
+PODFILE CHECKSUM: 08c7a2dcefcb3baff8bde909eec1273f0b3e07eb
 
 COCOAPODS: 1.11.3

@@ -62,7 +62,7 @@
                     </connections>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yaj-hw-r5R">
-                    <rect key="frame" x="12" y="706" width="369" height="35"/>
+                    <rect key="frame" x="12" y="706" width="346" height="35"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="音量" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0BJ-Ge-Jmo">
                             <rect key="frame" x="0.0" y="0.0" width="29" height="35"/>
@@ -71,7 +71,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="9O7-TN-1SU">
-                            <rect key="frame" x="42" y="0.0" width="329" height="36"/>
+                            <rect key="frame" x="42" y="0.0" width="306" height="36"/>
                             <color key="minimumTrackTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <color key="maximumTrackTintColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
                             <connections>
@@ -205,7 +205,7 @@
             <color key="backgroundColor" red="0.074509803921568626" green="0.074509803921568626" blue="0.074509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="STi-mE-Cxd" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="47N-4H-Bnq"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Yaj-hw-r5R" secondAttribute="trailing" constant="12" id="Aw4-6c-VUL"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Yaj-hw-r5R" secondAttribute="trailing" constant="35" id="Aw4-6c-VUL"/>
                 <constraint firstItem="19U-ey-fac" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="FB4-iN-hCq"/>
                 <constraint firstItem="EXl-DI-7tc" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="12" id="GK3-W4-h2W"/>
                 <constraint firstItem="fyW-6T-abP" firstAttribute="trailing" secondItem="Kj4-0Y-oJz" secondAttribute="trailing" id="IhR-OW-F4g"/>

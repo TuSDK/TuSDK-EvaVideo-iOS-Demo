@@ -52,6 +52,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL) updateAudio:(NSString*)Id withPath:(NSString*) path andConfig:(TUPEvaReplaceConfig_Audio*)config;
 
+/**
+ * 混音更新
+ * @param weight 音量
+ * @return 是否更新成功
+ */
+- (BOOL)updateAudioMixWeight:(float)weight;
+
 
 - (TUPPlayer*) newPlayer;
 - (void) resetPlayer;

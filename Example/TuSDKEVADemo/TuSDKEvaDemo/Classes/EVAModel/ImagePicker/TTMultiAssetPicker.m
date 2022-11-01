@@ -361,8 +361,9 @@ static const CGFloat kCellMargin = 3;
         }
         // 应用选中
         PHAsset *phAsset = [weakSelf phAssetAtIndexPathItem:indexPath.item];
-        if ([weakSelf.delegate respondsToSelector:@selector(picker:didSelectButtonItemWithIndexPath:phAsset:)]) {
-            BOOL status = [weakSelf.delegate picker:weakSelf didSelectButtonItemWithIndexPath:indexPath phAsset:phAsset];
+        if ([weakSelf.delegate respondsToSelector:@selector(picker:didSelectButtonItemWithIndexPath:phAsset:coverImage:)]) {
+            BOOL status = [weakSelf.delegate picker:weakSelf didSelectButtonItemWithIndexPath:indexPath phAsset:phAsset coverImage:cell.imageView.image];
+            
             if (status) {
                 cell.tagLabel.hidden = NO;
                 if (weakSelf.selectedPhAssets.count == 0) {
@@ -406,8 +407,11 @@ static const CGFloat kCellMargin = 3;
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView deselectItemAtIndexPath:indexPath animated:NO];
     PHAsset *phAsset = [self phAssetAtIndexPathItem:indexPath.item];
-    if ([self.delegate respondsToSelector:@selector(picker:didTapItemWithIndexPath:phAsset:)]) {
-        [self.delegate picker:self didTapItemWithIndexPath:indexPath phAsset:phAsset];
+    
+    TTMultiAssetPickerCell *cell = (TTMultiAssetPickerCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    
+    if ([self.delegate respondsToSelector:@selector(picker:didTapItemWithIndexPath:phAsset:coverImage:)]) {
+        [self.delegate picker:self didTapItemWithIndexPath:indexPath phAsset:phAsset coverImage:cell.imageView.image];
     }
 }
 
