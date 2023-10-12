@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -957,28 +957,28 @@
 		D789D62C22C325E3008D8F18 /* EVAModel */ = {
 			isa = PBXGroup;
 			children = (
-				A62A8B3E28508C2400ADDDFB /* TAEAssetPicker */,
-				A691C77027675285005BC230 /* TAEEdit */,
-				D7E956D422C5C66900749D6E /* EditImage */,
-				D7E956AE22C5B39600749D6E /* ImagePicker */,
-				D7E956AB22C5AAF400749D6E /* EditVideo */,
-				D789D62D22C32632008D8F18 /* EVAPreviewViewController.h */,
-				D789D62E22C32632008D8F18 /* EVAPreviewViewController.mm */,
-				D789D63F22C33B06008D8F18 /* EVAPreviewViewController.xib */,
-				D789D63022C3357D008D8F18 /* EditViewController.h */,
-				D789D63122C3357D008D8F18 /* EditViewController.mm */,
-				B88946A624ECC91E00BAAD7E /* EditViewController.xib */,
-				2A78BE422805202F002BE7F2 /* EditDynamicViewController.h */,
-				2A78BE412805202F002BE7F2 /* EditDynamicViewController.mm */,
-				2A78BE432805202F002BE7F2 /* EditDynamicViewController.xib */,
-				D789D63C22C335C8008D8F18 /* MusicView.h */,
-				D789D63D22C335C8008D8F18 /* MusicView.mm */,
-				D71E5AA0233B4893009D2FDC /* MusicView.xib */,
 				D7E9564322C37EC900749D6E /* EditCollectionViewCell.h */,
 				D7E9564422C37EC900749D6E /* EditCollectionViewCell.m */,
 				D7E9564522C37EC900749D6E /* EditCollectionViewCell.xib */,
+				2A78BE422805202F002BE7F2 /* EditDynamicViewController.h */,
+				2A78BE412805202F002BE7F2 /* EditDynamicViewController.mm */,
+				2A78BE432805202F002BE7F2 /* EditDynamicViewController.xib */,
+				D7E956D422C5C66900749D6E /* EditImage */,
+				D7E956AB22C5AAF400749D6E /* EditVideo */,
+				D789D63022C3357D008D8F18 /* EditViewController.h */,
+				D789D63122C3357D008D8F18 /* EditViewController.mm */,
+				B88946A624ECC91E00BAAD7E /* EditViewController.xib */,
+				D789D62D22C32632008D8F18 /* EVAPreviewViewController.h */,
+				D789D62E22C32632008D8F18 /* EVAPreviewViewController.mm */,
+				D789D63F22C33B06008D8F18 /* EVAPreviewViewController.xib */,
 				D774191822CCAA970025625C /* EvaProgressSlider.h */,
 				D774191922CCAA970025625C /* EvaProgressSlider.m */,
+				D7E956AE22C5B39600749D6E /* ImagePicker */,
+				D789D63C22C335C8008D8F18 /* MusicView.h */,
+				D789D63D22C335C8008D8F18 /* MusicView.mm */,
+				D71E5AA0233B4893009D2FDC /* MusicView.xib */,
+				A62A8B3E28508C2400ADDDFB /* TAEAssetPicker */,
+				A691C77027675285005BC230 /* TAEEdit */,
 			);
 			path = EVAModel;
 			sourceTree = "<group>";
@@ -1506,7 +1506,7 @@
 				CODE_SIGN_ENTITLEMENTS = TuSDKEvaDemo/TuSDKEvaDemo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20221101;
+				CURRENT_PROJECT_VERSION = 20231012;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 9U2KRZU6GT;
 				ENABLE_BITCODE = NO;
@@ -1520,7 +1520,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = TuSDKEvaDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1529,7 +1529,7 @@
 					"\"$(SRCROOT)/../../iOS-eva-dev/ios/TuSDK/framework/TuSDK\"/**",
 					"\"$(SRCROOT)/../libTuSDKCore\"",
 				);
-				MARKETING_VERSION = 3.2.0;
+				MARKETING_VERSION = 3.2.2;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"$(inherited)",
@@ -1551,7 +1551,7 @@
 				CODE_SIGN_ENTITLEMENTS = TuSDKEvaDemo/TuSDKEvaDemo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20221101;
+				CURRENT_PROJECT_VERSION = 20231012;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 9U2KRZU6GT;
 				ENABLE_BITCODE = NO;
@@ -1565,7 +1565,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = TuSDKEvaDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1574,7 +1574,7 @@
 					"\"$(SRCROOT)/../../iOS-eva-dev/ios/TuSDK/framework/TuSDK\"/**",
 					"\"$(SRCROOT)/../libTuSDKCore\"",
 				);
-				MARKETING_VERSION = 3.2.0;
+				MARKETING_VERSION = 3.2.2;
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"$(inherited)",
